@@ -7,7 +7,7 @@ from models.UpdateUserModel import UpdateUserModel
 class User(Base):
     __tablename__ = 'users'
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
 
     username = Column(String(150), nullable=False)
 
