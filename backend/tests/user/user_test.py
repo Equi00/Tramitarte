@@ -1,25 +1,33 @@
 from enums.Role import Role
-from database.Test_database import TestingBase, TestingSessionLocal, testing_engine
+from database.Database import Base, SessionLocal, engine
 from datetime import date
-from user_test_entity import UserTest
+from entities.Documentation import Documentation
+from entities.Process import Process
+from entities.Stage import *
+from entities.User import User
+from entities.AVORequest import AVORequest
 import pytest
 from models.UpdateUserModel import UpdateUserModel
 
 @pytest.fixture(scope="function")
 def session():
     """Create a clean session for each test."""
+    Base.metadata.create_all(bind=engine)
+    db_session = SessionLocal()
 
-    TestingBase.metadata.create_all(bind=testing_engine)
-    db_session = TestingSessionLocal()
+    try:
+        yield db_session
+    finally:
+       
+        if db_session.is_active:
+            db_session.rollback()
 
-    yield db_session
-
-    db_session.rollback()
-    db_session.close()
-    TestingBase.metadata.drop_all(bind=testing_engine)
+        db_session.close()
+        
+        Base.metadata.drop_all(bind=engine)
 
 def test_create_user(session):
-    user = UserTest(
+    user = User(
         username="Jose55xx",
         name="Jose",
         surname="Ramirez",
@@ -34,7 +42,7 @@ def test_create_user(session):
     session.add(user)
     session.commit()
 
-    user_db = session.query(UserTest).filter_by(username="Jose55xx").first()
+    user_db = session.query(User).filter_by(username="Jose55xx").first()
 
     assert user_db is not None
     assert user_db.name == "Jose"
@@ -43,7 +51,7 @@ def test_create_user(session):
     assert user_db.price == 100.0
 
 def test_update_user(session):
-    user = UserTest(
+    user = User(
         username="jdoe",
         name="John",
         surname="Doe",
@@ -63,13 +71,13 @@ def test_update_user(session):
     
     session.commit()
 
-    user_db = session.query(UserTest).filter_by(username="johnny").first()
+    user_db = session.query(User).filter_by(username="johnny").first()
     assert user_db is not None
     assert user_db.name == "Johnny"
     assert user_db.surname == "D"
 
 def test_unique_email_constraint(session):
-    user1 = UserTest(
+    user1 = User(
         username="user1",
         name="User",
         surname="One",
@@ -81,7 +89,7 @@ def test_unique_email_constraint(session):
         photo="profile1.jpg"
     )
 
-    user2 = UserTest(
+    user2 = User(
         username="user2",
         name="User",
         surname="Two",

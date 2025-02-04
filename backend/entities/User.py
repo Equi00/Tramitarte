@@ -1,4 +1,5 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float, Date, Enum
+from sqlalchemy.orm import relationship
 from database.Database import Base
 from enums.Role import Role
 from models.UpdateUserModel import UpdateUserModel
@@ -26,6 +27,8 @@ class User(Base):
     need_traduction = Column(Boolean, nullable=False)
 
     photo = Column(String(255), nullable=True)
+
+    processes = relationship("Process", back_populates="user")
 
     def update_user(self, update_model: UpdateUserModel):
         self.username = update_model.username
