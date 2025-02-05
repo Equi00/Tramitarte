@@ -2,6 +2,7 @@ from entities.AVORequest import AVORequest
 from entities.User import User
 from entities.Documentation import *
 from enums.Gender import Gender
+from entities.DownloadRequest import DownloadRequest
 from datetime import date
 from entities.Stage import *
 from database.Database import Base, SessionLocal, engine
@@ -16,6 +17,24 @@ def session():
     Base.metadata.create_all(bind=engine)
     db_session = SessionLocal()
 
+    avo_request = AVORequest(
+        first_name="John",
+        last_name="Doe",
+        birth_date=date(1990, 1, 1),
+        gender=Gender.MALE
+    )
+
+    invalid_avo_request = AVORequest(
+        first_name="invalid",
+        last_name="Doe",
+        birth_date=date(2222, 1, 1),
+        gender=Gender.MALE
+    )
+
+    db_session.add(avo_request)
+    db_session.add(invalid_avo_request)
+    db_session.commit()
+
     try:
         yield db_session
     finally:
@@ -29,12 +48,7 @@ def session():
 
 
 def test_stage1_to_stage2(session):
-    avo_request = AVORequest(
-        first_name="John",
-        last_name="Doe",
-        birth_date=date(1990, 1, 1),
-        gender=Gender.MALE
-    )
+    avo_request = session.query(AVORequest).filter_by(first_name="John").first()
 
     stage1 = Stage1(description="Load AVO")
     process = Process(code="PRC001", type="TypeA", stage=stage1)
@@ -53,12 +67,7 @@ def test_stage1_to_stage2(session):
 
 def test_stage1_fails_with_invalid_avo(session):
     stage1 = Stage1(description="Load AVO")
-    avo_request = AVORequest(
-        first_name="John",
-        last_name="Doe",
-        birth_date=date(2222, 1, 1),
-        gender=Gender.MALE
-    )
+    avo_request = session.query(AVORequest).filter_by(first_name="invalid").first()
 
     process = Process(code="PRC001", type="TypeA", stage=stage1)
     process.assign_avo_request(avo_request)

@@ -3,6 +3,7 @@ from database.Database import Base, SessionLocal, engine
 from datetime import date
 from entities.Documentation import Documentation
 from entities.Process import Process
+from entities.DownloadRequest import DownloadRequest
 from entities.Stage import *
 from entities.User import User
 from entities.AVORequest import AVORequest
@@ -31,7 +32,7 @@ def test_create_user(session):
         username="Jose55xx",
         name="Jose",
         surname="Ramirez",
-        role = Role.APPLICANT,
+        role = Role.REQUESTER,
         price=100.0,
         email="jramirez@gmail.com",
         birthdate=date(1990, 5, 14),
@@ -47,7 +48,7 @@ def test_create_user(session):
     assert user_db is not None
     assert user_db.name == "Jose"
     assert user_db.surname == "Ramirez"
-    assert user_db.role == Role.APPLICANT
+    assert user_db.role == Role.REQUESTER
     assert user_db.price == 100.0
 
 def test_update_user(session):
@@ -81,7 +82,7 @@ def test_unique_email_constraint(session):
         username="user1",
         name="User",
         surname="One",
-        role=Role.APPLICANT,
+        role=Role.REQUESTER,
         price=199.99,
         email="unique@example.com",
         birthdate=date(1985, 8, 20),
@@ -93,7 +94,7 @@ def test_unique_email_constraint(session):
         username="user2",
         name="User",
         surname="Two",
-        role=Role.APPLICANT,
+        role=Role.REQUESTER,
         price=49.99,
         email="unique@example.com",
         birthdate=date(1995, 3, 25),

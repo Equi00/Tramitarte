@@ -5,6 +5,7 @@ from entities.Stage import *
 from entities.User import User
 from entities.AVORequest import AVORequest
 import pytest
+from entities.DownloadRequest import DownloadRequest
 from enums.Gender import Gender
 from datetime import date
 

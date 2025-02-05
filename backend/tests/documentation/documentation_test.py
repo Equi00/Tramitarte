@@ -2,6 +2,7 @@ from entities.Documentation import *
 from entities.Process import Process
 from entities.Stage import *
 from entities.User import User
+from entities.DownloadRequest import DownloadRequest
 from entities.AVORequest import AVORequest
 import pytest
 from database.Database import Base, SessionLocal, engine

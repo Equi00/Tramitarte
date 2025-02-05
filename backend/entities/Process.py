@@ -20,14 +20,14 @@ class Process(Base):
     request_avo = relationship("AVORequest", back_populates="processes")
 
     # Relación general con documentación
-    documentations = relationship("Documentation", back_populates="process")
+    documentations = relationship("Documentation", back_populates="process", cascade="all, delete-orphan")
 
     # Relacionando documentos específicos según el tipo de subclase
-    avo_documentation = relationship("AvoDocumentation", back_populates="process")
-    user_documentation = relationship("UserDocumentation", back_populates="process")
-    descendant_documentation = relationship("DescendantDocumentation", back_populates="process")
-    translated_documentation = relationship("TranslatedDocumentation", back_populates="process")
-    attachments_to_translate = relationship("AttachmentDocumentation", back_populates="process")
+    avo_documentation = relationship("AvoDocumentation", back_populates="process", cascade="all, delete-orphan")
+    user_documentation = relationship("UserDocumentation", back_populates="process", cascade="all, delete-orphan")
+    descendant_documentation = relationship("DescendantDocumentation", back_populates="process", cascade="all, delete-orphan")
+    translated_documentation = relationship("TranslatedDocumentation", back_populates="process", cascade="all, delete-orphan")
+    attachments_to_translate = relationship("AttachmentDocumentation", back_populates="process", cascade="all, delete-orphan")
 
     descendant_count = Column(Integer, default=0)
 

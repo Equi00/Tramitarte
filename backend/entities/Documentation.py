@@ -11,7 +11,10 @@ class Documentation(Base):
     file_base64 = Column(String, nullable=False)
 
     process_id = Column(Integer, ForeignKey("processes.id"), nullable=False)
+    download_request_id = Column(Integer, ForeignKey("download_requests.id"), nullable=True)
+
     document_type = Column(String, nullable=False)
+    download_request = relationship("DownloadRequest", back_populates="documentation")
 
     process = relationship("Process", back_populates="documentations")
 

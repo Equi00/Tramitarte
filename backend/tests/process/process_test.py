@@ -4,6 +4,7 @@ from entities.Documentation import *
 from enums.Gender import Gender
 from datetime import date
 from entities.Stage import *
+from entities.DownloadRequest import DownloadRequest
 from database.Database import Base, SessionLocal, engine
 from entities.Process import Process
 import pytest
@@ -235,3 +236,54 @@ def test_add_descendant_documentation(session):
     assert retrieved.descendant_documentation[0].name == "doc3"
     assert retrieved.descendant_documentation[0].process_id == retrieved.id
     assert isinstance(retrieved.descendant_documentation[0], DescendantDocumentation)
+
+def test_delete_process(session):
+    stage = Stage1(description="Load AVO")
+    session.add(stage)
+    session.commit()
+
+    process = Process(code="PRC789", type="TypeC")
+    process.stage_id = stage.id
+
+    avo_request = AVORequest(
+        first_name="John",
+        last_name="ASDF",
+        birth_date=date(1990, 1, 1),
+        gender=Gender.MALE
+    )
+
+    process.assign_avo_request(avo_request)
+
+    doc = UserDocumentation(name="doc", file_type="PDF", file_base64="encoded_string")
+    doc2 = UserDocumentation(name="doc2", file_type="PDF", file_base64="encoded_string")
+
+    process.add_avo_documentation([doc, doc2])
+    process.add_attachments_to_translate([doc, doc2])
+    process.add_descendant_documentation([doc, doc2])
+    process.add_translated_documentation([doc, doc2])
+    process.add_user_documentation([doc, doc2])
+
+    session.add(process)
+    session.commit()
+
+    retrieved = session.query(Process).filter_by(code="PRC789").first()
+    assert len(retrieved.descendant_documentation) == 2
+    assert len(retrieved.user_documentation) == 2
+    assert len(retrieved.attachments_to_translate) == 2
+    assert len(retrieved.translated_documentation) == 2
+    assert len(retrieved.avo_documentation) == 2
+    assert len(retrieved.documentations) == 10
+    assert isinstance(retrieved.descendant_documentation[0], DescendantDocumentation)
+    assert isinstance(retrieved.user_documentation[0], UserDocumentation)
+    assert isinstance(retrieved.attachments_to_translate[0], AttachmentDocumentation)
+    assert isinstance(retrieved.translated_documentation[0], TranslatedDocumentation)
+    assert isinstance(retrieved.avo_documentation[0], AvoDocumentation)
+
+    session.delete(retrieved)
+    session.commit()
+
+    assert session.query(Process).filter_by(code="PRC789").first() is None
+    assert session.query(Documentation).filter_by(name="doc").first() is None
+    assert session.query(Documentation).filter_by(name="doc2").first() is None
+    assert session.query(AVORequest).filter_by(first_name="John").first() is not None
+    assert session.query(Stage).filter_by(description="Load AVO").first() is not None
