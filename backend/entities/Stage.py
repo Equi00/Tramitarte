@@ -83,7 +83,7 @@ class Stage4(Stage):
         super().__init__(description=description)
 
     def verify_stage(self, process):
-        if len(process.descendant_documentation) < 1:
+        if len(process.descendant_documentation) < process.descendant_count:
             raise InvalidDocumentationException("The process is missing necessary descendant documents")
         process.stage = Stage5(description="Load Translated Documentation")
 

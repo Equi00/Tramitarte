@@ -191,7 +191,7 @@ def test_stage4_fails_without_descendant_docs(session):
     stage4 = Stage4(description="Load Descendant Documentation")
     user = session.query(User).filter_by(name="John").first()
 
-    process = Process(code="PRC001", stage=stage4, user=user)
+    process = Process(code="PRC001", stage=stage4, user=user, descendant_count=2)
 
     session.add(stage4)
     session.add(process)
