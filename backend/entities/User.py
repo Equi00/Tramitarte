@@ -18,8 +18,6 @@ class User(Base):
 
     role = Column(Enum(Role), nullable=False)
 
-    price = Column(Float, nullable=False)
-
     email = Column(String(100), nullable=False, unique=True)
 
     birthdate = Column(Date, nullable=False)
@@ -31,6 +29,6 @@ class User(Base):
     processes = relationship("Process", back_populates="user")
 
     def update_user(self, update_model: UpdateUserModel):
-        self.username = update_model.username
-        self.surname = update_model.surname
-        self.name = update_model.name
+        self.username = update_model.username or self.username
+        self.surname = update_model.surname or self.surname
+        self.name = update_model.name or self.name

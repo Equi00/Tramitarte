@@ -22,23 +22,22 @@ def session():
     db_session.add(stage)
     db_session.commit()
 
-    process = Process(code="PRC123", type="TypeA", descendant_count=2)
-    process.stage_id = stage.id
-
-    db_session.add(process)
-    db_session.commit()
-
     translator = User(
         username="user2",
         name="User",
         surname="Two",
         role=Role.TRANSLATOR,
-        price=49.99,
         email="unique2@example.com",
         birthdate=date(1995, 3, 25),
         need_traduction=False,
         photo="profile2.jpg"
-    )  
+    )
+
+    process = Process(code="PRC123", descendant_count=2, user=translator)
+    process.stage = stage
+
+    db_session.add(process)
+    db_session.commit()  
 
     db_session.add(translator)
     db_session.commit()

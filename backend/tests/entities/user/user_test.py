@@ -33,7 +33,6 @@ def test_create_user(session):
         name="Jose",
         surname="Ramirez",
         role = Role.REQUESTER,
-        price=100.0,
         email="jramirez@gmail.com",
         birthdate=date(1990, 5, 14),
         need_traduction=False,
@@ -49,7 +48,6 @@ def test_create_user(session):
     assert user_db.name == "Jose"
     assert user_db.surname == "Ramirez"
     assert user_db.role == Role.REQUESTER
-    assert user_db.price == 100.0
 
 def test_update_user(session):
     user = User(
@@ -57,7 +55,6 @@ def test_update_user(session):
         name="John",
         surname="Doe",
         role=Role.TRANSLATOR,
-        price=99.99,
         email="jdoe@example.com",
         birthdate=date(1990, 5, 17),
         need_traduction=False,
@@ -83,7 +80,6 @@ def test_unique_email_constraint(session):
         name="User",
         surname="One",
         role=Role.REQUESTER,
-        price=199.99,
         email="unique@example.com",
         birthdate=date(1985, 8, 20),
         need_traduction=False,
@@ -95,7 +91,6 @@ def test_unique_email_constraint(session):
         name="User",
         surname="Two",
         role=Role.REQUESTER,
-        price=49.99,
         email="unique@example.com",
         birthdate=date(1995, 3, 25),
         need_traduction=False,

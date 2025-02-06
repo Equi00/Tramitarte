@@ -1,3 +1,5 @@
+from datetime import date
+from enums.Role import Role
 from entities.Documentation import *
 from entities.Process import Process
 from entities.Stage import *
@@ -14,6 +16,20 @@ def session():
     Base.metadata.create_all(bind=engine)
     db_session = SessionLocal()
 
+    user1 = User(
+        username="user1",
+        name="User",
+        surname="One",
+        role=Role.REQUESTER,
+        email="unique@example.com",
+        birthdate=date(1985, 8, 20),
+        need_traduction=False,
+        photo="profile1.jpg"
+    )
+
+    db_session.add(user1)
+    db_session.commit()
+
     try:
         yield db_session
     finally:
@@ -26,15 +42,14 @@ def session():
         Base.metadata.drop_all(bind=engine)
 
 def test_create_documentation(session):
+    user = session.query(User).filter_by(username="user1").first()
     stage = Stage1(description="Load AVO")
 
     session.add(stage)
 
     session.commit()
 
-    process = Process(code="PRC123", type="TypeA", descendant_count=2)
-
-    process.stage_id = stage.id
+    process = Process(code="PRC123", user=user, stage=stage)
 
     session.add(process)
     session.commit()
@@ -55,13 +70,14 @@ def test_create_documentation(session):
     assert isinstance(retrieved_doc, UserDocumentation)
 
 def test_missing_fields(session):
+    user = session.query(User).filter_by(username="user1").first()
     stage = Stage1(description="Load AVO")
 
     session.add(stage)
 
     session.commit()
 
-    process = Process(code="PRC123", type="TypeA", descendant_count=2)
+    process = Process(code="PRC123", user=user, stage=stage)
 
     process.stage_id = stage.id
 

@@ -9,10 +9,9 @@ class Process(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     code = Column(String, nullable=False)
-    type = Column(String, nullable=False)
 
     stage_id = Column(Integer, ForeignKey("stages.id"), nullable=False)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     request_avo_id = Column(Integer, ForeignKey("avo_requests.id"), nullable=True)
 
     stage = relationship("Stage", back_populates="processes")

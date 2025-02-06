@@ -1,3 +1,4 @@
+from enums.Role import Role
 from entities.AVORequest import AVORequest
 from entities.User import User
 from entities.Documentation import *
@@ -16,6 +17,20 @@ def session():
     Base.metadata.create_all(bind=engine)
     db_session = SessionLocal()
 
+    user = User(
+        username="jdoe",
+        name="John",
+        surname="Doe",
+        role=Role.TRANSLATOR,
+        email="jdoe@example.com",
+        birthdate=date(1990, 5, 17),
+        need_traduction=False,
+        photo="profile.jpg"
+    )
+
+    db_session.add(user)
+    db_session.commit()
+
     try:
         yield db_session
     finally:
@@ -28,15 +43,14 @@ def session():
         Base.metadata.drop_all(bind=engine)
 
 def test_create_process(session):
+    user = session.query(User).filter_by(username="jdoe").first()
     stage = Stage1(description="Load AVO")
 
     session.add(stage)
 
     session.commit()
 
-    process = Process(code="PRC123", type="TypeA", descendant_count=2)
-
-    process.stage_id = stage.id
+    process = Process(code="PRC123", user=user, stage=stage)
 
     session.add(process)
     session.commit()
@@ -44,19 +58,18 @@ def test_create_process(session):
     retrieved = session.query(Process).filter_by(code="PRC123").first()
     assert retrieved is not None
     assert retrieved.code == "PRC123"
-    assert retrieved.type == "TypeA"
-    assert retrieved.descendant_count == 2
+    assert retrieved.user is user
+    assert retrieved.stage is stage
 
 def test_assign_avo_request(session):
+    user = session.query(User).filter_by(username="jdoe").first()
     stage = Stage1(description="Load AVO")
 
     session.add(stage)
 
     session.commit()
 
-    process = Process(code="PRC123", type="TypeA")
-
-    process.stage_id = stage.id
+    process = Process(code="PRC123", user=user, stage=stage)
 
     avo_request = AVORequest(first_name="John", last_name="Doe", birth_date=date(2000, 1, 1), gender=Gender.MALE)
     
@@ -72,13 +85,14 @@ def test_assign_avo_request(session):
     assert retrieved.request_avo.first_name == "John"
 
 def test_has_translated_documentation(session):
+    user = session.query(User).filter_by(username="jdoe").first()
     stage = Stage1(description="Load AVO")
 
     session.add(stage)
+
     session.commit()
 
-    process = Process(code="PRC789", type="TypeC")
-    process.stage_id = stage.id
+    process = Process(code="PRC123", user=user, stage=stage)
 
     doc1 = UserDocumentation(name="doc3", file_type="PDF", file_base64="encoded_string")
     doc2 = UserDocumentation(name="doc2", file_type="PDF", file_base64="encoded_string")
@@ -96,19 +110,21 @@ def test_has_translated_documentation(session):
     session.add(process)
     session.commit()
 
-    retrieved = session.query(Process).filter_by(code="PRC789").first()
+    retrieved = session.query(Process).filter_by(code="PRC123").first()
     assert len(retrieved.translated_documentation) == 2
     assert len(retrieved.attachments_to_translate) == 2
     assert retrieved.has_translated_documentation() is True
     assert len(retrieved.documentations) == 4
 
 def test_add_attachments_to_translate(session):
+    user = session.query(User).filter_by(username="jdoe").first()
     stage = Stage1(description="Load AVO")
+
     session.add(stage)
+
     session.commit()
 
-    process = Process(code="PRC789", type="TypeC")
-    process.stage_id = stage.id
+    process = Process(code="PRC123", user=user, stage=stage)
 
     doc = UserDocumentation(name="doc3", file_type="PDF", file_base64="encoded_string")
     doc2 = UserDocumentation(name="doc2", file_type="PDF", file_base64="encoded_string")
@@ -123,19 +139,21 @@ def test_add_attachments_to_translate(session):
     session.add(process)
     session.commit()
 
-    retrieved = session.query(Process).filter_by(code="PRC789").first()
+    retrieved = session.query(Process).filter_by(code="PRC123").first()
     assert len(retrieved.attachments_to_translate) == 2
     assert retrieved.attachments_to_translate[0].name == "doc3"
     assert retrieved.attachments_to_translate[0].process_id == retrieved.id
     assert isinstance(retrieved.attachments_to_translate[0], AttachmentDocumentation)
 
 def test_add_translated_documentation(session):
+    user = session.query(User).filter_by(username="jdoe").first()
     stage = Stage1(description="Load AVO")
+
     session.add(stage)
+
     session.commit()
 
-    process = Process(code="PRC789", type="TypeC")
-    process.stage_id = stage.id
+    process = Process(code="PRC123", user=user, stage=stage)
 
     doc = UserDocumentation(name="doc3", file_type="PDF", file_base64="encoded_string")
     doc2 = UserDocumentation(name="doc2", file_type="PDF", file_base64="encoded_string")
@@ -150,19 +168,21 @@ def test_add_translated_documentation(session):
     session.add(process)
     session.commit()
 
-    retrieved = session.query(Process).filter_by(code="PRC789").first()
+    retrieved = session.query(Process).filter_by(code="PRC123").first()
     assert len(retrieved.translated_documentation) == 2
     assert retrieved.translated_documentation[0].name == "doc3"
     assert retrieved.translated_documentation[0].process_id == retrieved.id
     assert isinstance(retrieved.translated_documentation[0], TranslatedDocumentation)
 
 def test_add_user_documentation(session):
+    user = session.query(User).filter_by(username="jdoe").first()
     stage = Stage1(description="Load AVO")
+
     session.add(stage)
+
     session.commit()
 
-    process = Process(code="PRC789", type="TypeC")
-    process.stage_id = stage.id
+    process = Process(code="PRC123", user=user, stage=stage)
 
     doc = TranslatedDocumentation(name="doc3", file_type="PDF", file_base64="encoded_string")
     doc2 = TranslatedDocumentation(name="doc2", file_type="PDF", file_base64="encoded_string")
@@ -177,19 +197,21 @@ def test_add_user_documentation(session):
     session.add(process)
     session.commit()
 
-    retrieved = session.query(Process).filter_by(code="PRC789").first()
+    retrieved = session.query(Process).filter_by(code="PRC123").first()
     assert len(retrieved.user_documentation) == 2
     assert retrieved.user_documentation[0].name == "doc3"
     assert retrieved.user_documentation[0].process_id == retrieved.id
     assert isinstance(retrieved.user_documentation[0], UserDocumentation)
 
 def test_add_avo_documentation(session):
+    user = session.query(User).filter_by(username="jdoe").first()
     stage = Stage1(description="Load AVO")
+
     session.add(stage)
+
     session.commit()
 
-    process = Process(code="PRC789", type="TypeC")
-    process.stage_id = stage.id
+    process = Process(code="PRC123", user=user, stage=stage)
 
     doc = UserDocumentation(name="doc3", file_type="PDF", file_base64="encoded_string")
     doc2 = UserDocumentation(name="doc2", file_type="PDF", file_base64="encoded_string")
@@ -204,19 +226,21 @@ def test_add_avo_documentation(session):
     session.add(process)
     session.commit()
 
-    retrieved = session.query(Process).filter_by(code="PRC789").first()
+    retrieved = session.query(Process).filter_by(code="PRC123").first()
     assert len(retrieved.avo_documentation) == 2
     assert retrieved.avo_documentation[0].name == "doc3"
     assert retrieved.avo_documentation[0].process_id == retrieved.id
     assert isinstance(retrieved.avo_documentation[0], AvoDocumentation)
 
 def test_add_descendant_documentation(session):
+    user = session.query(User).filter_by(username="jdoe").first()
     stage = Stage1(description="Load AVO")
+
     session.add(stage)
+
     session.commit()
 
-    process = Process(code="PRC789", type="TypeC")
-    process.stage_id = stage.id
+    process = Process(code="PRC123", user=user, stage=stage)
 
     doc = UserDocumentation(name="doc3", file_type="PDF", file_base64="encoded_string")
     doc2 = UserDocumentation(name="doc2", file_type="PDF", file_base64="encoded_string")
@@ -231,19 +255,21 @@ def test_add_descendant_documentation(session):
     session.add(process)
     session.commit()
 
-    retrieved = session.query(Process).filter_by(code="PRC789").first()
+    retrieved = session.query(Process).filter_by(code="PRC123").first()
     assert len(retrieved.descendant_documentation) == 2
     assert retrieved.descendant_documentation[0].name == "doc3"
     assert retrieved.descendant_documentation[0].process_id == retrieved.id
     assert isinstance(retrieved.descendant_documentation[0], DescendantDocumentation)
 
 def test_delete_process(session):
+    user = session.query(User).filter_by(username="jdoe").first()
     stage = Stage1(description="Load AVO")
+
     session.add(stage)
+
     session.commit()
 
-    process = Process(code="PRC789", type="TypeC")
-    process.stage_id = stage.id
+    process = Process(code="PRC123", user=user, stage=stage)
 
     avo_request = AVORequest(
         first_name="John",
@@ -266,7 +292,7 @@ def test_delete_process(session):
     session.add(process)
     session.commit()
 
-    retrieved = session.query(Process).filter_by(code="PRC789").first()
+    retrieved = session.query(Process).filter_by(code="PRC123").first()
     assert len(retrieved.descendant_documentation) == 2
     assert len(retrieved.user_documentation) == 2
     assert len(retrieved.attachments_to_translate) == 2
@@ -282,7 +308,7 @@ def test_delete_process(session):
     session.delete(retrieved)
     session.commit()
 
-    assert session.query(Process).filter_by(code="PRC789").first() is None
+    assert session.query(Process).filter_by(code="PRC123").first() is None
     assert session.query(Documentation).filter_by(name="doc").first() is None
     assert session.query(Documentation).filter_by(name="doc2").first() is None
     assert session.query(AVORequest).filter_by(first_name="John").first() is not None

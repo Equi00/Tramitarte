@@ -1,3 +1,4 @@
+from enums.Role import Role
 from entities.AVORequest import AVORequest
 from entities.User import User
 from entities.Documentation import *
@@ -31,6 +32,18 @@ def session():
         gender=Gender.MALE
     )
 
+    user = User(
+        username="jdoe",
+        name="John",
+        surname="Doe",
+        role=Role.TRANSLATOR,
+        email="jdoe@example.com",
+        birthdate=date(1990, 5, 17),
+        need_traduction=False,
+        photo="profile.jpg"
+    )
+
+    db_session.add(user)
     db_session.add(avo_request)
     db_session.add(invalid_avo_request)
     db_session.commit()
@@ -49,9 +62,10 @@ def session():
 
 def test_stage1_to_stage2(session):
     avo_request = session.query(AVORequest).filter_by(first_name="John").first()
+    user = session.query(User).filter_by(name="John").first()
 
     stage1 = Stage1(description="Load AVO")
-    process = Process(code="PRC001", type="TypeA", stage=stage1)
+    process = Process(code="PRC001", stage=stage1, user=user)
 
     process.assign_avo_request(avo_request)
 
@@ -68,8 +82,9 @@ def test_stage1_to_stage2(session):
 def test_stage1_fails_with_invalid_avo(session):
     stage1 = Stage1(description="Load AVO")
     avo_request = session.query(AVORequest).filter_by(first_name="invalid").first()
+    user = session.query(User).filter_by(name="John").first()
 
-    process = Process(code="PRC001", type="TypeA", stage=stage1)
+    process = Process(code="PRC001", stage=stage1, user=user)
     process.assign_avo_request(avo_request)
 
     session.add(stage1)
@@ -82,7 +97,8 @@ def test_stage1_fails_with_invalid_avo(session):
 
 def test_stage2_to_stage3(session):
     stage2 = Stage2(description="Load User Documentation")
-    process = Process(code="PRC001", type="TypeA", stage=stage2)
+    user = session.query(User).filter_by(name="John").first()
+    process = Process(code="PRC001", stage=stage2, user=user)
 
     docs = [UserDocumentation(name=f"doc{i}", file_type="PDF", file_base64="encoded") for i in range(3)]
     process.add_user_documentation(docs)
@@ -100,7 +116,9 @@ def test_stage2_to_stage3(session):
 
 def test_stage2_fails_with_insufficient_user_docs(session):
     stage2 = Stage2(description="Load User Documentation")
-    process = Process(code="PRC001", type="TypeA", stage=stage2)
+    user = session.query(User).filter_by(name="John").first()
+
+    process = Process(code="PRC001", stage=stage2, user=user)
 
     docs = [UserDocumentation(name="doc1", file_type="PDF", file_base64="encoded")]
     process.add_user_documentation(docs)
@@ -116,7 +134,9 @@ def test_stage2_fails_with_insufficient_user_docs(session):
 
 def test_stage3_to_stage4(session):
     stage3 = Stage3(description="Load AVO Documentation")
-    process = Process(code="PRC001", type="TypeA", stage=stage3)
+    user = session.query(User).filter_by(name="John").first()
+
+    process = Process(code="PRC001", stage=stage3, user=user)
 
     avo_docs = [AvoDocumentation(name="avo_doc", file_type="PDF", file_base64="encoded")]
     process.add_avo_documentation(avo_docs)
@@ -134,7 +154,9 @@ def test_stage3_to_stage4(session):
 
 def test_stage3_fails_without_avo_docs(session):
     stage3 = Stage3(description="Load AVO Documentation")
-    process = Process(code="PRC001", type="TypeA", stage=stage3)
+    user = session.query(User).filter_by(name="John").first()
+
+    process = Process(code="PRC001", stage=stage3, user=user)
 
     session.add(stage3)
     session.add(process)
@@ -147,7 +169,9 @@ def test_stage3_fails_without_avo_docs(session):
 
 def test_stage4_to_stage5(session):
     stage4 = Stage4(description="Load Descendant Documentation")
-    process = Process(code="PRC001", type="TypeA", stage=stage4)
+    user = session.query(User).filter_by(name="John").first()
+
+    process = Process(code="PRC001", stage=stage4, user=user)
 
     descendant_docs = [DescendantDocumentation(name="desc_doc", file_type="PDF", file_base64="encoded")]
     process.descendant_documentation.extend(descendant_docs)
@@ -165,7 +189,9 @@ def test_stage4_to_stage5(session):
 
 def test_stage4_fails_without_descendant_docs(session):
     stage4 = Stage4(description="Load Descendant Documentation")
-    process = Process(code="PRC001", type="TypeA", stage=stage4)
+    user = session.query(User).filter_by(name="John").first()
+
+    process = Process(code="PRC001", stage=stage4, user=user)
 
     session.add(stage4)
     session.add(process)
@@ -178,7 +204,9 @@ def test_stage4_fails_without_descendant_docs(session):
 
 def test_stage5_completion(session):
     stage5 = Stage5(description="Load Translated Documentation")
-    process = Process(code="PRC001", type="TypeA", stage=stage5)
+    user = session.query(User).filter_by(name="John").first()
+
+    process = Process(code="PRC001", stage=stage5, user=user)
 
     docs = [UserDocumentation(name="doc", file_type="PDF", file_base64="encoded")]
     process.add_attachments_to_translate(docs)
@@ -197,7 +225,9 @@ def test_stage5_completion(session):
 
 def test_stage5_fails_without_translated_docs(session):
     stage5 = Stage5(description="Load Translated Documentation")
-    process = Process(code="PRC001", type="TypeA", stage=stage5)
+    user = session.query(User).filter_by(name="John").first()
+
+    process = Process(code="PRC001", stage=stage5, user=user)
 
     docs = [UserDocumentation(name="doc", file_type="PDF", file_base64="encoded")]
     process.add_attachments_to_translate(docs)

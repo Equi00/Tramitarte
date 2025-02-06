@@ -19,7 +19,6 @@ def session():
         name="User",
         surname="One",
         role=Role.REQUESTER,
-        price=199.99,
         email="unique@example.com",
         birthdate=date(1985, 8, 20),
         need_traduction=False,
@@ -31,7 +30,6 @@ def session():
         name="User",
         surname="Two",
         role=Role.TRANSLATOR,
-        price=49.99,
         email="unique2@example.com",
         birthdate=date(1995, 3, 25),
         need_traduction=False,
@@ -47,8 +45,7 @@ def session():
     db_session.add(stage)
     db_session.commit()
 
-    process = Process(code="PRC123", type="TypeA", descendant_count=2)
-    process.stage_id = stage.id
+    process = Process(code="PRC123", user=requester, stage=stage)
 
     db_session.add(process)
     db_session.commit()
