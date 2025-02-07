@@ -2,7 +2,6 @@ from datetime import date
 import pytest
 from fastapi import HTTPException
 from unittest.mock import MagicMock
-from enums.NType import NType
 from services.UserService import UserService
 from entities.User import User
 from entities.Notification import Notification
@@ -136,7 +135,6 @@ def test_find_notifications_by_user_destination_id(user_service, session):
         user_origin=retrieved_translator,
         user_destination=retrieved_requester,
         description="Test Notification",
-        notification_type=NType.NOTIFICATION
     )
     session.add(notification)
     session.commit()

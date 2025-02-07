@@ -6,7 +6,6 @@ from services.UserService import UserService
 from services.ProcessService import ProcessService
 from services.AVORequestService import AVORequestService
 from enums.Gender import Gender
-from enums.NType import NType
 from entities.User import User
 from entities.Notification import Notification
 from entities.TranslationRequest import TranslationRequest

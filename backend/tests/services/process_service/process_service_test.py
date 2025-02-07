@@ -4,7 +4,6 @@ from fastapi import HTTPException
 from unittest.mock import MagicMock
 from enums.Gender import Gender
 from services.ProcessService import ProcessService
-from enums.NType import NType
 from services.UserService import UserService
 from entities.User import User
 from entities.Notification import Notification

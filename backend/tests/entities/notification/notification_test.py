@@ -1,5 +1,4 @@
 from entities.Notification import Notification
-from enums.NType import NType
 from enums.Role import Role
 from database.Database import Base, SessionLocal, engine
 from datetime import date
@@ -63,7 +62,6 @@ def test_create_notification(session):
         user_origin=user1,
         user_destination=user2,
         description="Test Notification",
-        notification_type=NType.NOTIFICATION
     )
 
     session.add(notification)
@@ -72,28 +70,6 @@ def test_create_notification(session):
     retrieved = session.query(Notification).filter_by(user_origin_id=user1.id).first()
     assert retrieved is not None
     assert retrieved.description == "Test Notification"
-    assert retrieved.notification_type == NType.NOTIFICATION
-    assert retrieved.user_origin_id == user1.id
-    assert retrieved.user_destination_id == user2.id
-
-def test_create_alert(session):
-    user1 = session.query(User).filter_by(username="Jose55xx").first()
-    user2 = session.query(User).filter_by(username="user2").first()
-
-    alert = Notification(
-        user_origin=user1,
-        user_destination=user2,
-        description="Test Alert",
-        notification_type=NType.ALERT
-    )
-
-    session.add(alert)
-    session.commit()
-    
-    retrieved = session.query(Notification).filter_by(user_origin_id=user1.id).first()
-    assert retrieved is not None
-    assert retrieved.description == "Test Alert"
-    assert retrieved.notification_type == NType.ALERT
     assert retrieved.user_origin_id == user1.id
     assert retrieved.user_destination_id == user2.id
 
@@ -105,7 +81,6 @@ def test_invalid_notification(session):
         notification = Notification(
             user_destination=user2,
             description="Test Alert",
-            notification_type=NType.ALERT
         )   
         session.add(notification)
         session.commit()
@@ -114,7 +89,6 @@ def test_invalid_notification(session):
         notification = Notification(
             user_origin=user2,
             description="Test Alert",
-            notification_type=NType.ALERT
         )   
         session.add(notification)
         session.commit()
@@ -123,7 +97,6 @@ def test_invalid_notification(session):
         notification = Notification(
             user_origin=user1,
             user_destination=user2,
-            notification_type=NType.ALERT
         )   
         session.add(notification)
         session.commit()
