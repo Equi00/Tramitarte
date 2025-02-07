@@ -1,9 +1,12 @@
 import re
+from typing import Optional
 from PIL import Image
 import pytesseract
 from pdf2image import convert_from_bytes
 from fastapi import HTTPException
-from PyPDF2 import PdfReader
+from pypdf import PdfReader
+import fitz
+import io
 
 
 class TesseractService:
@@ -30,7 +33,7 @@ class TesseractService:
             image = Image.open(input_stream)
             return pytesseract.image_to_string(image)
         except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
+            raise HTTPException(status_code=400, detail="Invalid file, this is not an image.")
 
     def recognize_pdf(self, input_stream) -> str:
         """Extracts text from a PDF using PyPDF2."""
@@ -39,30 +42,50 @@ class TesseractService:
             text = "\n".join([page.extract_text() for page in reader.pages if page.extract_text()])
             return text
         except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
+            raise HTTPException(status_code=400, detail="Invalid file format, this is not a PDF file.")
 
-    def extract_images_from_pdf_with_ocr(self, input_stream) -> str:
-        """Extracts text from images within a PDF using OCR."""
+    def extract_images_from_pdf_with_ocr(self, input_stream, lang = None) -> str:
         try:
-            images = convert_from_bytes(input_stream.read(), dpi=300)
-            result = "\n".join([pytesseract.image_to_string(img) for img in images])
-            return result
+            file_signature = input_stream.read(4)
+            input_stream.seek(0) 
+
+            if file_signature != b"%PDF":
+                raise HTTPException(status_code=400, detail="Invalid file format, this is not a PDF file.")
+            
+            pdf_document = fitz.open("pdf", input_stream.read())
+
+            extracted_text = []
+
+            for page_num in range(len(pdf_document)):
+                page = pdf_document[page_num]
+                images = page.get_images(full=True)
+
+                for img_index, img in enumerate(images):
+                    xref = img[0] 
+                    base_image = pdf_document.extract_image(xref)
+                    image_bytes = base_image["image"]
+                    img_pil = Image.open(io.BytesIO(image_bytes))
+
+                    text = pytesseract.image_to_string(img_pil, lang=lang)
+                    extracted_text.append(text)
+
+            return "\n".join(extracted_text)
         except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
+            raise HTTPException(status_code=400, detail="Invalid file format, this is not a PDF file.")
 
     def is_dni_front(self, input_stream) -> bool:
         """Checks if the image is a front side of a DNI (National ID)."""
-        text = self.recognize_image(input_stream)
+        text = self.recognize_image(input_stream).lower()
         return self.contains_phrase_front(text)
 
     def is_dni_back(self, input_stream) -> bool:
         """Checks if the image is a back side of a DNI (National ID)."""
-        text = self.recognize_image(input_stream)
+        text = self.recognize_image(input_stream).lower()
         return self.contains_phrase_back(text)
 
-    def is_certificate(self, input_stream) -> bool:
+    def is_certificate(self, input_stream, lang = None) -> bool:
         """Checks if the PDF contains a civil certificate (birth, marriage, death)."""
-        text = self.extract_images_from_pdf_with_ocr(input_stream)
+        text = self.extract_images_from_pdf_with_ocr(input_stream, lang).lower()
         return self.contains_phrase_pdf(text)
 
     def is_birth_certificate(self, input_stream) -> bool:
@@ -80,19 +103,19 @@ class TesseractService:
         text = self.extract_images_from_pdf_with_ocr(input_stream).lower()
         return self.contains_phrase_pdf_death(text)
 
-    def is_birth_certificate_italy(self, input_stream) -> bool:
+    def is_birth_certificate_italy(self, input_stream, lang) -> bool:
         """Checks if the PDF is an Italian birth certificate."""
-        text = self.extract_images_from_pdf_with_ocr(input_stream).lower()
+        text = self.extract_images_from_pdf_with_ocr(input_stream, lang).lower()
         return self.contains_phrase_pdf_birth_italy(text)
 
-    def is_marriage_certificate_italy(self, input_stream) -> bool:
+    def is_marriage_certificate_italy(self, input_stream, lang) -> bool:
         """Checks if the PDF is an Italian marriage certificate."""
-        text = self.extract_images_from_pdf_with_ocr(input_stream).lower()
+        text = self.extract_images_from_pdf_with_ocr(input_stream, lang).lower()
         return self.contains_phrase_pdf_marriage_italy(text)
 
-    def is_death_certificate_italy(self, input_stream) -> bool:
+    def is_death_certificate_italy(self, input_stream, lang) -> bool:
         """Checks if the PDF is an Italian death certificate."""
-        text = self.extract_images_from_pdf_with_ocr(input_stream).lower()
+        text = self.extract_images_from_pdf_with_ocr(input_stream, lang).lower()
         return self.contains_phrase_pdf_death_italy(text)
 
     def contains_phrase_pdf_death_italy(self, text: str) -> bool:
@@ -125,9 +148,13 @@ class TesseractService:
 
     def contains_phrase_pdf(self, text: str) -> bool:
         """Checks for phrases related to any type of civil certificate."""
+        text = text.lower().strip()
         return (self.contains_phrase_pdf_birth(text) or
                 self.contains_phrase_pdf_marriage(text) or
-                self.contains_phrase_pdf_death(text))
+                self.contains_phrase_pdf_death(text) or
+                self.contains_phrase_pdf_birth_italy(text) or
+                self.contains_phrase_pdf_marriage_italy(text) or
+                self.contains_phrase_pdf_death_italy(text))
 
     def contains_phrase_front(self, text: str) -> bool:
         """Checks if text contains key phrases for DNI front side."""
