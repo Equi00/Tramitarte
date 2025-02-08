@@ -2,6 +2,7 @@ from datetime import date
 import pytest
 from fastapi import HTTPException
 from unittest.mock import MagicMock
+from models.CreateUserModel import CreateUserModel
 from services.UserService import UserService
 from entities.User import User
 from entities.Notification import Notification
@@ -65,7 +66,7 @@ def user_service(session):
     return UserService(session)
 
 def test_create_user(user_service, session):
-    user = User(
+    user = CreateUserModel(
         username="asdsdf",
         name="ramiro",
         surname="asdfsadf",
