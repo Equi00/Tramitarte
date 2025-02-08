@@ -1,7 +1,6 @@
 from typing import List, Optional
 from fastapi import Depends, HTTPException
 from models.CreateUserModel import CreateUserModel
-from database.get_db import get_db
 from sqlalchemy.orm import sessionmaker
 from entities.User import User
 from entities.Notification import Notification
@@ -75,6 +74,16 @@ class UserService:
         user.update_user(update_data)
         self.db.commit()
         self.db.refresh(user)
+        return user
+    
+    def delete(self, user_id: int) -> User:
+        user = self.db.query(User).filter(User.id == user_id).first()
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found.")
+        
+        self.db.delete(user)
+        self.db.commit()
+        
         return user
     
     def validate_email_format(self, email: str):
