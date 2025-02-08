@@ -1,5 +1,6 @@
 from typing import List, Optional
 from fastapi import Depends, HTTPException
+from models.CreateUserModel import CreateUserModel
 from database.get_db import get_db
 from sqlalchemy.orm import sessionmaker
 from entities.User import User
@@ -22,7 +23,8 @@ class UserService:
     def find_by_id(self, user_id: int) -> Optional[User]:
         return self.db.query(User).filter(User.id == user_id).first()
     
-    def create(self, user: User) -> User:
+    def create(self, user_data: CreateUserModel) -> User:
+        user = User(**user_data.model_dump()) 
         self.db.add(user)
         self.db.commit()
         self.db.refresh(user)
@@ -37,10 +39,7 @@ class UserService:
     
     def find_translator_by_email(self, email: str) -> List[User]:
         self.validate_email_format(email)
-        return self.db.query(User).filter(User.role == Role.TRANSLATOR, User.email.contains(email)).all()
-    
-    def find_by_name_and_surname(self, name: Optional[str], surname: Optional[str]) -> Optional[User]:
-        return self.db.query(User).filter(User.name == name, User.surname == surname).first()
+        return self.db.query(User).filter(User.role == Role.TRANSLATOR, User.email.contains(email)).first()
     
     def find_notifications_by_user_destination_id(self, user_id: int) -> List[NotificationModel]:
         user = self.db.query(User).filter(User.id == user_id).first()

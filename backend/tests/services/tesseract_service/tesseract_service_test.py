@@ -86,7 +86,7 @@ def test_invalid_image_format(tesseract_service):
     with pytest.raises(HTTPException) as exception:
         tesseract_service.recognize_image(decode_from_base64(base64_code))
 
-    assert exception.value.status_code == 500
+    assert exception.value.status_code == 400
     assert exception.value.detail == "Invalid file, this is not an image." 
 
 def test_invalid_file_format(tesseract_service):
@@ -95,7 +95,7 @@ def test_invalid_file_format(tesseract_service):
     with pytest.raises(HTTPException) as exception:
         tesseract_service.recognize_pdf(decode_from_base64(base64_code))
 
-    assert exception.value.status_code == 500
+    assert exception.value.status_code == 400
     assert exception.value.detail == "Invalid file format, this is not a PDF file." 
 
 def test_invalid_certificate(tesseract_service):
