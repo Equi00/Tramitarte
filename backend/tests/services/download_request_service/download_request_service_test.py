@@ -2,6 +2,7 @@ from datetime import date
 import pytest
 from fastapi import HTTPException
 from unittest.mock import MagicMock
+from models.DocumentationModel import DocumentationModel
 from services.DownloadRequestService import DownloadRequestService
 from enums.Gender import Gender
 from services.ProcessService import ProcessService
@@ -75,7 +76,7 @@ def test_create_download_request_success(download_request_service, session):
     requester = session.query(User).filter_by(username="Jose55xx").first()
     translator = session.query(User).filter_by(username="user2").first()
     process = session.query(Process).filter_by(code="PRC123").first()
-    documents = [UserDocumentation(name="Test Document", file_type="PDF", file_base64="dGVzdA==", process_id=process.id)]
+    documents = [DocumentationModel(id=1, name="Test Document", file_type="PDF", file_base64="dGVzdA==", process_id=process.id)]
 
     download_request_service.create_download_request(requester.id, translator.id, documents)
 
@@ -84,7 +85,7 @@ def test_create_download_request_success(download_request_service, session):
     assert retrieved_download_request.requester == requester
     assert retrieved_download_request.translator == translator
     assert len(retrieved_download_request.documentation) == 1
-    assert retrieved_download_request.documentation[0] == documents[0]
+    assert retrieved_download_request.documentation[0].name == documents[0].name
 
 def test_create_download_request_requester_not_found(download_request_service, session):
     translator = session.query(User).filter_by(username="user2").first()
@@ -106,7 +107,7 @@ def test_find_requests_by_requester_success(download_request_service, session):
     requester = session.query(User).filter_by(username="Jose55xx").first()
     translator = session.query(User).filter_by(username="user2").first()
     process = session.query(Process).filter_by(code="PRC123").first()
-    documents = [UserDocumentation(name="Test Document", file_type="PDF", file_base64="dGVzdA==", process_id=process.id)]
+    documents = [DocumentationModel(id=1, name="Test Document", file_type="PDF", file_base64="dGVzdA==", process_id=process.id)]
 
     download_request_service.create_download_request(requester.id, translator.id, documents)
 
@@ -122,3 +123,29 @@ def test_find_requests_by_requester_not_found(download_request_service, session)
 
     assert exception.value.status_code == 404
     assert exception.value.detail == "Requester not found."
+
+def test_delete_download_request_by_id(download_request_service, session):
+    requester = session.query(User).filter_by(username="Jose55xx").first()
+    translator = session.query(User).filter_by(username="user2").first()
+    process = session.query(Process).filter_by(code="PRC123").first()
+    documents = [DocumentationModel(id=1, name="Test Document", file_type="PDF", file_base64="dGVzdA==", process_id=process.id)]
+
+    download_request_service.create_download_request(requester.id, translator.id, documents)
+
+    retrieved_download_request: DownloadRequest = session.query(DownloadRequest).filter_by(requester_id=requester.id).first()
+
+    assert retrieved_download_request.documentation[0].process_id == documents[0].process_id
+
+    response = download_request_service.delete_download_request_by_id(retrieved_download_request.id)
+
+    deleted_download_request = session.query(DownloadRequest).filter_by(requester_id=requester.id).first()
+
+    assert deleted_download_request is None
+    assert response == {"message": "Download request deleted successfully"}
+
+def test_delete_download_request_by_id_failed(download_request_service, session):
+    with pytest.raises(HTTPException) as exception:
+        download_request_service.delete_download_request_by_id(565665)
+
+    assert exception.value.status_code == 404
+    assert exception.value.detail == "Request not found."

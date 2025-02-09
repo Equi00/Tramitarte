@@ -182,3 +182,19 @@ def test_validate_email_format_invalid(user_service):
 
     assert exception.value.status_code == 400
     assert "Invalid email format" in exception.value.detail
+
+def test_delete_user(user_service, session):
+    retrieved_translator = session.query(User).filter_by(name="Jose").first()
+
+    user_service.delete(retrieved_translator.id)
+
+    retrieved_user = session.query(User).filter_by(name="Jose").first()
+
+    assert retrieved_user is None
+
+def test_delete_user_failed(user_service):
+    with pytest.raises(HTTPException) as exception:
+        user_service.delete(343443)
+
+    assert exception.value.status_code == 404
+    assert "User not found." in exception.value.detail

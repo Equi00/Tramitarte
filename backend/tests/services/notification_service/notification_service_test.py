@@ -147,3 +147,43 @@ def test_delete_translation_request_by_requester_not_found(notification_service)
     
     assert exception.value.status_code == 404
     assert "Requester not found." in exception.value.detail
+
+def test_delete_notification_by_id_success(notification_service, session):
+    requester = session.query(User).filter_by(username="Jose55xx").first()
+    translator = session.query(User).filter_by(username="user2").first()
+
+    notification_service.generate_alert_to_translator(requester.id, translator.id, "New translation request")
+
+    retrieved_notification: Notification = session.query(Notification).filter_by(user_origin_id=requester.id).first()
+
+    notification_service.delete_notification_by_id(retrieved_notification.id)
+
+    retrieved_notification: Notification = session.query(Notification).filter_by(user_origin_id=requester.id).first()
+
+    assert retrieved_notification is None
+    
+def test_delete_notification_by_id_failed(notification_service):
+    with pytest.raises(HTTPException) as exception:
+        notification_service.delete_notification_by_id(34)
+    
+    assert exception.value.status_code == 404
+    assert "Notification not found." in exception.value.detail
+
+def test_find_all_notifications_by_user_destination(notification_service, session):
+    requester = session.query(User).filter_by(username="Jose55xx").first()
+    translator = session.query(User).filter_by(username="user2").first()
+
+    notification_service.generate_alert_to_translator(requester.id, translator.id, "New translation request")
+
+    retrieved_notification: Notification = session.query(Notification).filter_by(user_origin_id=requester.id).first()
+
+    notification_founded = notification_service.find_all_notifications_by_user_destination(translator.id)
+
+    assert retrieved_notification == notification_founded[0]
+
+def test_find_all_notifications_by_user_destination_failed(notification_service, session):
+    with pytest.raises(HTTPException) as exception:
+        notification_service.find_all_notifications_by_user_destination(34)
+    
+    assert exception.value.status_code == 404
+    assert "Receiver not found." in exception.value.detail
