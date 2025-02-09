@@ -130,7 +130,7 @@ def test_find_by_translator_success(translation_task_service, session):
     translation_task_service.create_translation_task(requester_id=requester.id, translator_id=translator.id)
     translation_task_service.create_translation_task(requester_id=requester.id, translator_id=translator.id)
 
-    result = translation_task_service.find_by_translator(translator_id=2)
+    result = translation_task_service.find_by_translator(translator_id=translator.id)
 
     assert len(result) == 2
     assert result[0].translator == translator
@@ -163,3 +163,26 @@ def test_find_by_process_not_found(translation_task_service):
 
     assert excepiton.value.status_code == 404
     assert excepiton.value.detail == "Process not found."
+
+def test_delete_by_id(translation_task_service, session):
+    translator = session.query(User).filter_by(username="user2").first()
+    requester = session.query(User).filter_by(username="Jose55xx").first()
+    process = session.query(Process).filter_by(code="PRC123").first()
+
+    translation_task_service.create_translation_task(requester_id=requester.id, translator_id=translator.id)
+
+    result = translation_task_service.find_by_process(process_id=process.id)
+
+    translation_task_service.delete_by_id(result[0].id)
+
+    translation_task_retrieved = session.query(TranslationTask).filter_by(translator_id=translator.id).first()
+
+    assert translation_task_retrieved is None
+
+
+def test_delete_by_id_failed(translation_task_service):
+    with pytest.raises(HTTPException) as excepiton:
+        translation_task_service.delete_by_id(34344)
+
+    assert excepiton.value.status_code == 404
+    assert excepiton.value.detail == "Translation task not found."

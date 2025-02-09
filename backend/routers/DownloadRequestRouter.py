@@ -33,10 +33,7 @@ async def create_download_request(
     documents: List[DocumentationModel],
     service: DownloadRequestService = Depends(get_download_request_service)
 ):
-    try:
-        return service.create_download_request(requester_id, translator_id, documents)
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Failed to create download request: {str(e)}")
+    return service.create_download_request(requester_id, translator_id, documents)
 
 
 @dr_router.get("/requester/{requester_id}")
@@ -44,15 +41,12 @@ async def get_download_requests_by_requester(
     requester_id: int,
     service: DownloadRequestService = Depends(get_download_request_service)
 ) -> List[DownloadRequestModel]:
-    try:
-        return service.find_requests_by_requester(requester_id)
-    except Exception as e:
-        raise HTTPException(status_code=404, detail=f"No download requests found: {str(e)}")
+    return service.find_requests_by_requester(requester_id)
 
 
 @dr_router.delete("/{request_id}")
 async def delete_download_request(
     request_id: int,
     service: DownloadRequestService = Depends(get_download_request_service)
-):
+) -> dict:
     return service.delete_download_request_by_id(request_id)

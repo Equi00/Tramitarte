@@ -18,10 +18,8 @@ class Process(Base):
     user = relationship("User", back_populates="processes")
     request_avo = relationship("AVORequest", back_populates="processes")
 
-    # Relación general con documentación
     documentations = relationship("Documentation", back_populates="process", cascade="all, delete-orphan")
 
-    # Relacionando documentos específicos según el tipo de subclase
     avo_documentation = relationship("AvoDocumentation", back_populates="process", cascade="all, delete-orphan")
     user_documentation = relationship("UserDocumentation", back_populates="process", cascade="all, delete-orphan")
     descendant_documentation = relationship("DescendantDocumentation", back_populates="process", cascade="all, delete-orphan")

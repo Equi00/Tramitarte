@@ -1,5 +1,7 @@
-from datetime import date
 import pytest
+from main import app
+from fastapi.testclient import TestClient
+from datetime import date
 from fastapi import HTTPException
 from unittest.mock import MagicMock
 from models.DocumentationModel import DocumentationModel
@@ -18,6 +20,10 @@ from entities.Stage import *
 from entities.AVORequest import AVORequest
 from enums.Role import Role
 from database.Database import Base, SessionLocal, engine
+
+
+
+client = TestClient(app)
 
 @pytest.fixture(scope="function")
 def session():
@@ -68,84 +74,106 @@ def session():
         
         Base.metadata.drop_all(bind=engine)
 
-@pytest.fixture
-def download_request_service(session):
-    return DownloadRequestService(session)
-
-def test_create_download_request_success(download_request_service, session):
+def test_create_download_request_success(session):
     requester = session.query(User).filter_by(username="Jose55xx").first()
     translator = session.query(User).filter_by(username="user2").first()
     process = session.query(Process).filter_by(code="PRC123").first()
-    documents = [DocumentationModel(id=1, name="Test Document", file_type="PDF", file_base64="dGVzdA==", process_id=process.id)]
+    json_documents = [
+        {
+            "id": 0,
+            "name": "Test Document",
+            "file_type": "PDF",
+            "file_base64": "dGVzdA==",
+            "process_id": process.id
+        }
+    ]
 
-    download_request_service.create_download_request(requester.id, translator.id, documents)
+    response = client.post(f"/api/download-request/requester/{requester.id}/translator/{translator.id}", json=json_documents)
 
     retrieved_download_request = session.query(DownloadRequest).filter_by(requester_id=requester.id).first()
+    
+    assert response.status_code == 200
     assert retrieved_download_request is not None
     assert retrieved_download_request.requester == requester
     assert retrieved_download_request.translator == translator
     assert len(retrieved_download_request.documentation) == 1
-    assert retrieved_download_request.documentation[0].name == documents[0].name
+    assert retrieved_download_request.documentation[0].name == json_documents[0]["name"]
 
-def test_create_download_request_requester_not_found(download_request_service, session):
-    translator = session.query(User).filter_by(username="user2").first()
-    with pytest.raises(HTTPException) as exc:
-        download_request_service.create_download_request(545, translator.id, [])
+def test_create_download_request_requester_not_found(session):
+    json_documents = [
+        {
+            "id": 0,
+            "name": "Test Document",
+            "file_type": "PDF",
+            "file_base64": "dGVzdA==",
+            "process_id": 545
+        }
+    ]
+    response = client.post(f"/api/download-request/requester/{454}/translator/{4543}", json=json_documents)
 
-    assert exc.value.status_code == 404
-    assert exc.value.detail == "Requester or translator not found."  
+    assert response.status_code == 404
+    assert response.json() == {"detail": "Requester or translator not found."}
 
-def test_create_download_request_translator_not_found(download_request_service, session):
-    requester = session.query(User).filter_by(username="Jose55xx").first()
-    with pytest.raises(HTTPException) as exception:
-        download_request_service.create_download_request(requester.id, 3434, [])
-
-    assert exception.value.status_code == 404
-    assert exception.value.detail == "Requester or translator not found."
-
-def test_find_requests_by_requester_success(download_request_service, session):
-    requester = session.query(User).filter_by(username="Jose55xx").first()
-    translator = session.query(User).filter_by(username="user2").first()
-    process = session.query(Process).filter_by(code="PRC123").first()
-    documents = [DocumentationModel(id=1, name="Test Document", file_type="PDF", file_base64="dGVzdA==", process_id=process.id)]
-
-    download_request_service.create_download_request(requester.id, translator.id, documents)
-
-    result = download_request_service.find_requests_by_requester(requester.id)
-
-    assert result[0].requester == requester
-    assert result[0].translator == translator
-
-
-def test_find_requests_by_requester_not_found(download_request_service, session):
-    with pytest.raises(HTTPException) as exception:
-        download_request_service.find_requests_by_requester(565665)
-
-    assert exception.value.status_code == 404
-    assert exception.value.detail == "Requester not found."
-
-def test_delete_download_request_by_id(download_request_service, session):
+def test_find_requests_by_requester_success(session):
     requester = session.query(User).filter_by(username="Jose55xx").first()
     translator = session.query(User).filter_by(username="user2").first()
     process = session.query(Process).filter_by(code="PRC123").first()
-    documents = [DocumentationModel(id=1, name="Test Document", file_type="PDF", file_base64="dGVzdA==", process_id=process.id)]
+    json_documents = [
+        {
+            "id": 0,
+            "name": "Test Document",
+            "file_type": "PDF",
+            "file_base64": "dGVzdA==",
+            "process_id": process.id
+        }
+    ]
 
-    download_request_service.create_download_request(requester.id, translator.id, documents)
+    response = client.post(f"/api/download-request/requester/{requester.id}/translator/{translator.id}", json=json_documents)
+
+    result = client.get(f"/api/download-request/requester/{requester.id}")
+
+    assert response.status_code == 200
+    assert result.status_code == 200
+    assert result.json()[0]["requester_id"] == requester.id
+    assert result.json()[0]["translator_id"] == translator.id 
+    assert result.json()[0]["documentation"][0] == json_documents[0] 
+
+def test_find_requests_by_requester_not_found(session):
+    response = client.get(f"/api/download-request/requester/{343434}")
+
+    assert response.status_code == 404
+    assert response.json() == {"detail": "Requester not found."}
+
+def test_delete_download_request_by_id(session):
+    requester = session.query(User).filter_by(username="Jose55xx").first()
+    translator = session.query(User).filter_by(username="user2").first()
+    process = session.query(Process).filter_by(code="PRC123").first()
+    json_documents = [
+        {
+            "id": 0,
+            "name": "Test Document",
+            "file_type": "PDF",
+            "file_base64": "dGVzdA==",
+            "process_id": process.id
+        }
+    ]
+
+    client.post(f"/api/download-request/requester/{requester.id}/translator/{translator.id}", json=json_documents)
 
     retrieved_download_request: DownloadRequest = session.query(DownloadRequest).filter_by(requester_id=requester.id).first()
 
-    assert retrieved_download_request.documentation[0].process_id == documents[0].process_id
+    assert retrieved_download_request.documentation[0].process_id == json_documents[0]["process_id"]
 
-    response = download_request_service.delete_download_request_by_id(retrieved_download_request.id)
+    response = client.delete(f"/api/download-request/{requester.id}")
 
     deleted_download_request = session.query(DownloadRequest).filter_by(requester_id=requester.id).first()
 
     assert deleted_download_request is None
-    assert response == {"message": "Download request deleted successfully"}
+    assert response.status_code == 200
+    assert response.json() == {"message": "Download request deleted successfully"}
 
-def test_delete_download_request_by_id_failed(download_request_service, session):
-    with pytest.raises(HTTPException) as exception:
-        download_request_service.delete_download_request_by_id(565665)
+def test_delete_download_request_by_id_failed(session):
+    response = client.delete(f"/api/download-request/{3434}")
 
-    assert exception.value.status_code == 404
-    assert exception.value.detail == "Request not found."
+    assert response.status_code == 404
+    assert response.json() == {"detail": "Request not found."}

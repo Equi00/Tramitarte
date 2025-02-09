@@ -59,24 +59,13 @@ def session():
 def documentation_service(session):
     return DocumentationService(session)
 
-def test_save_documentation(documentation_service, session):
-    process = session.query(Process).first()
-    doc = Documentation(name="test_doc", file_type="pdf", file_base64="dGVzdA==")
-    doc.process_id = process.id
-    
-    saved_doc = documentation_service.save(doc)
-    
-    retrieved_doc = session.query(Documentation).filter_by(id=saved_doc.id).first()
-    assert retrieved_doc.id is not None
-    assert retrieved_doc.name == "test_doc"
-    assert retrieved_doc.file_base64 == "dGVzdA=="
-
 def test_update_documentation(documentation_service, session):
     process = session.query(Process).first()
     doc = Documentation(name="old", file_type="pdf", file_base64="b2xkZGF0YQ==")
     doc.process_id = process.id
 
-    doc = documentation_service.save(doc)
+    session.add(doc)
+    session.commit()
 
     updated_doc = Documentation(name="new", file_type="jpg", file_base64="bmV3ZGF0YQ==")
     

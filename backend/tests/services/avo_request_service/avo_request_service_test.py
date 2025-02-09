@@ -2,8 +2,7 @@ from datetime import date
 import pytest
 from fastapi import HTTPException
 from unittest.mock import MagicMock
-from services.UserService import UserService
-from services.ProcessService import ProcessService
+from models.AVORequestModel import AVORequestModel
 from services.AVORequestService import AVORequestService
 from enums.Gender import Gender
 from entities.User import User
@@ -57,19 +56,12 @@ def session():
         Base.metadata.drop_all(bind=engine)
 
 @pytest.fixture
-def user_service(session):
-    return UserService(session)
-
-@pytest.fixture
-def process_service(session, user_service):
-    return ProcessService(session, user_service)
-
-@pytest.fixture
-def avo_request_service(session, process_service):
-    return AVORequestService(session, process_service)
+def avo_request_service(session):
+    return AVORequestService(session)
 
 def test_save_valid_avo_request(avo_request_service, session):
-    avo_request = AVORequest(
+    avo_request = AVORequestModel(
+        id = 0,
         first_name="John",
         last_name="Doe",
         birth_date=date(1990, 1, 1),
@@ -82,7 +74,8 @@ def test_save_valid_avo_request(avo_request_service, session):
     assert retrieved_avo == result
 
 def test_save_invalid_avo_request(avo_request_service):
-    avo_request = AVORequest(
+    avo_request = AVORequestModel(
+        id = 0,
         first_name="",
         last_name="",
         birth_date=date(1990, 1, 1),
@@ -96,7 +89,8 @@ def test_save_invalid_avo_request(avo_request_service):
     assert exc_info.value.detail == "AVO is not valid."
 
 def test_update_existing_avo_request(avo_request_service, session):
-    avo_request = AVORequest(
+    avo_request = AVORequestModel(
+        id = 0,
         first_name="asdf",
         last_name="asdf",
         birth_date=date(1990, 1, 1),
@@ -105,18 +99,25 @@ def test_update_existing_avo_request(avo_request_service, session):
 
     result = avo_request_service.save(avo_request)
 
-    result.first_name = "JOSE"
+    avo_request = AVORequestModel(
+        id = 0,
+        first_name="JOSE",
+        last_name="asdf",
+        birth_date=date(1990, 1, 1),
+        gender=Gender.MALE
+    )
 
-    updated_avo = avo_request_service.update(result)
+    updated_avo = avo_request_service.update(avo_request)
 
     retrieved_avo = session.query(AVORequest).filter_by(first_name="JOSE").first()
 
     assert updated_avo == retrieved_avo
     assert retrieved_avo.first_name == "JOSE"
-    assert retrieved_avo.id == updated_avo.id == result.id
+    assert retrieved_avo.id == updated_avo.id == result.id == avo_request.id
 
 def test_update_non_existent_avo_request(avo_request_service):
-    avo_request = AVORequest(
+    avo_request = AVORequestModel(
+        id = 0,
         first_name="asdf",
         last_name="asdf",
         birth_date=date(1990, 1, 1),
@@ -136,17 +137,8 @@ def test_find_avo_by_user_existing(avo_request_service, session):
 
     assert result == retireved_process.request_avo
 
-def test_find_avo_by_user_not_found(avo_request_service):
-    user1 = User(
-        username="asdfasd",
-        name="asdfsdaf",
-        surname="asdfdsf",
-        role=Role.REQUESTER,
-        email="unique@example.com",
-        birthdate=date(1985, 8, 20),
-        need_traduction=False,
-        photo="profile1.jpg"
-    )
+def test_find_avo_by_user_not_found(avo_request_service, session):
+    user1 = session.query(User).filter_by(username="user1").first()
 
     result = avo_request_service.find_avo_by_user(user1)
 

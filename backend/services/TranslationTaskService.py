@@ -40,3 +40,12 @@ class TranslationTaskService:
             raise HTTPException(status_code=404, detail="Process not found.")
 
         return self.db.query(TranslationTask).filter_by(process=process).all()
+
+    def delete_by_id(self, id: int):
+        translation_task = self.db.query(TranslationTask).filter_by(id=id).first()
+
+        if not translation_task:
+            raise HTTPException(status_code=404, detail="Translation task not found.")
+        
+        self.db.delete(translation_task)
+        self.db.commit()

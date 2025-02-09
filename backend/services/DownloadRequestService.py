@@ -34,7 +34,7 @@ class DownloadRequestService:
         if not requester:
             raise HTTPException(status_code=404, detail="Requester not found.")
 
-        return self.db.query(DownloadRequest).filter_by(requester = requester).first()
+        return self.db.query(DownloadRequest).filter_by(requester = requester).all()
     
     def delete_download_request_by_id(self, id: int):
         request: DownloadRequest = self.db.query(DownloadRequest).filter_by(id=id).first()
