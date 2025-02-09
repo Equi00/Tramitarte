@@ -1,0 +1,1341 @@
+{
+	"info": {
+		"_postman_id": "261a52af-cbf5-42f5-80f5-5de2315b4351",
+		"name": "tramitarte",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27971034"
+	},
+	"item": [
+		{
+			"name": "OCR endpoints",
+			"item": [
+				{
+					"name": "recognize image",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "img",
+									"type": "file",
+									"src": "/C:/Users/Usuario/Desktop/Tramitarte/backend/test_files/dni_front_argentina.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/ocr/image",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"ocr",
+								"image"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "recognize pdf text",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/Usuario/Desktop/Tramitarte/backend/test_files/marriage_certificate.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/ocr/pdf",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"ocr",
+								"pdf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "is DNI front",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "img",
+									"type": "file",
+									"src": "/C:/Users/Usuario/Desktop/Tramitarte/backend/test_files/dni_front_argentina.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/ocr/image/is_dni_front",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"ocr",
+								"image",
+								"is_dni_front"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "is DNI back",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "img",
+									"type": "file",
+									"src": "/C:/Users/Usuario/Desktop/Tramitarte/backend/test_files/dni_back_argentina.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/ocr/image/is_dni_back",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"ocr",
+								"image",
+								"is_dni_back"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "is certificate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "pdf",
+									"type": "file",
+									"src": "/C:/Users/Usuario/Desktop/Tramitarte/backend/test_files/death_certificate.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/ocr/pdf/is_certificate",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"ocr",
+								"pdf",
+								"is_certificate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "extract text from image in PDF",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "pdf",
+									"type": "file",
+									"src": "/C:/Users/Usuario/Desktop/Tramitarte/backend/test_files/death_certificate.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/ocr/pdf/text_from_img",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"ocr",
+								"pdf",
+								"text_from_img"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "is marriage certificate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "pdf",
+									"type": "file",
+									"src": "/C:/Users/Usuario/Desktop/Tramitarte/backend/test_files/marriage_certificate.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/ocr/pdf/is_marriage",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"ocr",
+								"pdf",
+								"is_marriage"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "is birth certificate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "pdf",
+									"type": "file",
+									"src": "/C:/Users/Usuario/Desktop/Tramitarte/backend/test_files/birth_certificate.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/ocr/pdf/is_birth",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"ocr",
+								"pdf",
+								"is_birth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "is death certificate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "pdf",
+									"type": "file",
+									"src": "/C:/Users/Usuario/Desktop/Tramitarte/backend/test_files/death_certificate.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/ocr/pdf/is_death",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"ocr",
+								"pdf",
+								"is_death"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "is italian marriage certificate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "pdf",
+									"type": "file",
+									"src": "/C:/Users/Usuario/Desktop/Tramitarte/backend/test_files/marriage_certificate_TRADUCTION.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/ocr/pdf/is_marriage_italy",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"ocr",
+								"pdf",
+								"is_marriage_italy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "is italian birth certificate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "pdf",
+									"type": "file",
+									"src": "/C:/Users/Usuario/Desktop/Tramitarte/backend/test_files/birth_certificate_TRADUCTION.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/ocr/pdf/is_birth_italy",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"ocr",
+								"pdf",
+								"is_birth_italy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "is italian death certificate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "pdf",
+									"type": "file",
+									"src": "/C:/Users/Usuario/Desktop/Tramitarte/backend/test_files/death_certificate_TRADUCTION.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/ocr/pdf/is_death_italy",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"ocr",
+								"pdf",
+								"is_death_italy"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "USER endpoints",
+			"item": [
+				{
+					"name": "get translators",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/user/translators",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"user",
+								"translators"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get requesters",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/user/requesters",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"user",
+								"requesters"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get notifications by user destination",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/user/1/notifications",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"user",
+								"1",
+								"notifications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/user/3",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"user",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user by email",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/user/?email=user@example.com",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"user",
+								""
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "user@example.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get translation requests by translator id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/user/3/translation-requests",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"user",
+								"3",
+								"translation-requests"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get translation requests by requester and translator id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/user/translation-requests/requester/1/translator/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"user",
+								"translation-requests",
+								"requester",
+								"1",
+								"translator",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get translation request by requester id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/user/requests/requester/3",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"user",
+								"requests",
+								"requester",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get translator by email",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/user/translator/email?email=user@example.com",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"user",
+								"translator",
+								"email"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "user@example.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"string\",\r\n  \"name\": \"string\",\r\n  \"surname\": \"string\",\r\n  \"role\": \"TRANSLATOR\",\r\n  \"email\": \"user@example.com\",\r\n  \"birthdate\": \"2025-02-08\",\r\n  \"need_traduction\": true,\r\n  \"photo\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/user/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"user",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update user",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"aaaaaaa\",\r\n    \"surname\": \"aaaaaaa\",\r\n    \"name\": \"aaaaaaa\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/user/3",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"user",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/user/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"user",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "NOTIFICATION endpoints",
+			"item": [
+				{
+					"name": "get notifications by user destination id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/notification/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"notification",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create alert for translator",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/notification/alert-translator/1/2?description=exaple message",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"notification",
+								"alert-translator",
+								"1",
+								"2"
+							],
+							"query": [
+								{
+									"key": "description",
+									"value": "exaple message"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create alert",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/notification/alert/1/2?description=message",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"notification",
+								"alert",
+								"1",
+								"2"
+							],
+							"query": [
+								{
+									"key": "description",
+									"value": "message"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete alert",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/notification/alert/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"notification",
+								"alert",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete translation request",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/notification/request/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"notification",
+								"request",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete translation request by requester id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/notification/request/requester/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"notification",
+								"request",
+								"requester",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DOWNLOAD REQUEST endpoints",
+			"item": [
+				{
+					"name": "get download requests by requester",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/download-request/requester/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"download-request",
+								"requester",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create download request",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"id\": 0,\r\n        \"name\": \"Test Document\",\r\n        \"file_type\": \"PDF\",\r\n        \"file_base64\": \"dGVzdA==\",\r\n        \"process_id\": 0\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/download-request/requester/1/translator/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"download-request",
+								"requester",
+								"1",
+								"translator",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete download request by id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/download-request/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"download-request",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TRANSLATION TASK endpoints",
+			"item": [
+				{
+					"name": "get translation tasks by translator id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/task/translator/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"task",
+								"translator",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get translation tasks by process id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/task/process/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"task",
+								"process",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create translation task",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/task/requester/1/translator/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"task",
+								"requester",
+								"1",
+								"translator",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete translation task by id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/task/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"task",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PROCESS endpoints",
+			"item": [
+				{
+					"name": "get process by user id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/process/user/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"process",
+								"user",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get avo request by user id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/process/request/user/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"process",
+								"request",
+								"user",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get process documentations by process id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/process/documentation/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"process",
+								"documentation",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "start process by user id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/process/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"process",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "upload avo  by process id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 0,\r\n  \"first_name\": \"string\",\r\n  \"last_name\": \"string\",\r\n  \"birth_date\": \"2025-02-09\",\r\n  \"gender\": \"Male\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/process/upload-avo/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"process",
+								"upload-avo",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "upload user documentation by user id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n    \"id\": 0,\r\n    \"name\": \"string\",\r\n    \"file_type\": \"string\",\r\n    \"file_base64\": \"string\",\r\n    \"process_id\": 0\r\n  }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/process/upload/documentation/user/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"process",
+								"upload",
+								"documentation",
+								"user",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "upload avo documentation by process id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n    \"id\": 0,\r\n    \"name\": \"string\",\r\n    \"file_type\": \"string\",\r\n    \"file_base64\": \"string\",\r\n    \"process_id\": 0\r\n  }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/process/upload/documentation/avo/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"process",
+								"upload",
+								"documentation",
+								"avo",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "upload descendants by process id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n    \"id\": 0,\r\n    \"name\": \"string\",\r\n    \"file_type\": \"string\",\r\n    \"file_base64\": \"string\",\r\n    \"process_id\": 0\r\n  }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/process/upload/documentation/descendants/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"process",
+								"upload",
+								"documentation",
+								"descendants",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "upload translated documentation by user id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n    \"id\": 0,\r\n    \"name\": \"string\",\r\n    \"file_type\": \"string\",\r\n    \"file_base64\": \"string\",\r\n    \"process_id\": 0\r\n  }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/process/upload/documentation/translated/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"process",
+								"upload",
+								"documentation",
+								"translated",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update documentation by documentation id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"string\",\r\n  \"file_type\": \"string\",\r\n  \"file_base64\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/process/modify/document/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"process",
+								"modify",
+								"document",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete process by process id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/process/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"process",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

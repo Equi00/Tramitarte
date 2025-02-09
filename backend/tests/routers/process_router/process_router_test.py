@@ -599,9 +599,15 @@ def test_get_avo_by_user(session):
     assert response.status_code == 200
     assert response.json()["first_name"] == "avo name"
 
-def test_get_avo_by_user_failed(session):    
+def test_get_avo_by_user_null_value(session):    
     user = session.query(User).filter_by(username="user2").first()
     response = client.get(f"/api/process/request/user/{user.id}")
 
     assert response.status_code == 200
     assert response.json() == None
+
+def test_get_avo_by_user_failed(session):    
+    response = client.get(f"/api/process/request/user/{343434}")
+
+    assert response.status_code == 404
+    assert response.json() == {"detail": "User not found."}

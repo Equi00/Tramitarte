@@ -126,6 +126,8 @@ async def delete_process(process_id: int, service: ProcessService = Depends(get_
 async def get_avo_request_by_user(user_id: int, user_service: UserService = Depends(get_user_service), avo_service: AVORequestService = Depends(get_avo_service)):
     try:
         user = user_service.find_by_id(user_id)
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found.")
         return avo_service.find_avo_by_user(user)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
