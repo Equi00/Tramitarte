@@ -1,0 +1,16 @@
+pillow
+pybase64
+databases
+datetime
+fastapi
+fitz
+importlib
+openai
+pdf2image
+pydantic
+pypdf
+pytesseract
+pytest
+sqlalchemy
+typing
+uuid
