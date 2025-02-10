@@ -66,8 +66,8 @@ class NotificationService:
                 description=f"The requester {requester.email} has deleted their request."
             )
 
-        self.db.query(TranslationRequest).filter_by(requester=requester).delete()
-        self.db.commit()
+            self.db.query(TranslationRequest).filter_by(requester=requester).delete()
+            self.db.commit()
 
     def delete_notification_by_id(self, id: int):
         notification = self.db.query(Notification).filter_by(id=id).first()

@@ -76,99 +76,99 @@ class TesseractService:
     def is_dni_front(self, input_stream) -> bool:
         """Checks if the image is a front side of a DNI (National ID)."""
         text = self.recognize_image(input_stream).lower()
-        return self.contains_phrase_front(text)
+        return self._contains_phrase_front(text)
 
     def is_dni_back(self, input_stream) -> bool:
         """Checks if the image is a back side of a DNI (National ID)."""
         text = self.recognize_image(input_stream).lower()
-        return self.contains_phrase_back(text)
+        return self._contains_phrase_back(text)
 
     def is_certificate(self, input_stream, lang = None) -> bool:
         """Checks if the PDF contains a civil certificate (birth, marriage, death)."""
         text = self.extract_images_from_pdf_with_ocr(input_stream, lang).lower()
-        return self.contains_phrase_pdf(text)
+        return self._contains_phrase_pdf(text)
 
     def is_birth_certificate(self, input_stream) -> bool:
         """Checks if the PDF is a birth certificate."""
         text = self.extract_images_from_pdf_with_ocr(input_stream).lower()
-        return self.contains_phrase_pdf_birth(text)
+        return self._contains_phrase_pdf_birth(text)
 
     def is_marriage_certificate(self, input_stream) -> bool:
         """Checks if the PDF is a marriage certificate."""
         text = self.extract_images_from_pdf_with_ocr(input_stream).lower()
-        return self.contains_phrase_pdf_marriage(text)
+        return self._contains_phrase_pdf_marriage(text)
 
     def is_death_certificate(self, input_stream) -> bool:
         """Checks if the PDF is a death certificate."""
         text = self.extract_images_from_pdf_with_ocr(input_stream).lower()
-        return self.contains_phrase_pdf_death(text)
+        return self._contains_phrase_pdf_death(text)
 
     def is_birth_certificate_italy(self, input_stream, lang) -> bool:
         """Checks if the PDF is an Italian birth certificate."""
         text = self.extract_images_from_pdf_with_ocr(input_stream, lang).lower()
-        return self.contains_phrase_pdf_birth_italy(text)
+        return self._contains_phrase_pdf_birth_italy(text)
 
     def is_marriage_certificate_italy(self, input_stream, lang) -> bool:
         """Checks if the PDF is an Italian marriage certificate."""
         text = self.extract_images_from_pdf_with_ocr(input_stream, lang).lower()
-        return self.contains_phrase_pdf_marriage_italy(text)
+        return self._contains_phrase_pdf_marriage_italy(text)
 
     def is_death_certificate_italy(self, input_stream, lang) -> bool:
         """Checks if the PDF is an Italian death certificate."""
         text = self.extract_images_from_pdf_with_ocr(input_stream, lang).lower()
-        return self.contains_phrase_pdf_death_italy(text)
+        return self._contains_phrase_pdf_death_italy(text)
 
-    def contains_phrase_pdf_death_italy(self, text: str) -> bool:
+    def _contains_phrase_pdf_death_italy(self, text: str) -> bool:
         """Checks for phrases related to Italian death certificates."""
         return self.phrase_death_italy_certificate1 in text or self.phrase_death_italy_certificate2 in text
 
-    def contains_phrase_pdf_marriage_italy(self, text: str) -> bool:
+    def _contains_phrase_pdf_marriage_italy(self, text: str) -> bool:
         """Checks for phrases related to Italian marriage certificates."""
         return self.phrase_marriage_certificate in text and (
                 self.phrase_certificate_italy in text or self.phrase_certificate_italy2 in text)
 
-    def contains_phrase_pdf_birth_italy(self, text: str) -> bool:
+    def _contains_phrase_pdf_birth_italy(self, text: str) -> bool:
         """Checks for phrases related to Italian birth certificates."""
         return self.phrase_birth_italy_certificate in text and (
                 self.phrase_certificate_italy in text or self.phrase_certificate_italy2 in text)
 
-    def contains_phrase_pdf_death(self, text: str) -> bool:
+    def _contains_phrase_pdf_death(self, text: str) -> bool:
         """Checks for phrases related to death certificates."""
         return self.phrase_death_certificate1 in text or self.phrase_death_certificate2 in text
 
-    def contains_phrase_pdf_birth(self, text: str) -> bool:
+    def _contains_phrase_pdf_birth(self, text: str) -> bool:
         """Checks for phrases related to birth certificates."""
         return self.phrase_birth_certificate in text and (
                 self.phrase_certificate in text or self.phrase_certificate2 in text)
 
-    def contains_phrase_pdf_marriage(self, text: str) -> bool:
+    def _contains_phrase_pdf_marriage(self, text: str) -> bool:
         """Checks for phrases related to marriage certificates."""
         return self.phrase_marriage_certificate in text and (
                 self.phrase_certificate in text or self.phrase_certificate2 in text)
 
-    def contains_phrase_pdf(self, text: str) -> bool:
+    def _contains_phrase_pdf(self, text: str) -> bool:
         """Checks for phrases related to any type of civil certificate."""
         text = text.lower().strip()
-        return (self.contains_phrase_pdf_birth(text) or
-                self.contains_phrase_pdf_marriage(text) or
-                self.contains_phrase_pdf_death(text) or
-                self.contains_phrase_pdf_birth_italy(text) or
-                self.contains_phrase_pdf_marriage_italy(text) or
-                self.contains_phrase_pdf_death_italy(text))
+        return (self._contains_phrase_pdf_birth(text) or
+                self._contains_phrase_pdf_marriage(text) or
+                self._contains_phrase_pdf_death(text) or
+                self._contains_phrase_pdf_birth_italy(text) or
+                self._contains_phrase_pdf_marriage_italy(text) or
+                self._contains_phrase_pdf_death_italy(text))
 
-    def contains_phrase_front(self, text: str) -> bool:
+    def _contains_phrase_front(self, text: str) -> bool:
         """Checks if text contains key phrases for DNI front side."""
         return "registro nacional de las personas" in text.lower()
 
-    def contains_phrase_back(self, text: str) -> bool:
+    def _contains_phrase_back(self, text: str) -> bool:
         """Checks if text contains key phrases for DNI back side."""
         text_lower = text.lower()
         phrase_back = "ministro del interior y transporte"
-        pattern = self.find_pattern(text)
+        pattern = self._find_pattern(text)
 
         return phrase_back in text_lower or bool(pattern)
 
-    def find_pattern(self, text: str):
+    def _find_pattern(self, text: str):
         """Finds specific ID patterns like 'idargXXX' or 'XXXarg' in text."""
         regex = re.compile(r"(?i)(idarg\w+|\w+arg)")
         return regex.findall(text)

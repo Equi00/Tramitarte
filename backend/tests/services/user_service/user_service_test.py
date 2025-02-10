@@ -172,13 +172,13 @@ def test_update_user_not_found(user_service):
 
 def test_validate_email_format_valid(user_service):
     try:
-        user_service.validate_email_format("test@example.com")
+        user_service._validate_email_format("test@example.com")
     except HTTPException:
         pytest.fail("Validation should not raise an exception.")
 
 def test_validate_email_format_invalid(user_service):
     with pytest.raises(HTTPException) as exception:
-        user_service.validate_email_format("invalid-email")
+        user_service._validate_email_format("invalid-email")
 
     assert exception.value.status_code == 400
     assert "Invalid email format" in exception.value.detail

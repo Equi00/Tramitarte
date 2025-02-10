@@ -82,5 +82,5 @@ async def get_translator_by_email(email: str, service: UserService = Depends(get
     return service.find_translator_by_email(email)
 
 @u_router.delete("/{id}", response_model=UserModel)
-async def create_user(id: int, service: UserService = Depends(get_user_service)):
+async def delete_user(id: int, service: UserService = Depends(get_user_service)):
     return service.delete(id)

@@ -139,9 +139,12 @@ class ProcessService:
         return document_list
 
     def delete_process(self, process_id: int):
-        process = self.db.query(Process).filter(Process.id == process_id).first()
+        process: Process = self.db.query(Process).filter(Process.id == process_id).first()
         if not process:
             raise HTTPException(status_code=404, detail="The process to delete does not exist.")
+        
+        self.db.delete(process.stage)
+        self.db.delete(process.request_avo)
         self.db.delete(process)
         self.db.commit()
 

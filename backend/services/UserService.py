@@ -30,14 +30,14 @@ class UserService:
         return user
     
     def find_by_email(self, email: str) -> User:
-        self.validate_email_format(email)
+        self._validate_email_format(email)
         user = self.db.query(User).filter(User.email == email).first()
         if not user:
             raise HTTPException(status_code=404, detail="No registered user with this email.")
         return user
     
-    def find_translator_by_email(self, email: str) -> List[User]:
-        self.validate_email_format(email)
+    def find_translator_by_email(self, email: str) -> Optional[User]:
+        self._validate_email_format(email)
         return self.db.query(User).filter(User.role == Role.TRANSLATOR, User.email.contains(email)).first()
     
     def find_notifications_by_user_destination_id(self, user_id: int) -> List[NotificationModel]:
@@ -86,7 +86,7 @@ class UserService:
         
         return user
     
-    def validate_email_format(self, email: str):
+    def _validate_email_format(self, email: str):
         import re
         if not re.match(r'^[0-9A-Za-z.-]+@[A-Za-z]+\.[a-zA-Z]+$', email):
             raise HTTPException(status_code=400, detail="Invalid email format. It should be in the form name@domain.extension")
