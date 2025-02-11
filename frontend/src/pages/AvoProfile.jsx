@@ -11,7 +11,7 @@ import {
   Wrap,
   WrapItem,
 } from "@chakra-ui/react";
-import { AccountCircle, Close, Edit } from "@mui/icons-material";
+import { AccountCircle, Close } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import {useState,useEffect} from "react"
 

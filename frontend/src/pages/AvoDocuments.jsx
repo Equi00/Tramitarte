@@ -11,11 +11,11 @@ import {
 import { ArrowBack } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
-import ConfirmationModal from "../components/ConfirmationModal";
-import ModalIsLoading from "../components/ModalIsLoading";
-import AVODocumentation from "../components/documentacionSolicitante/AVODocumentation";
-import tramiteService from "../services/TramiteService";
-import ModalError from "../components/ModalError";
+import ConfirmationModal from "../components/modals/ConfirmationModal";
+import ModalIsLoading from "../components/modals/ModalIsLoading";
+import AVODocumentation from "../components/requesterDocumentation/AVODocumentation";
+import processService from "../services/ProcessService";
+import ModalError from "../components/modals/ModalError";
 function AvoDocuments() {
   const navigate = useNavigate();
   const { isOpen } = useDisclosure();
@@ -143,7 +143,7 @@ function AvoDocuments() {
   
       documents.push(...filesWithName);
 
-      let response = await tramiteService.uploadAVODocumentation(
+      let response = await processService.uploadAVODocumentation(
         documents,
         Number(process.id)
       );

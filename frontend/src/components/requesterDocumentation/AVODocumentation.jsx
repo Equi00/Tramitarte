@@ -1,10 +1,10 @@
 import { Box, Center, useDisclosure } from "@chakra-ui/react";
-import InputFile from "./InputFile";
-import InputNoObligatoryCertificate from "./InputNoObligatoryCertificate";
-import tramiteService from "../../services/TramiteService";
+import InputFile from "../inputs/InputFile";
+import InputNoObligatoryCertificate from "../inputs/InputNoObligatoryCertificate";
+import processService from "../../services/ProcessService";
 import { useEffect, useState } from "react";
-import ModalError from "../ModalError";
-import ModalIsLoading from "../ModalIsLoading";
+import ModalError from "../modals/ModalError";
+import ModalIsLoading from "../modals/ModalIsLoading";
 
 function AVODocumentation({ addAVODocuments, isOpenNO1, onToggle1, isOpenNO2, onToggle2}) {
   const [name1, setName1] = useState("death certificate (.pdf)")
@@ -21,7 +21,7 @@ function AVODocumentation({ addAVODocuments, isOpenNO1, onToggle1, isOpenNO2, on
       const extension = file.name.slice(lastPoint + 1);
       setIsCharging(true)
       if(extension === "pdf"){
-        let verification = await tramiteService.isDeathCertificate(file)
+        let verification = await processService.isDeathCertificate(file)
         if(verification === false){
           setIsCharging(false)
           onOpen()
@@ -48,7 +48,7 @@ function AVODocumentation({ addAVODocuments, isOpenNO1, onToggle1, isOpenNO2, on
       const extension = file.name.slice(lastPoint + 1);
       setIsCharging(true)
       if(extension === "pdf"){
-        let verification = await tramiteService.isMarriageCertificate(file)
+        let verification = await processService.isMarriageCertificate(file)
         if(verification === false){
           setIsCharging(false)
           onOpen()
@@ -75,7 +75,7 @@ function AVODocumentation({ addAVODocuments, isOpenNO1, onToggle1, isOpenNO2, on
       const extension = file.name.slice(lastPoint + 1);
       setIsCharging(true)
         if(extension === "pdf"){
-        let verification = await tramiteService.isBirthCertificate(file)
+        let verification = await processService.isBirthCertificate(file)
         if(verification === false){
           setIsCharging(false)
           onOpen()

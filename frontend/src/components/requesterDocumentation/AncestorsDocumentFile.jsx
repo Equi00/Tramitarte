@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import InputFile from "./InputFile";
+import InputFile from "../inputs/InputFile";
 import { Box, Center, useDisclosure } from "@chakra-ui/react";
-import tramiteService from "../../services/TramiteService";
-import ModalError from "../ModalError";
-import InputNoObligatoryCertificateMultiple from "./InputNoObligatoryCertificateMultiple";
-import ModalIsLoading from "../ModalIsLoading";
+import processService from "../../services/ProcessService";
+import ModalError from "../modals/ModalError";
+import InputNoObligatoryCertificateMultiple from "../inputs/InputNoObligatoryCertificateMultiple";
+import ModalIsLoading from "../modals/ModalIsLoading";
 
 function AncestorsDocumentFile({ ancestorCount, persons, setAncestorsDocumentation, deleteDocuments, setCheck1, setCheck2 }) {
   const [name1, setName1] = useState([]);
@@ -23,7 +23,7 @@ function AncestorsDocumentFile({ ancestorCount, persons, setAncestorsDocumentati
       const extension = file.name.slice(lastPoint + 1);
       setIsCharging(true)
     if(extension === "pdf"){
-    const verification = await tramiteService.isDeathCertificate(file);
+    const verification = await processService.isDeathCertificate(file);
     
     if (verification === false) {
         setIsCharging(false)
@@ -58,7 +58,7 @@ function AncestorsDocumentFile({ ancestorCount, persons, setAncestorsDocumentati
       const extension = file.name.slice(lastPoint + 1);
       setIsCharging(true)
       if(extension === "pdf"){
-    const verification = await tramiteService.isMarriageCertificate(file);
+    const verification = await processService.isMarriageCertificate(file);
     
     if (verification === false) {
       setIsCharging(false)
@@ -93,7 +93,7 @@ function AncestorsDocumentFile({ ancestorCount, persons, setAncestorsDocumentati
       const extension = file.name.slice(lastPoint + 1);
       setIsCharging(true)
       if(extension === "pdf"){
-    const verification = await tramiteService.isBirthCertificate(file);
+    const verification = await processService.isBirthCertificate(file);
     
     if (verification === false) {
       setIsCharging(false)

@@ -1,18 +1,12 @@
 import {
-    Stack,
     Checkbox,
-    Box,
-    useDisclosure,
     Text,
     Flex,
-    Collapse,
-    Center,
-    SimpleGrid,
     Grid,
     GridItem,
   } from "@chakra-ui/react";
   import InputFile from "./InputFile";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function InputNoObligatoryCertificateMultiple({ confirmationQuestion, action, handleOnInput, handleCheckbox, index }) {
     const [isChecked, setIsChecked] = useState(false);

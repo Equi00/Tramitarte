@@ -11,7 +11,7 @@ import { Check, Close } from "@mui/icons-material";
 
 export default function ConfirmationModal({
   isOpen,
-  handleConfirmacion,
+  handleConfirmation,
   onClose,
   question,
   dataToConfirm,
@@ -34,7 +34,7 @@ export default function ConfirmationModal({
             icon={<Close />}
           />
           <IconButton
-            onClick={() => handleConfirmacion()}
+            onClick={() => handleConfirmation()}
             bg={"teal.200"}
             icon={<Check />}
           />

@@ -1,6 +1,6 @@
 import { Card, CardHeader, Heading } from "@chakra-ui/react"
 
-const CardAviso = ({text}) => {
+const WarningCard = ({text}) => {
 
     return(
         <Card
@@ -16,4 +16,4 @@ const CardAviso = ({text}) => {
     )
 }
 
-export default CardAviso
+export default WarningCard

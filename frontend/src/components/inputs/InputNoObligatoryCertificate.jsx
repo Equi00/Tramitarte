@@ -1,13 +1,8 @@
 import {
-  Stack,
   Checkbox,
-  Box,
-  useDisclosure,
   Text,
   Flex,
   Collapse,
-  Center,
-  SimpleGrid,
   Grid,
   GridItem,
 } from "@chakra-ui/react";

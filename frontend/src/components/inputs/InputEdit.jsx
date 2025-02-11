@@ -1,6 +1,6 @@
 import { Button } from "@chakra-ui/button";
 import { Input } from "@chakra-ui/input";
-import { Edit, FileUpload } from "@mui/icons-material";
+import { Edit } from "@mui/icons-material";
 import { useRef } from "react";
 
 function InputEdit({ accion, handleOnInput }) {

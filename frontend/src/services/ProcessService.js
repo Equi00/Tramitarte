@@ -1,6 +1,6 @@
 import axios from "axios";
 
-class TramiteService {
+class ProcessService {
   urlBackend = "http://localhost:8000/api";
 
   async guardarTramite(user_id) {
@@ -16,7 +16,7 @@ class TramiteService {
     return persisted_avo;
   }
 
-  async cargarDocumentacionPersonal(documentation, user_id) {
+  async uploadPersonalDocumentation(documentation, user_id) {
     let generated_documentation = await axios.post(
       `${this.urlBackend}/process/upload/documentation/user/${user_id}`,
       JSON.stringify(documentation),
@@ -41,7 +41,7 @@ class TramiteService {
     return generated_documentation;
   }
 
-  async cargarDocumentacionTraducida(documentation, user_id) {
+  async uploadTranslatedDocumentation(documentation, user_id) {
     let generated_documentation = await axios.post(
       `${this.urlBackend}/process/upload/documentation/translated/${user_id}`,
       documentation
@@ -49,14 +49,14 @@ class TramiteService {
     return generated_documentation;
   }
 
-  async buscarPorUsuario(user_id) {
+  async searchProcessByUserId(user_id) {
     let persisted_process = await axios.get(
       `${this.urlBackend}/process/user/${user_id}`
     );
     return persisted_process;
   }
 
-  async esDniFrente(imgFile) {
+  async isDNIFront(imgFile) {
     const formData = new FormData();
     formData.append("img", imgFile);
   
@@ -64,7 +64,7 @@ class TramiteService {
     return response.data;
   }
 
-  async esDniDorso(imgFile) {
+  async isDNIBack(imgFile) {
     const formData = new FormData();
     formData.append("img", imgFile);
   
@@ -104,7 +104,7 @@ class TramiteService {
     return response.data;
   }
 
-  async esCertificadoNacimientoItaliano(pdfFile){
+  async isItalianBirthCertificate(pdfFile){
     const formData = new FormData();
     formData.append("pdf", pdfFile);
 
@@ -112,7 +112,7 @@ class TramiteService {
     return response.data;
   }
 
-  async esCertificadoMatrimonioItaliano(pdfFile) {
+  async isItalianMarriageCertificate(pdfFile) {
     const formData = new FormData();
     formData.append("pdf", pdfFile);
   
@@ -120,7 +120,7 @@ class TramiteService {
     return response.data;
   }
 
-  async esCertificadoDefuncionItaliano(pdfFile) {
+  async isItalianDeathCertification(pdfFile) {
     const formData = new FormData();
     formData.append("pdf", pdfFile);
   
@@ -137,11 +137,11 @@ class TramiteService {
     return avo.data
   }
 
-  async modificarArchivo(document_id,document){
+  async modifyFile(document_id,document){
     await axios.post(`${this.urlBackend}/process/modify/document/${document_id}`, document)
   }
 }
 
-const tramiteService = new TramiteService();
+const processService = new ProcessService();
 
-export default tramiteService;
+export default processService;

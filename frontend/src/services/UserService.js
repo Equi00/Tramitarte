@@ -1,6 +1,6 @@
 import axios from "axios";
 
-class UsuarioService {
+class UserService {
     urlBackend = 'http://localhost:8000/api';
 
     async guardarUsuario(user) {
@@ -20,7 +20,7 @@ class UsuarioService {
         let user= await axios?.get(`${this.urlBackend}/user`, { params: body })
         return user
     }
-    async traerDocumentacionCargada(id){
+    async getDocumentationUploaded(id){
         let documentacion= await axios?.get(`${this.urlBackend}/process/documentation/${id}`)
         return documentacion.data.documentList
     }
@@ -121,6 +121,6 @@ class UsuarioService {
  
 }
 
-const usuarioService = new UsuarioService();
+const userService = new UserService();
 
-export default usuarioService;
+export default userService;

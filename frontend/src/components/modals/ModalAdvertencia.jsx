@@ -1,4 +1,4 @@
-import { InfoOutlineIcon, WarningIcon } from "@chakra-ui/icons";
+import { WarningIcon } from "@chakra-ui/icons";
 import {
   Modal,
   ModalOverlay,

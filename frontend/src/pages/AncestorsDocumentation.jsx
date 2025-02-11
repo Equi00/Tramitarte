@@ -13,11 +13,11 @@ import {
 } from "@chakra-ui/react";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { useNavigate } from "react-router";
-import AncestorsDocumentFile from "../components/documentacionSolicitante/AncestorsDocumentFile";
-import ConfirmationModal from "../components/ConfirmationModal";
-import ModalError from "../components/ModalError";
-import ModalIsLoading from "../components/ModalIsLoading";
-import tramiteService from "../services/TramiteService";
+import AncestorsDocumentFile from "../components/requesterDocumentation/AncestorsDocumentFile";
+import ConfirmationModal from "../components/modals/ConfirmationModal";
+import ModalError from "../components/modals/ModalError";
+import ModalIsLoading from "../components/modals/ModalIsLoading";
+import ProcessService from "../services/ProcessService";
 
 function AncestorsDocumentation() {
   const navigate = useNavigate();
@@ -139,7 +139,7 @@ function AncestorsDocumentation() {
 
       
 
-      let response = await tramiteService.uploadAncestorsDocumentation(documents, Number(process.id));
+      let response = await ProcessService.uploadAncestorsDocumentation(documents, Number(process.id));
       console.log(documents)
       console.log(response);
       let names = documents.map((docu) => docu.name)
