@@ -232,7 +232,7 @@ def test_add_avo_documentation(session):
     assert retrieved.avo_documentation[0].process_id == retrieved.id
     assert isinstance(retrieved.avo_documentation[0], AvoDocumentation)
 
-def test_add_descendant_documentation(session):
+def test_add_ancestor_documentation(session):
     user = session.query(User).filter_by(username="jdoe").first()
     stage = Stage1(description="Load AVO")
 
@@ -245,21 +245,21 @@ def test_add_descendant_documentation(session):
     doc = UserDocumentation(name="doc3", file_type="PDF", file_base64="encoded_string")
     doc2 = UserDocumentation(name="doc2", file_type="PDF", file_base64="encoded_string")
 
-    process.add_descendant_documentation([doc, doc2])
+    process.add_ancestors_documentation([doc, doc2])
 
-    assert len(process.descendant_documentation) == 2
+    assert len(process.ancestors_documentation) == 2
 
-    assert isinstance(process.descendant_documentation[0], DescendantDocumentation)
-    assert isinstance(process.descendant_documentation[1], DescendantDocumentation)
+    assert isinstance(process.ancestors_documentation[0], AncestorDocumentation)
+    assert isinstance(process.ancestors_documentation[1], AncestorDocumentation)
 
     session.add(process)
     session.commit()
 
     retrieved = session.query(Process).filter_by(code="PRC123").first()
-    assert len(retrieved.descendant_documentation) == 2
-    assert retrieved.descendant_documentation[0].name == "doc3"
-    assert retrieved.descendant_documentation[0].process_id == retrieved.id
-    assert isinstance(retrieved.descendant_documentation[0], DescendantDocumentation)
+    assert len(retrieved.ancestors_documentation) == 2
+    assert retrieved.ancestors_documentation[0].name == "doc3"
+    assert retrieved.ancestors_documentation[0].process_id == retrieved.id
+    assert isinstance(retrieved.ancestors_documentation[0], AncestorDocumentation)
 
 def test_delete_process(session):
     user = session.query(User).filter_by(username="jdoe").first()
@@ -285,7 +285,7 @@ def test_delete_process(session):
 
     process.add_avo_documentation([doc, doc2])
     process.add_attachments_to_translate([doc, doc2])
-    process.add_descendant_documentation([doc, doc2])
+    process.add_ancestors_documentation([doc, doc2])
     process.add_translated_documentation([doc, doc2])
     process.add_user_documentation([doc, doc2])
 
@@ -293,13 +293,13 @@ def test_delete_process(session):
     session.commit()
 
     retrieved = session.query(Process).filter_by(code="PRC123").first()
-    assert len(retrieved.descendant_documentation) == 2
+    assert len(retrieved.ancestors_documentation) == 2
     assert len(retrieved.user_documentation) == 2
     assert len(retrieved.attachments_to_translate) == 2
     assert len(retrieved.translated_documentation) == 2
     assert len(retrieved.avo_documentation) == 2
     assert len(retrieved.documentations) == 10
-    assert isinstance(retrieved.descendant_documentation[0], DescendantDocumentation)
+    assert isinstance(retrieved.ancestors_documentation[0], AncestorDocumentation)
     assert isinstance(retrieved.user_documentation[0], UserDocumentation)
     assert isinstance(retrieved.attachments_to_translate[0], AttachmentDocumentation)
     assert isinstance(retrieved.translated_documentation[0], TranslatedDocumentation)

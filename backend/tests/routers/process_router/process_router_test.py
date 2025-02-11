@@ -137,7 +137,7 @@ def advance_to_stage_4(session):
 def advance_to_stage_5(session):
     process: Process = advance_to_stage_4(session)
 
-    process.descendant_count = 2
+    process.ancestor_count = 2
 
     session.add(process)
     session.commit()
@@ -146,21 +146,21 @@ def advance_to_stage_5(session):
     json_documents = [
         {
             "id": 4,
-            "name": "descendant document",
+            "name": "ancestor document",
             "file_type": "png",
             "file_base64": "dGVzdA==",
             "process_id": process.id
         },
         {
             "id": 5,
-            "name": "descendant document",
+            "name": "ancestor document",
             "file_type": "png",
             "file_base64": "dGVzdA==",
             "process_id": process.id
         }
     ]
 
-    client.post(f"/api/process/upload/documentation/descendants/{process.user.id}", json=json_documents)
+    client.post(f"/api/process/upload/documentation/ancestors/{process.user.id}", json=json_documents)
 
     return session.query(Process).filter_by(code="PRC123").first()
 
@@ -335,7 +335,7 @@ def test_upload_avo_documents_success(session):
     assert len(retrieved_process.attachments_to_translate) == 2 # the avo document and the pdf user document
     assert len(retrieved_process.documentations) == 6 # the avo document, the user documents adn the attachments to translate
     assert retrieved_process.code == process.code
-    assert retrieved_process.stage.description == "Load Descendant Documentation"
+    assert retrieved_process.stage.description == "Load Ancestors Documentation"
 
 def test_upload_avo_documents_insufficient(session):
     process = advance_to_stage_3(session)
@@ -363,10 +363,10 @@ def test_upload_avo_documents_failed(session):
     assert response.status_code == 404
     assert response.json() == {"detail": "Process not found."}
 
-def test_upload_descendant_documents_success(session):
+def test_upload_ancestors_documents_success(session):
     process: Process = advance_to_stage_4(session)
 
-    process.descendant_count = 2
+    process.ancestor_count = 2
 
     session.add(process)
     session.commit()
@@ -375,21 +375,21 @@ def test_upload_descendant_documents_success(session):
     json_documents = [
         {
             "id": 4,
-            "name": "descendant document",
+            "name": "ancestor document",
             "file_type": "PDF",
             "file_base64": "dGVzdA==",
             "process_id": process.id
         },
         {
             "id": 5,
-            "name": "descendant document",
+            "name": "ancestor document",
             "file_type": "PDF",
             "file_base64": "dGVzdA==",
             "process_id": process.id
         }
     ]
 
-    response = client.post(f"/api/process/upload/documentation/descendants/{process.id}", json=json_documents)
+    response = client.post(f"/api/process/upload/documentation/ancestors/{process.id}", json=json_documents)
 
     # expire session to obtain actual data
     session.expire_all()
@@ -398,16 +398,16 @@ def test_upload_descendant_documents_success(session):
 
     assert response.status_code == 200
     assert response.json() == {"message": "Documentation successfully saved"}
-    assert len(retrieved_process.descendant_documentation) == 2
-    assert len(retrieved_process.attachments_to_translate) == 4 # the avo document, the pdf user document, the descendant documents
-    assert len(retrieved_process.documentations) == 10 # the avo document(1), the user documents(3), the attachments to translate(4) and the descendant documents(2)
+    assert len(retrieved_process.ancestors_documentation) == 2
+    assert len(retrieved_process.attachments_to_translate) == 4 # the avo document, the pdf user document, the ancestor documents
+    assert len(retrieved_process.documentations) == 10 # the avo document(1), the user documents(3), the attachments to translate(4) and the ancestor documents(2)
     assert retrieved_process.code == process.code
     assert retrieved_process.stage.description == "Load Translated Documentation"
 
-def test_upload_descendant_documents_insufficient(session):
+def test_upload_ancestor_documents_insufficient(session):
     process: Process = advance_to_stage_4(session)
 
-    process.descendant_count = 2
+    process.ancestor_count = 2
 
     session.add(process)
     session.commit()
@@ -416,17 +416,17 @@ def test_upload_descendant_documents_insufficient(session):
     json_documents = [
         {
             "id": 4,
-            "name": "descendant document",
+            "name": "ancestor document",
             "file_type": "PDF",
             "file_base64": "dGVzdA==",
             "process_id": process.id
         }
     ]
 
-    with pytest.raises(InvalidDocumentationException, match="The process is missing necessary descendant documents"):
-        client.post(f"/api/process/upload/documentation/descendants/{process.id}", json=json_documents)
+    with pytest.raises(InvalidDocumentationException, match="The process is missing necessary ancestor documents"):
+        client.post(f"/api/process/upload/documentation/ancestors/{process.id}", json=json_documents)
 
-def test_upload_descendant_documents_failed(session):
+def test_upload_ancestor_documents_failed(session):
     process = advance_to_stage_3(session)
 
     json_documents = [
@@ -439,7 +439,7 @@ def test_upload_descendant_documents_failed(session):
         }
     ]
     
-    response = client.post(f"/api/process/upload/documentation/descendants/{343434}", json=json_documents)
+    response = client.post(f"/api/process/upload/documentation/ancestors/{343434}", json=json_documents)
 
     assert response.status_code == 404
     assert response.json() == {"detail": "Process not found."}
@@ -468,8 +468,8 @@ def test_upload_translated_documents_success(session):
     assert response.status_code == 200
     assert response.json()["code"] == retrieved_process.code
     assert len(retrieved_process.translated_documentation) == 4
-    assert len(retrieved_process.attachments_to_translate) == 4 # the avo document, the pdf user document, the descendant documents
-    assert len(retrieved_process.documentations) == 14 # the avo document(1), the user documents(3), the attachments to translate(4), the descendant documents(2), translated documents(4)
+    assert len(retrieved_process.attachments_to_translate) == 4 # the avo document, the pdf user document, the ancestor documents
+    assert len(retrieved_process.documentations) == 14 # the avo document(1), the user documents(3), the attachments to translate(4), the ancestors documents(2), translated documents(4)
     assert retrieved_process.code == process.code
     assert retrieved_process.stage.description == "Process Completed, click to download files"
 

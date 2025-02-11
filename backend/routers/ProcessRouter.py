@@ -79,10 +79,10 @@ async def upload_avo_documentation(process_id: int, documentation: List[Document
     
 
 
-@p_router.post("/upload/documentation/descendants/{process_id}")
-async def upload_descendants_documentation(process_id: int, documentation: List[DocumentationModel], service: ProcessService = Depends(get_process_service)) -> dict:
+@p_router.post("/upload/documentation/ancestors/{process_id}")
+async def upload_ancestors_documentation(process_id: int, documentation: List[DocumentationModel], service: ProcessService = Depends(get_process_service)) -> dict:
     try:
-        service.upload_descendants_documents(process_id, documentation)
+        service.upload_ancestors_documents(process_id, documentation)
         return {"message": "Documentation successfully saved"}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))

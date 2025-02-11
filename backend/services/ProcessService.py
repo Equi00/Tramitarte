@@ -86,18 +86,18 @@ class ProcessService:
 
         return process
 
-    def upload_descendants_documents(self, process_id: int, descendants_documents: List[DocumentationModel]) -> ProcessModel:
+    def upload_ancestors_documents(self, process_id: int, ancestors_documents: List[DocumentationModel]) -> ProcessModel:
         process: Process = self.db.query(Process).filter(Process.id == process_id).first()
         if not process:
             raise HTTPException(status_code=404, detail="Process not found.")
         
-        descendant_documentation_list = []
-        for doc in descendants_documents:
-            document = DescendantDocumentation(**doc.model_dump())
-            descendant_documentation_list.append(document)
+        ancestor_documentation_list = []
+        for doc in ancestors_documents:
+            document = AncestorDocumentation(**doc.model_dump())
+            ancestor_documentation_list.append(document)
 
-        process.add_descendant_documentation(descendant_documentation_list)
-        process.add_attachments_to_translate(descendant_documentation_list)
+        process.add_ancestors_documentation(ancestor_documentation_list)
+        process.add_attachments_to_translate(ancestor_documentation_list)
         process.advance_stage()
 
         self.db.add(process.stage)
