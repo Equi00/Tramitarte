@@ -10,13 +10,13 @@ import {
 } from "@chakra-ui/react";
 import { Check, Close } from "@mui/icons-material";
 
-export default function ModalAdvertencia({
+export default function WarningModal({
   isOpen,
-  handleConfirmacion,
+  handleConfirmation,
   onClose,
-  pregunta,
-  datoAConfirmar,
-  segundoParrafo
+  question,
+  dataToConfirm,
+  secondParagraph
 }) {
   return (
     <Modal size="xs" isOpen={isOpen} onClose={onClose}>
@@ -31,13 +31,13 @@ export default function ModalAdvertencia({
           />
         </ModalHeader>
         <ModalHeader justifyContent={"center"} display={"flex"}>
-          {pregunta}
+          {question}
         </ModalHeader>
         <ModalBody textAlign={"center"}>
-          {datoAConfirmar}
+          {dataToConfirm}
         </ModalBody>
         <ModalBody fontWeight={700} textAlign={"center"}>
-          {segundoParrafo}
+          {secondParagraph}
         </ModalBody>
         <ModalFooter justifyContent="space-evenly">
           <IconButton
@@ -47,7 +47,7 @@ export default function ModalAdvertencia({
             icon={<Close />}
           />
           <IconButton
-            onClick={() => handleConfirmacion()}
+            onClick={() => handleConfirmation()}
             bg={"teal.200"}
             icon={<Check />}
           />

@@ -7,24 +7,16 @@ import {
   Text,
   Button,
   Icon,
-  createIcon,
   useColorModeValue,
 } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
-import LogoAnimado from "../components/logoAnimado/LogoAnimado";
+import AnimatedLogo from "../components/AnimatedLogo/AnimatedLogo";
 import AboutUs from "./AboutUs";
 import Testimonials from "./Testimonials";
-import Faq from "../components/Faq";
 import { HashLink } from "react-router-hash-link";
 import HomeFooter from "../components/HomeFooter";
 import { useAuth0 } from "@auth0/auth0-react";
-import PreguntasHome from "./PreguntasHome";
-
-const PlayIcon = createIcon({
-  displayName: "PlayIcon",
-  viewBox: "0 0 58 58",
-  d: "M28.9999 0.562988C13.3196 0.562988 0.562378 13.3202 0.562378 29.0005C0.562378 44.6808 13.3196 57.438 28.9999 57.438C44.6801 57.438 57.4374 44.6808 57.4374 29.0005C57.4374 13.3202 44.6801 0.562988 28.9999 0.562988ZM39.2223 30.272L23.5749 39.7247C23.3506 39.8591 23.0946 39.9314 22.8332 39.9342C22.5717 39.9369 22.3142 39.8701 22.0871 39.7406C21.86 39.611 21.6715 39.4234 21.5408 39.1969C21.4102 38.9705 21.3421 38.7133 21.3436 38.4519V19.5491C21.3421 19.2877 21.4102 19.0305 21.5408 18.8041C21.6715 18.5776 21.86 18.3899 22.0871 18.2604C22.3142 18.1308 22.5717 18.064 22.8332 18.0668C23.0946 18.0696 23.3506 18.1419 23.5749 18.2763L39.2223 27.729C39.4404 27.8619 39.6207 28.0486 39.7458 28.2713C39.8709 28.494 39.9366 28.7451 39.9366 29.0005C39.9366 29.2559 39.8709 29.507 39.7458 29.7297C39.6207 29.9523 39.4404 30.1391 39.2223 30.272Z",
-});
+import QuestionsHome from "../components/QuestionsHome";
 
 export const Blob = (props) => {
   return (
@@ -78,7 +70,7 @@ function Home() {
                 zIndex: -1,
               }}
             >
-              Tramitá tu ciudadanía!
+              Apply for your citizenship!
             </Text>
             <br />
             <Text as={"span"} color={"teal.400"}>
@@ -86,9 +78,8 @@ function Home() {
             </Text>
           </Heading>
           <Text color={"gray.500"}>
-            Los tr&aacute;mites de ciudadan&iacute;a requieren de varios pasos y
-            verificaciones para resolverlo. ¡Resolvelo con nosotros y en tiempo
-            record!
+          Citizenship procedures require several steps and
+          verifications to be completed. Resolve it with us in record time!
           </Text>
           <Stack
             spacing={{ base: 4, sm: 6 }}
@@ -104,9 +95,9 @@ function Home() {
               bg={"teal.400"}
               _hover={{ bg: "green.500" }}
             >
-              Iniciar mi tr&aacute;mite
+              Start my process
             </Button>
-            <HashLink to="#preguntas-frecuentes" smooth>
+            <HashLink to="#frequently-asked-questions" smooth>
               <Button
                 w="100%"
                 rounded={"full"}
@@ -114,7 +105,7 @@ function Home() {
                 fontWeight={"normal"}
                 px={6}
               >
-                ¿C&oacute;mo funciona?
+                How does it work?
               </Button>
             </HashLink>
           </Stack>
@@ -136,7 +127,7 @@ function Home() {
             color={useColorModeValue("teal.50", "green.400")}
           />
           <Box position={"relative"} height={"300px"} overflow={"hidden"}>
-            <LogoAnimado />
+            <AnimatedLogo />
           </Box>
         </Flex>
       </Stack>
@@ -144,11 +135,11 @@ function Home() {
       <Testimonials />
       <Flex justifyContent={"center"} py="8">
         <Heading color={useColorModeValue('teal.600', 'white')} as="h2" size="2xl">
-          ¿C&oacute;mo podemos ayudarte?
+        How can we help you?
         </Heading>
       </Flex>
       <Box py="2%">
-        <PreguntasHome />
+        <QuestionsHome />
       </Box>
       <HomeFooter />
     </Container>

@@ -2,21 +2,21 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { RouterApp } from "./router/routes";
 import { createContext, useState } from "react";
 
-export const TramiteContext = createContext();
-export const UsuarioLogueadoContext = createContext();
+export const ProcessContext = createContext();
+export const LoggedUserContext = createContext();
 
 function App() {
-  const [tramite, setTramite] = useState(null);
-  const [usuarioLogueado, setUsuarioLogueado] = useState(null);
+  const [process, setProcess] = useState(null);
+  const [loggedUser, setLoggedUser] = useState(null);
 
   return (
-    <UsuarioLogueadoContext.Provider value={usuarioLogueado}>
-      <TramiteContext.Provider value={tramite}>
+    <LoggedUserContext.Provider value={loggedUser}>
+      <ProcessContext.Provider value={process}>
         <ChakraProvider>
-          <RouterApp setTramiteContext={setTramite} setUsuarioLogueadoContext={setUsuarioLogueado} />
+          <RouterApp setProcessContext={setProcess} setLoggedUserContext={setLoggedUser} />
         </ChakraProvider>
-      </TramiteContext.Provider>
-    </UsuarioLogueadoContext.Provider>
+      </ProcessContext.Provider>
+    </LoggedUserContext.Provider>
   );
 }
 

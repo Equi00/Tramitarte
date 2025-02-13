@@ -24,7 +24,7 @@ function AncestorsDocumentation() {
   const { isOpen, onToggle } = useDisclosure();
   const [ancestorCount, setAncestorCount] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isCharging, setIsCharging] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [ancestorDocumentation, setAncestorDocumentation] = useState([]);
   const { isOpen: isOpenError, onOpen: onOpenError, onClose: onCloseError } = useDisclosure();
   const [verified1, setVerified1] = useState([])
@@ -119,7 +119,7 @@ function AncestorsDocumentation() {
   
   const handleConfirmation = async () => {
     closeModal();
-    setIsCharging(true);
+    setIsLoading(true);
     console.log("acá", ancestorDocumentation);
     let process = JSON.parse(window.localStorage.getItem("process"));
     let documents = []
@@ -144,7 +144,7 @@ function AncestorsDocumentation() {
       console.log(response);
       let names = documents.map((docu) => docu.name)
       console.log("document names ", names)
-      setIsCharging(false);
+      setIsLoading(false);
       navigate(
         `/home/requester/${
           JSON.parse(window.localStorage.getItem("loggedUser")).id
@@ -303,7 +303,7 @@ function AncestorsDocumentation() {
           "You can modify it from the menu, in any case ;)"
         }
         isOpen={isModalOpen}
-        handleConfirmacion={handleConfirmation}
+        handleConfirmation={handleConfirmation}
         onClose={closeModal}
       />
       <ModalError
@@ -316,7 +316,7 @@ function AncestorsDocumentation() {
       />
       <ModalIsLoading
         mensaje={"Please wait while we save the documentation ;)"}
-        isOpen={isCharging}
+        isOpen={isLoading}
       />
     </Box>
   );

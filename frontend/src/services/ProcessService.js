@@ -3,12 +3,12 @@ import axios from "axios";
 class ProcessService {
   urlBackend = "http://localhost:8000/api";
 
-  async guardarTramite(user_id) {
+  async saveProcess(user_id) {
     let process = await axios.post(`${this.urlBackend}/process/${user_id}`);
     return process;
   }
 
-  async cargarAVO(avo, process_id) {
+  async uploadAVO(avo, process_id) {
     let persisted_avo = await axios.post(
       `${this.urlBackend}/process/upload-avo/${process_id}`,
       avo
@@ -72,7 +72,7 @@ class ProcessService {
     return response.data;
   }
 
-  async esCertificado(pdfFile) {
+  async isCertificate(pdfFile) {
     const formData = new FormData();
     formData.append("pdf", pdfFile);
   
@@ -128,7 +128,7 @@ class ProcessService {
     return response.data;
   }
 
-  async eliminar(process_id) {
+  async delete(process_id) {
     await axios.delete(`${this.urlBackend}/process/${process_id}`);
   }
 

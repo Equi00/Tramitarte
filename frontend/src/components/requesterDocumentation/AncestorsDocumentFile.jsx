@@ -10,7 +10,7 @@ function AncestorsDocumentFile({ ancestorCount, persons, setAncestorsDocumentati
   const [name1, setName1] = useState([]);
   const [name2, setName2] = useState([]);
   const [name3, setName3] = useState([]);
-  const [isCharging, setIsCharging] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: isOpenError, onOpen: onOpenError, onClose: onCloseError } = useDisclosure();
   const [verified1, setVerified1] = useState([])
@@ -21,12 +21,12 @@ function AncestorsDocumentFile({ ancestorCount, persons, setAncestorsDocumentati
     if(file){
       const lastPoint = file.name.lastIndexOf(".");
       const extension = file.name.slice(lastPoint + 1);
-      setIsCharging(true)
+      setIsLoading(true)
     if(extension === "pdf"){
     const verification = await processService.isDeathCertificate(file);
     
     if (verification === false) {
-        setIsCharging(false)
+      setIsLoading(false)
         onOpen();
       } else {
         setAncestorsDocumentation({
@@ -42,10 +42,10 @@ function AncestorsDocumentFile({ ancestorCount, persons, setAncestorsDocumentati
           newName[index] = shorterName;
           return newName;
         });
-        setIsCharging(false)
+        setIsLoading(false)
       }
   }else{
-    setIsCharging(false)
+    setIsLoading(false)
     onOpenError()
   }
     }
@@ -56,12 +56,12 @@ function AncestorsDocumentFile({ ancestorCount, persons, setAncestorsDocumentati
     if(file){
       const lastPoint = file.name.lastIndexOf(".");
       const extension = file.name.slice(lastPoint + 1);
-      setIsCharging(true)
+      setIsLoading(true)
       if(extension === "pdf"){
     const verification = await processService.isMarriageCertificate(file);
     
     if (verification === false) {
-      setIsCharging(false)
+      setIsLoading(false)
       onOpen();
     } else {
       setAncestorsDocumentation({
@@ -77,10 +77,10 @@ function AncestorsDocumentFile({ ancestorCount, persons, setAncestorsDocumentati
         newNames[index] = shorterName;
         return newNames;
       });
-      setIsCharging(false)
+      setIsLoading(false)
     }
   }else{
-    setIsCharging(false)
+    setIsLoading(false)
     onOpenError()
   }
     }
@@ -91,12 +91,12 @@ function AncestorsDocumentFile({ ancestorCount, persons, setAncestorsDocumentati
     if(file){
       const lastPoint = file.name.lastIndexOf(".");
       const extension = file.name.slice(lastPoint + 1);
-      setIsCharging(true)
+      setIsLoading(true)
       if(extension === "pdf"){
     const verification = await processService.isBirthCertificate(file);
     
     if (verification === false) {
-      setIsCharging(false)
+      setIsLoading(false)
       onOpen();
     } else {
       setAncestorsDocumentation({
@@ -112,10 +112,10 @@ function AncestorsDocumentFile({ ancestorCount, persons, setAncestorsDocumentati
         newNames[index] = shorterName;
         return newNames;
       });
-      setIsCharging(false)
+      setIsLoading(false)
     }
   }else{
-    setIsCharging(false)
+    setIsLoading(false)
     onOpenError()
   }
     }
@@ -210,7 +210,7 @@ function AncestorsDocumentFile({ ancestorCount, persons, setAncestorsDocumentati
       />
         <ModalIsLoading
           message={"Please wait while we save the documentation ;)"}
-          isOpen={isCharging}
+          isOpen={isLoading}
         />
         <ModalError
           question={"The file extension is not valid"}

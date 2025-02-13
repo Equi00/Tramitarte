@@ -1,40 +1,36 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
-import Tramite from "../components/Tramite";
+import Process from "../pages/Process";
 import UserHome from "../pages/UserHome";
 import UserProfile from "../pages/UserProfile";
-import PreguntasFrecuentes from "../pages/PreguntasFrecuentes";
-import FamilySearch from "../pages/FamilySearch";
-import TraductoresRegistrados from "../pages/TraductoresRegistrados";
-import ModalConfirmacion from "../components/ModalConfirmacion";
-import EleccionRol from "../pages/EleccionRol";
-import SolicitudAVO from "../pages/SolicitudAVO";
-import PedidosTraduccion from "../components/PedidosTraduccion";
-import VerifyEmailForm from "../pages/VerificacionEmail";
-import Documentacion from "../pages/DocumentacionPersonal";
-import DocumentacionPersonal from "../pages/DocumentacionPersonal";
-import DocumentacionAscendentes from "../pages/DocumentacionAscendentes";
-import DocumentacionAVO from "../pages/ArchivosAVO";
-import ArchivosAVO from "../pages/ArchivosAVO";
+import FrequentQuestions from "../pages/FrequentQuestions";
+import RegisteredTranslators from "../pages/RegisteredTranslators";
+import ConfirmationModal from "../components/modals/ConfirmationModal";
+import RoleElection from "../pages/RoleElection";
+import AVORequest from "../pages/AVORequest";
+import TranslationRequests from "../pages/TranslationRequests";
+import VerifyEmailForm from "../pages/VerifyEmailForm";
+import PersonalDocumentation from "../pages/PersonalDocumentation";
+import AncestorsDocumentation from "../pages/AncestorsDocumentation";
+import AvoDocuments from "../pages/AvoDocuments";
 import AvoProfile from "../pages/AvoProfile";
-import DocumentacionCargada from "../pages/DocumentacionCargada";
-import CardAviso from "../components/CardAviso";
-import CardTraduccion from "../components/CardTraduccion";
-import CargaDocumentos from "../components/CargaDocumentos";
-import DocumentacionTraducida from "../pages/DocumentacionTraducida";
+import DocumentationUploaded from "../pages/DocumentationUploaded";
+import CardTranslator from "../pages/CardTranslator";
+import LoadDocuments from "../pages/LoadDocuments";
+import TranslatedDocumentation from "../pages/TranslatedDocumentation";
 
 
-export const RouterApp = ({ setTramiteContext, setUsuarioLogueadoContext }) => {
+export const RouterApp = ({ setProcessContext, setLoggedUserContext }) => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route
-          path="eleccion-rol"
+          path="role-election"
           element={
-            <EleccionRol
-              setUsuarioLogueadoContext={setUsuarioLogueadoContext}
+            <RoleElection
+            setLoggedUserContext={setLoggedUserContext}
             />
           }
         />
@@ -42,72 +38,71 @@ export const RouterApp = ({ setTramiteContext, setUsuarioLogueadoContext }) => {
           path="verificacion"
           element={
             <VerifyEmailForm
-              setUsuarioLogueadoContext={setUsuarioLogueadoContext}
+            setLoggedUserContext={setLoggedUserContext}
             />
           }
         />
 
         <Route index element={<Home />} />
-        <Route path="/home/solicitante/:idUsuario" element={<UserHome />}>
+        <Route path="/home/requester/:userId" element={<UserHome />}>
           <Route
             index
-            element={<Tramite setTramiteContext={setTramiteContext} />}
+            element={<Process setProcessContext={setProcessContext} />}
           />
         </Route>
         <Route
-          path="/home/solicitante/:idUsuario/documentacion-personal"
-          element={<DocumentacionPersonal />}
+          path="/home/requester/:userId/personal-documentation"
+          element={<PersonalDocumentation />}
         />
         <Route
-          path="/home/solicitante/:idUsuario/documentacion-ascendentes"
-          element={<DocumentacionAscendentes />}
+          path="/home/requester/:userId/ancestors-documentation"
+          element={<AncestorsDocumentation />}
         />
         <Route
-          path="/home/solicitante/:idUsuario/documentacion-traducida"
-          element={<DocumentacionTraducida />}
+          path="/home/requester/:userId/translated-documentation"
+          element={<TranslatedDocumentation />}
         />
         <Route
-          path="/home/solicitante/:idUsuario/documentacion-avo"
-          element={<ArchivosAVO />}
+          path="/home/requester/:userId/avo-documentation"
+          element={<AvoDocuments />}
         />
         <Route
-          path="/home/solicitante/:idUsuario/solicitud-avo"
-          element={<SolicitudAVO />}
+          path="/home/requester/:userId/avo-request"
+          element={<AVORequest />}
         />
 
         <Route 
-          path="/home/solicitante/:idUsuario/traductores" 
-          element={<TraductoresRegistrados />} 
+          path="/home/requester/:userId/translators" 
+          element={<RegisteredTranslators />} 
         />
 
-        <Route path="/usuario/:idUsuario" element={<UserProfile />} />
+        <Route path="/user/:userId" element={<UserProfile />} />
 
         <Route 
-          path="home/traductor/:idUsuario/pedidos-pendientes" 
-          element={<PedidosTraduccion />} 
+          path="home/translator/:userId/pending-orders" 
+          element={<TranslationRequests />} 
         />
 
         <Route 
-          path="/carga" 
-          element={<CargaDocumentos />} 
+          path="/loading" 
+          element={<LoadDocuments />} 
         />
 
-        <Route path="/home/traductor/:idUsuario/*" element={<UserHome />}>
+        <Route path="/home/translator/:userId/*" element={<UserHome />}>
           <Route 
             index 
-            element={<CardTraduccion/>} 
+            element={<CardTranslator/>} 
           />
         </Route>
-        <Route path="/usuario" element={<UserProfile />} />
+        <Route path="/user" element={<UserProfile />} />
         <Route path="/avo-profile" element={<AvoProfile />} />
-        <Route path="/preguntas-frecuentes" element={<PreguntasFrecuentes />} />
-        <Route path="/family-search" element={<FamilySearch />} />
-        <Route path="/solicitantes" element={<div>solicitantes</div>} />
-        <Route path="/pedidos-pendientes" element={<PedidosTraduccion />} />
-        <Route path="/documentacion-cargada" element={<DocumentacionCargada />} />
+        <Route path="/frequently-asked-questions" element={<FrequentQuestions />} />
+        <Route path="/requesters" element={<div>requesters</div>} />
+        <Route path="/pending-orders" element={<TranslationRequests />} />
+        <Route path="/documentation-uploaded" element={<DocumentationUploaded />} />
         <Route path="/network-error" element={<div>Error</div>} />
         
-        <Route path="*" element={<ModalConfirmacion />} />
+        <Route path="*" element={<ConfirmationModal />} />
       </Routes>
     </BrowserRouter>
   );

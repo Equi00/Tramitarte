@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import logo from "../assets/logo.png";
-import familySearch from "../data/familySearch"
+import translators from "../data/translators"
 
-function MapFamilySearch({bool}) {
+function MapTranslators({bool}) {
     useEffect(() => {
       const countryCenter = [-34.6989, -65.0379677];
-      const map = L.map("mapFamilySearch").setView(countryCenter, 5);
+      const map = L.map("mapTranslators").setView(countryCenter, 5);
   
       L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution:
@@ -22,15 +22,14 @@ function MapFamilySearch({bool}) {
         popupAnchor: [0, 0],
       });
   
-      familySearch.map((familySearch) => {
+      translators.map((translator) => {
         let latitude, longitude;
-        [latitude, longitude] = [familySearch.latitude, familySearch.longitude];
+        [latitude, longitude] = [translator.latitude, translator.longitude];
         L.marker([latitude, longitude], {
           icon: iconoTramitarte,
-        }).addTo(map).bindPopup(`<b>${familySearch.address}</b><br>
-          ${familySearch.city}<br>
-          <i>${familySearch.phone}</i><br>
-          <i>${familySearch.email}</i><br>
+        }).addTo(map).bindPopup(`<b>${translator.address}</b><br>
+          ${translator.city}<br>
+          <i>${translator.phone}</i><br>
           `).openPopup();
       });
       
@@ -39,7 +38,7 @@ function MapFamilySearch({bool}) {
       };
     }, [bool]);
   
-    return <div id="mapFamilySearch" style={{ height: "450px" }}></div>;
+    return <div id="mapTranslators" style={{ height: "450px" }}></div>;
   }
   
-  export default MapFamilySearch;
+  export default MapTranslators;

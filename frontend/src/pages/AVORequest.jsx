@@ -25,99 +25,99 @@ import { ArrowBack } from "@mui/icons-material";
 import { CalendarIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { useContext, useState } from "react";
 
-import ModalConfirmacion from "../components/ModalConfirmacion";
-import ModalIsLoading from "../components/ModalIsLoading";
-import tramiteService from "../services/TramiteService";
-import { TramiteContext } from "../App";
-import ModalError from "../components/ModalError";
+import ConfirmationModal from "../components/modals/ConfirmationModal";
+import ModalIsLoading from "../components/modals/ModalIsLoading";
+import processService from "../services/ProcessService";
+import { ProcessContext } from "../App";
+import ModalError from "../components/modals/ModalError";
 
-function SolicitudAVO() {
-  const dias = [...Array(31).keys()].map((i) => i + 1);
-  const meses = [...Array(12).keys()].map((i) => i + 1);
-  const anios = [...Array(new Date().getFullYear()).keys()]
+function AVORequest() {
+  const days = [...Array(31).keys()].map((i) => i + 1);
+  const months = [...Array(12).keys()].map((i) => i + 1);
+  const years = [...Array(new Date().getFullYear()).keys()]
     .map((i) => i + 1000)
     .filter((i) => i < 2023 - 18);
 
   const navigate = useNavigate();
-  const { idUsuario } = useParams();
-  const tramiteContext = useContext(TramiteContext);
+  const { userId } = useParams();
+  const processContext = useContext(ProcessContext);
   const handleBack = () => navigate(-1);
   const [isChecked, setIsChecked] = useState(false);
-  const [estaCargando, setEstaCargando] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { isOpen: isOpen1, onOpen: onOpen1, onClose: onClose1 } = useDisclosure();
   const { isOpen: isOpen2, onOpen: onOpen2, onClose: onClose2 } = useDisclosure();
-  let [nombreAVO, setNombreAVO] = useState("");
-  let [apellidoAVO, setApellidoAVO] = useState("");
-  const [fechaNacimiento, setFechaNacimiento] = useState({
-    dia: "1",
-    mes: "10",
-    anio: "1995",
+  let [AVOName, setAVOName] = useState("");
+  let [AVOSurname, setAVOSurname] = useState("");
+  const [birthdate, setBirthdate] = useState({
+    day: "1",
+    month: "10",
+    year: "1995",
   });
-  const [sexoAVO, setSexoAVO] = useState("FEMENINO");
+  const [AVOGender, setAVOGender] = useState("Female");
 
-  const handleOnChangeNombreAVO = (e) => {
-    setNombreAVO(e.target.value);
+  const handleOnChangeAVOName = (e) => {
+    setAVOName(e.target.value);
   };
 
-  const handleOnChangeApellidoAVO = (e) => {
-    setApellidoAVO(e.target.value);
+  const handleOnChangeAVOSurname = (e) => {
+    setAVOSurname(e.target.value);
   };
 
-  const handleOnChangeFechaNacimientoAVO = (fechaNacimientoNueva) => {
-    setFechaNacimiento(fechaNacimientoNueva);
+  const handleOnChangeAVOBirthdate = (birthdate) => {
+    setBirthdate(birthdate);
   };
 
   const handleOnChangeSexRadioButton = (e) => {
-    setSexoAVO(e.target.name);
+    setAVOGender(e.target.name);
     setIsChecked(!isChecked);
   };
 
   const handleOnClickSubmitAVO = () => {
-    if (esValidoApellido() && esValidoNombre() && apellidoAVO.trim() && nombreAVO.trim()) {
+    if (isSurnameValid() && isNameValid() && AVOSurname.trim() && AVOName.trim()) {
       onOpen1();
     }else{
       onOpen2()
     }
   };
 
-  const esValidoApellido = () => {
-    return !apellidoAVO.match(/\d+/g)
+  const isSurnameValid = () => {
+    return !AVOSurname.match(/\d+/g)
   };
 
-  const esValidoNombre = () => {
-    return !nombreAVO.match(/\d+/g)
+  const isNameValid = () => {
+    return !AVOName.match(/\d+/g)
   };
 
-  const handleConfirmacion = () => {
-    setEstaCargando(true);
+  const handleConfirmation = () => {
+    setIsLoading(true);
   
-    tramiteService
-      .buscarPorUsuario(idUsuario)
+    processService
+      .searchProcessByUserId(userId)
       .then((response) => {
-        const tramite = response.data;
-        const idTramite = tramite.id; 
+        const process = response.data;
+        const idProcess = process.id; 
   
-        return tramiteService.cargarAVO(
+        return processService.uploadAVO(
           {
-            nombre: nombreAVO,
-            apellido: apellidoAVO,
-            fechaNacimiento: `${
-              fechaNacimiento.dia < 10
-                ? "0" + fechaNacimiento.dia
-                : fechaNacimiento.dia
+            first_name: AVOName,
+            last_name: AVOSurname,
+            birth_date: `${
+              birthdate.day < 10
+                ? "0" + birthdate.day
+                : birthdate.day
             }/${
-              fechaNacimiento.mes < 10
-                ? "0" + fechaNacimiento.mes
-                : fechaNacimiento.mes
-            }/${fechaNacimiento.anio}`,
-            sexo: sexoAVO,
+              birthdate.month < 10
+                ? "0" + birthdate.month
+                : birthdate.month
+            }/${birthdate.year}`,
+            gender: AVOGender,
           },
-          idTramite
+          idProcess
         );
       })
       .then((response) => {
-        setEstaCargando(false);
-        navigate(`/home/solicitante/${idUsuario}`);
+        setIsLoading(false);
+        navigate(`/home/requester/${userId}`);
         return response;
       })
       .catch((error) => navigate("/network-error"));
@@ -146,7 +146,7 @@ function SolicitudAVO() {
           fontWeight={"700"}
           overflowWrap={'break-word'}
         >
-          {tramiteContext.codigo}
+          {processContext.code}
         </Center>
       </Center>
       <Center p=".8rem">
@@ -164,12 +164,12 @@ function SolicitudAVO() {
               color="white"
               fontWeight={"700"}
             >
-              {"BÚSQUEDA AVO"}
+              {"AVO SEARCHING"}
             </Center>
           </Box>
           <Center>
             <Text textAlign="center" p=".8rem">
-              Completá los datos de tu antepasado italiano que emigró
+            Fill in the details of your Italian ancestor who emigrated
             </Text>
           </Center>
           <Accordion allowToggle w="100%" maxW="100%">
@@ -186,63 +186,63 @@ function SolicitudAVO() {
                   _expanded={{ display: "flex" }}
                   borderRadius="45px"
                 >
-                  <Text fontWeight={"700"}>COMPLETAR SOLICITUD</Text>
+                  <Text fontWeight={"700"}>COMPLETE REQUEST</Text>
                   <ChevronDownIcon />
                 </AccordionButton>
               </h2>
               <AccordionPanel>
                 <FormControl
-                  isInvalid={!esValidoNombre()}
+                  isInvalid={!isNameValid()}
                   isRequired
                   py="2%"
                   color="blue.900"
-                  id="nombre-avo"
+                  id="avo-name"
                 >
-                  <FormLabel>Nombre</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <Input
                     h={12}
                     borderRadius="25px"
                     border="1px solid rgba(26, 54, 93, 1)"
                     type="text"
-                    placeholder="Nombre..."
-                    value={nombreAVO}
-                    onInput={handleOnChangeNombreAVO}
+                    placeholder="Name..."
+                    value={AVOName}
+                    onInput={handleOnChangeAVOName}
                   />
-                  {!esValidoNombre() && (
+                  {!isNameValid() && (
                     <FormErrorMessage>
-                      Solo se permiten letras.
+                      Only letters are allowed.
                     </FormErrorMessage>
                   )}
                 </FormControl>
                 <FormControl
-                  isInvalid={!esValidoApellido()}
+                  isInvalid={!isSurnameValid()}
                   isRequired
                   py="2%"
                   color="blue.900"
-                  id="apellido-avo"
+                  id="avo-surname"
                 >
-                  <FormLabel>Apellido</FormLabel>
+                  <FormLabel>Surname</FormLabel>
                   <Input
-                    value={apellidoAVO}
-                    onInput={handleOnChangeApellidoAVO}
-                    onChange={handleOnChangeApellidoAVO}
+                    value={AVOSurname}
+                    onInput={handleOnChangeAVOSurname}
+                    onChange={handleOnChangeAVOSurname}
                     h={12}
                     borderRadius="25px"
                     border="1px solid rgba(26, 54, 93, 1)"
                     type="text"
-                    placeholder="Apellido..."
+                    placeholder="Surname..."
                   />
-                  {!esValidoApellido() && (
-                    <FormErrorMessage>Solo se permiten letras</FormErrorMessage>
+                  {!isSurnameValid() && (
+                    <FormErrorMessage>Only letters are allowed.</FormErrorMessage>
                   )}
                 </FormControl>
                 <FormControl
                   isRequired
                   py="2%"
                   color="blue.900"
-                  id="fecha-nacimiento-avo"
+                  id="avo-birthdate"
                 >
-                  <FormLabel>Fecha</FormLabel>
+                  <FormLabel>Birthdate</FormLabel>
                   <InputGroup
                     borderRadius="25px"
                     border="1px solid rgba(26, 54, 93, 1)"
@@ -251,62 +251,62 @@ function SolicitudAVO() {
                   >
                     <Flex justify="space-evenly" w="80%" pl="1rem">
                       <Select
-                        value={fechaNacimiento.dia}
+                        value={birthdate.day}
                         textAlign="center"
                         variant="unstyled"
                         icon={""}
                         size="md"
                         onChange={(e) => {
-                          handleOnChangeFechaNacimientoAVO({
-                            anio: fechaNacimiento.anio,
-                            mes: fechaNacimiento.mes,
-                            dia: e.target.value,
+                          handleOnChangeAVOBirthdate({
+                            year: birthdate.year,
+                            month: birthdate.month,
+                            day: e.target.value,
                           });
                         }}
                       >
-                        {dias.map((anio) => (
-                          <option key={anio} value={anio}>
-                            {anio}
+                        {days.map((day) => (
+                          <option key={day} value={day}>
+                            {day}
                           </option>
                         ))}
                       </Select>
                       <Select
-                        value={fechaNacimiento.mes}
+                        value={birthdate.month}
                         textAlign="center"
                         variant="unstyled"
                         icon={""}
                         size="md"
                         onChange={(e) =>
-                          handleOnChangeFechaNacimientoAVO({
-                            anio: fechaNacimiento.anio,
-                            mes: e.target.value,
-                            dia: fechaNacimiento.dia,
+                          handleOnChangeAVOBirthdate({
+                            year: birthdate.year,
+                            month: e.target.value,
+                            day: birthdate.day,
                           })
                         }
                       >
-                        {meses.map((mes, index) => (
-                          <option key={index} value={mes}>
-                            {mes}
+                        {months.map((month, index) => (
+                          <option key={index} value={month}>
+                            {month}
                           </option>
                         ))}
                       </Select>
                       <Select
-                        value={fechaNacimiento.anio}
+                        value={birthdate.year}
                         textAlign="center"
                         variant="unstyled"
                         icon={""}
                         size="auto"
                         onChange={(e) =>
-                          handleOnChangeFechaNacimientoAVO({
-                            anio: e.target.value,
-                            mes: fechaNacimiento.mes,
-                            dia: fechaNacimiento.dia,
+                          handleOnChangeAVOBirthdate({
+                            year: e.target.value,
+                            month: birthdate.month,
+                            day: birthdate.day,
                           })
                         }
                       >
-                        {anios.map((anio) => (
-                          <option key={anio} value={anio}>
-                            {anio}
+                        {years.map((year) => (
+                          <option key={year} value={year}>
+                            {year}
                           </option>
                         ))}
                       </Select>
@@ -321,30 +321,30 @@ function SolicitudAVO() {
                     </Flex>
                   </InputGroup>
                   <FormHelperText color="blue.600">
-                    La fecha de nacimiento de tu AVO
+                  Your AVO's date of birth
                   </FormHelperText>
                 </FormControl>
                 <FormControl isRequired py="2%" color="blue.900" id="sexo-avo">
-                  <FormLabel>Sexo biol&oacute;gico</FormLabel>
+                  <FormLabel>Biological sex</FormLabel>
                   <Checkbox
                     colorScheme="teal"
                     color="blue.900"
                     p=".4rem"
                     isChecked={isChecked}
                     onChange={(e) => handleOnChangeSexRadioButton(e)}
-                    name={"FEMENINO"}
+                    name={"Female"}
                   >
-                    Femenino
+                    Female
                   </Checkbox>
                   <Checkbox
                     colorScheme="teal"
                     color="blue.900"
                     p=".4rem"
-                    name={"MASCULINO"}
+                    name={"Male"}
                     isChecked={!isChecked}
                     onChange={(e) => handleOnChangeSexRadioButton(e)}
                   >
-                    Masculino
+                    Male
                   </Checkbox>
                 </FormControl>
                 <Center py="4">
@@ -362,7 +362,7 @@ function SolicitudAVO() {
                       bg: "teal.500",
                     }}
                   >
-                    {"CARGAR AVO"}
+                    {"UPLOAD AVO"}
                   </Button>
                 </Center>
               </AccordionPanel>
@@ -370,29 +370,29 @@ function SolicitudAVO() {
           </Accordion>
         </Box>
       </Center>
-      <ModalConfirmacion
-        pregunta={"¿Estás seguro de cargar estos datos de tu AVO?"}
-        datoAConfirmar={
-          "En cualquier caso, podés modificarlos desde tu perfil ;)"
+      <ConfirmationModal
+        question={"Are you sure you want to upload this data from your AVO?"}
+        dataToConfirm={
+          "In any case, you can modify them from your profile ;)"
         }
         isOpen={isOpen1}
         onClose={onClose1}
-        handleConfirmacion={() => handleConfirmacion()}
+        handleConfirmation={() => handleConfirmation()}
       />
       <ModalError
-        pregunta={"Los datos ingresados no son correctos."}
-        datoAConfirmar={
-          "Por favor ingrese todos los datos correctamente"
+        question={"The data entered is not correct."}
+        dataToConfirm={
+          "Please enter all data correctly"
         }
         isOpen={isOpen2}
         onClose={onClose2}
       />
       <ModalIsLoading
-        mensaje={"Esperanos mientras guardamos los datos de tu AVO... ;)"}
-        isOpen={estaCargando}
+        message={"Please wait while we save your AVO data... ;)"}
+        isOpen={isLoading}
       />
     </Box>
   );
 }
 
-export default SolicitudAVO;
+export default AVORequest;

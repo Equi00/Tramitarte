@@ -1,4 +1,5 @@
 pillow
+fastapi[all] 
 pybase64
 databases
 datetime

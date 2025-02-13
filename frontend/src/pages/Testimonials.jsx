@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import {
   Box,
   Flex,
@@ -86,10 +85,10 @@ export default function Testimonnials() {
     <Box id="testimonials" bg={useColorModeValue("white", "gray.700")}>
       <Container maxW={"8xl"} py={16} as={Stack} spacing={12}>
         <Stack spacing={0} align={"center"}>
-          <Heading color="teal.600">{`¿Qué dicen nuestros clientes?`}</Heading>
+          <Heading color="teal.600">{`What do our customers say?`}</Heading>
           <Text>
             {
-              "¡Fijate sus comentarios! Todos nuestros clientes terminan muy contentos con nuestro trabajo."
+              "Check out their comments! All of our clients are very happy with our work."
             }
           </Text>
         </Stack>
@@ -100,13 +99,13 @@ export default function Testimonnials() {
           <Testimonial>
             <TestimonialContent>
               <TestimonialHeading>
-                {'"Respuestas en el acto"'}
+              {'"Answers on the spot"'}
               </TestimonialHeading>
               <TestimonialText>
-                {`
-                Yo empecé a usar la aplicación sin saber nada sobre mis ancestros y el trámite. Lo terminé en tiempo récord 
-                y con mucha contención del lado de la aplicación ;)"
-                `}
+              {`
+              I started using the app without knowing anything about my ancestors and the process. I finished it in record time
+              and with a lot of support from the app side ;)"
+              `}
               </TestimonialText>
             </TestimonialContent>
             <TestimonialAvatar
@@ -114,18 +113,18 @@ export default function Testimonnials() {
                 "https://plus.unsplash.com/premium_photo-1675034393500-dc5fe64b527a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80"
               }
               name={"Roberta Fritzenbalden"}
-              title={"San Miguel de Tucumán, Tucumán"}
+              title={"San Miguel of Tucumán, Tucumán"}
             />
           </Testimonial>
           <Testimonial>
             <TestimonialContent>
               <TestimonialHeading>
-                {'"Me ahorró mucha plata"'}
+              {'"It saved me a lot of money"'}
               </TestimonialHeading>
               <TestimonialText>
-                {`"Venía intentando con varias consultoras, y con varias de ellas tuve que dejar el trámite, por falta de respuesta.
-                Que me faltaban docs, que no podían asesorarme más... Con la aplicación llegué a centralizar todo, y lo mejor, contactar a un traductor
-                directamente, alquien que yo hubiera evaluado y autorizado a ver mis documentos personales. ¡De 10!"`}
+              {`I had been trying with several consulting firms, and with several of them I had to abandon the process, due to lack of response.
+              I was missing documents, they could not advise me further... With the application I was able to centralize everything, and best of all, contact a translator
+              directly, someone I had evaluated and authorized to see my personal documents. 10/10!`}
               </TestimonialText>
             </TestimonialContent>
             <TestimonialAvatar
@@ -138,10 +137,10 @@ export default function Testimonnials() {
           </Testimonial>
           <Testimonial>
             <TestimonialContent>
-              <TestimonialHeading>"¡Todo ordenado!"</TestimonialHeading>
+              <TestimonialHeading>"All in order!"</TestimonialHeading>
               <TestimonialText>
-                {`"Empecé a usar la app después de varias veces de intentar con otras consultoras. A pesar de que el trámite lo finalicé con una consultora, usé la aplicación como backup de
-                toda la documentación que necesitaba. Quería manejar mis documentos y no dejarlos en manos de cualquiera, ¡y eso lo hice con la app!"`}
+                {`I started using the app after trying several times with other consulting firms. Even though I completed the process with a consulting firm, I used the app as a backup for
+                all the documentation I needed. I wanted to manage my documents and not leave them in the hands of just anyone, and I did that with the app!`}
               </TestimonialText>
             </TestimonialContent>
             <TestimonialAvatar

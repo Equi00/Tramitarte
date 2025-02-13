@@ -19,7 +19,7 @@ import ModalError from "../components/modals/ModalError";
 function AvoDocuments() {
   const navigate = useNavigate();
   const { isOpen } = useDisclosure();
-  const [isCharging, setIsCharging] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { isOpen: isOpenError, onOpen: onOpenError, onClose: onCloseError } = useDisclosure();
   const { isOpen: isOpenNoObligatory1, onToggle: onToggle1 } = useDisclosure();
@@ -124,7 +124,7 @@ function AvoDocuments() {
 
   const handleConfirmacion = async () => {
     closeModal();
-    setIsCharging(true);
+    setIsLoading(true);
     console.log("acá", [
       AVOdocumentation.deathCertificate,
       AVOdocumentation.marriageCertificate,
@@ -149,7 +149,7 @@ function AvoDocuments() {
       );
       console.log(documents)
       console.log(response);
-      setIsCharging(false);
+      setIsLoading(false);
       navigate(
         `/home/requester/${
           JSON.parse(window.localStorage.getItem("loggedUser")).id
@@ -275,7 +275,7 @@ function AvoDocuments() {
           "You can modify it from the menu, in any case ;)"
         }
         isOpen={isModalOpen}
-        handleConfirmacion={handleConfirmacion}
+        handleConfirmation={handleConfirmacion}
         onClose={closeModal}
       />
       <ModalError
@@ -288,7 +288,7 @@ function AvoDocuments() {
       />
       <ModalIsLoading
         message={"Please wait while we save the documentation ;)"}
-        isOpen={isCharging}
+        isOpen={isLoading}
       />
     </Box>
   );

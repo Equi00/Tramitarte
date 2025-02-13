@@ -3,19 +3,19 @@ import axios from "axios";
 class UserService {
     urlBackend = 'http://localhost:8000/api';
 
-    async guardarUsuario(user) {
+    async saveUser(user) {
         console.log(user)
-        let new_user = await axios.post(`${this.urlBackend}/user`, user)
+        let new_user = await axios.post(`${this.urlBackend}/user/`, user)
         console.log(new_user)
         return new_user;
     }
 
-    async traerPorId(id){
+    async getById(id){
         let user = await axios.get(`${this.urlBackend}/user/${id}`)
         return user.data
     }
 
-    async traerUsuarioXMail(email) {
+    async getUserByEmail(email) {
         let body= {"email" : email}
         let user= await axios?.get(`${this.urlBackend}/user`, { params: body })
         return user
@@ -25,72 +25,72 @@ class UserService {
         return documentacion.data.documentList
     }
 
-    async traerTraductores(){
+    async getTranslators(){
         let translators = await axios.get(`${this.urlBackend}/user/translators`)
         return translators.data
     }
 
-    async buscarTraductores(email){
+    async searchTranslatorByEmail(email){
         let body= {"email" : email}
         let translator = await axios?.get(`${this.urlBackend}/user/translator/email`, { params: body })
         return translator.data
     }
 
-    async traerNotificaciones(id){
+    async getNotifications(id){
         let notifications = await axios.get(`${this.urlBackend}/user/${id}/notifications`)
         return notifications.data
     }
 
-    async enviarNotificacion(origin_id, destination_id, text){
+    async sendNotification(origin_id, destination_id, text){
         await axios.post(`${this.urlBackend}/notification/alert-translator/${origin_id}/${destination_id}?description=${text}` )
     }
 
-    async enviarAlerta(origin_id, destination_id, text){
+    async sendAlert(origin_id, destination_id, text){
         await axios.post(`${this.urlBackend}/notification/alert/${origin_id}/${destination_id}?description=${text}` )
     }
 
-    async buscarSolicitudTraduccion(id_translator){
+    async searchTranslateRequests(id_translator){
         let translation_requests = await axios.get(`${this.urlBackend}/user/${id_translator}/translation-requests`)
         return translation_requests.data
     }
 
-    async buscarSolicitudTraduccionSolicitante(id_requester, id_translator){
+    async searchRequestByRequesterAndTranslator(id_requester, id_translator){
         let translation_requests = await axios.get(`${this.urlBackend}/user/translation-requests/requester/${id_requester}/translator/${id_translator}`)
         return translation_requests.data
     }
 
-    async buscarSolicitudPorSolicitante(id_requester){
+    async searchRequestByRequester(id_requester){
         let translation_request = await axios.get(`${this.urlBackend}/user/requests/requester/${id_requester}`)
         return translation_request.data
     }
 
-    async eliminarAlerta(alert_id){
+    async deleteAlert(alert_id){
         await axios.delete(`${this.urlBackend}/notification/alert/${alert_id}` )
     }
 
-    async eliminarSolicitudTraduccion(translation_request_id){
+    async deleteTranslationRequest(translation_request_id){
         await axios.delete(`${this.urlBackend}/notification/request/${translation_request_id}`)
     }
 
-    async eliminarSolicitudTraduccionPorSolicitante(requester_id){
+    async deleteTranslationRequestByRequester(requester_id){
         await axios.delete(`${this.urlBackend}/notification/request/requester/${requester_id}`)
     }
 
-    async crearPedidoTraduccion(requester_id, translator_id){
+    async createTranslationTask(requester_id, translator_id){
         let translation_task = await axios.post(`${this.urlBackend}/task/requester/${requester_id}/translator/${translator_id}`)
         return translation_task.data
     }
 
-    async buscarPedidoTraduccion(translator_id){
+    async searchTranslationTask(translator_id){
         let translation_task = await axios.get(`${this.urlBackend}/task/translator/${translator_id}`)
         return translation_task.data
     }
 
-    async eliminarPedidoTraduccion(task_id){
+    async deleteTranslationTask(task_id){
         await axios.delete(`${this.urlBackend}/task/${task_id}`)
     }
 
-    async crearSolicitudDescarga(requester_id, translator_id, documents){
+    async createDownloadRequest(requester_id, translator_id, documents){
         let response = await axios.post(
             `${this.urlBackend}/download-request/requester/${requester_id}/translator/${translator_id}`,
                     JSON.stringify(documents),
@@ -99,19 +99,19 @@ class UserService {
         return response
     }
 
-    async buscarSolicitudDescargaPorSolicitante(requester_id){
+    async searchDownloadRequestByRequesterId(requester_id){
         let download_request = await axios.get(`${this.urlBackend}/download-request/requester/${requester_id}`)
         return download_request.data
     }
 
-    async eliminarSolicitudDescarga(id){
+    async deleteDownloadRequest(id){
         await axios.delete(`${this.urlBackend}/download-request/${id}`)
         console.log("Download request deleted")
     }
     
-    async actualizarDataUsuario(id, body) {
+    async updateUserData(id, body) {
         try {
-            let user = await axios?.post(`${this.urlBackend}/user/${id}`, body);
+            let user = await axios?.put(`${this.urlBackend}/user/${id}`, body);
             return user.data;
         } catch (error) {
             console.error("Update user error:", error);

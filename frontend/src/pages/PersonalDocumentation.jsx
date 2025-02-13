@@ -21,7 +21,7 @@ function PersonalDocumentation() {
   const navigate = useNavigate();
   const { isOpen, onToggle } = useDisclosure();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isCharging, setIsCharging] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { isOpen: isOpenError, onOpen: onOpenError, onClose: onCloseError } = useDisclosure();
   const [requesterDocumentation, setRequesterDocumentation] = useState({
     dniFront: { name: "", file_type: "", file_base64: "" },
@@ -112,7 +112,7 @@ function PersonalDocumentation() {
 
   const handleConfirmacion = async () => {
       closeModal();
-      setIsCharging(true);
+      setIsLoading(true);
       console.log("acá", [
         requesterDocumentation.dniFront,
         requesterDocumentation.dniBack,
@@ -129,7 +129,7 @@ function PersonalDocumentation() {
           Number(process.id)
         );
         console.log(response);
-        setIsCharging(false);
+        setIsLoading(false);
         navigate(
           `/home/requester/${
             JSON.parse(window.localStorage.getItem("loggedUser")).id
@@ -232,7 +232,7 @@ function PersonalDocumentation() {
           "You can modify it from the menu, in any case ;)"
         }
         isOpen={isModalOpen}
-        handleConfirmacion={handleConfirmacion}
+        handleConfirmation={handleConfirmacion}
         onClose={closeModal}
       />
       <ModalError
@@ -245,7 +245,7 @@ function PersonalDocumentation() {
       />
       <ModalIsLoading
         mensaje={"Please wait while we save the documentation ;)"}
-        isOpen={isCharging}
+        isOpen={isLoading}
       />
     </Box>
   );

@@ -31,7 +31,6 @@ import { HamburgerIcon, CloseIcon, QuestionIcon } from "@chakra-ui/icons";
 import {
   AccountCircle,
   Assignment,
-  AssignmentInd,
   ConnectWithoutContact,
   Email,
   FamilyRestroom,
@@ -42,9 +41,9 @@ import {
 import { useLocation, useNavigate, useParams } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import usuarioService from "../services/UsuarioService";
+import userService from "../services/UserService";
 
-const NavLink = ({ texto, link }) => (
+const NavLink = ({ text, link }) => (
   <Link
     px={2}
     py={1}
@@ -56,31 +55,31 @@ const NavLink = ({ texto, link }) => (
     }}
     href={link}
   >
-    {texto}
+    {text}
   </Link>
 );
 
-export default function UserNavbar({ usuarioLogueado }) {
+export default function UserNavbar({ loggedUser }) {
   const { logout, user } = useAuth0();
   const navigate = useNavigate();
   const location = useLocation();
-  const { idUsuario } = useParams();
+  const { userId } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [notificaciones, setNotificacion] = useState()
+  const [notifications, setNotifications] = useState()
   const bgColors = useColorModeValue("teal.300", "blue.900");
   const colors = useColorModeValue("white", "blue.900");
   const btnRef = useRef();
 
-  const itemsMenuSolicitante = [
+  const itemsMenuRequester = [
     {
-      hipervinculo: `/home/solicitante/${idUsuario}`,
-      texto: "Inicio",
-      icono: <Icon color="white" as={Home} boxSize={8} />,
+      hyperlink: `/home/requester/${userId}`,
+      text: "Home",
+      icon: <Icon color="white" as={Home} boxSize={8} />,
     },
     {
-      hipervinculo: `/home/solicitante/${idUsuario}/traductores`,
-      texto: "Traductores Registrados",
-      icono: (
+      hyperlink: `/home/requester/${userId}/translators`,
+      text: "Registered Translators",
+      icon: (
         <Icon
           color="white"
           as={ConnectWithoutContact}
@@ -90,55 +89,53 @@ export default function UserNavbar({ usuarioLogueado }) {
       ),
     },
     {
-      hipervinculo: "/preguntas-frecuentes",
-      texto: "Preguntas Frecuentes",
-      icono: <QuestionIcon color="white" bg="teal.300" boxSize={8} />,
+      hyperlink: "/frequently-asked-questions",
+      text: "Frequently Asked Questions",
+      icon: <QuestionIcon color="white" bg="teal.300" boxSize={8} />,
     },
     {
-      hipervinculo: "/documentacion-cargada",
-      texto: "Certificados",
-      icono: <Icon color="white" as={FolderCopy} bg="teal.300" boxSize={8} />,
+      hyperlink: "/documentation-uploaded",
+      text: "Certificates",
+      icon: <Icon color="white" as={FolderCopy} bg="teal.300" boxSize={8} />,
     },
     {
-      hipervinculo: "/avo-profile",
-      texto: "Mi AVO",
-      icono: (
+      hyperlink: "/avo-profile",
+      text: "My AVO",
+      icon: (
         <Icon color="white" as={FamilyRestroom} bg="teal.300" boxSize={8} />
       ),
     },
   ];
 
-  const itemsMenuTraductor = [
+  const itemsMenuTranslator = [
     {
-      hipervinculo: `/home/traductor/${idUsuario}`,
-      texto: "Inicio",
-      icono: <Icon color="white" as={Home} boxSize={8} />,
+      hyperlink: `/home/translator/${userId}`,
+      text: "Home",
+      icon: <Icon color="white" as={Home} boxSize={8} />,
     },
     {
-      hipervinculo: `/home/traductor/${idUsuario}/pedidos-pendientes`,
-      texto: "Solicitudes pendientes",
-      icono: <Icon color="white" as={Assignment} bg="teal.300" boxSize={8} />,
+      hyperlink: `/home/translator/${userId}/pending-orders`,
+      text: "Pending Orders",
+      icon: <Icon color="white" as={Assignment} bg="teal.300" boxSize={8} />,
     }
   ];
 
-  //const notificacionesanashe = ["Notificación 1", "Notificación 2"];
-
-  const notificacionesUsuario = async () => {
+  const userNotifications = async () => {
     try{
-      let notificacion = await usuarioService.traerNotificaciones(idUsuario)
-      setNotificacion(notificacion)
+      let notifications = await userService.getNotifications(userId)
+      setNotifications(notifications)
     }catch(e){
       navigate("/network-error")
     }
   }
 
-  const eliminarAlerta = async (idAlerta) => {
-    await usuarioService.eliminarAlerta(idAlerta)
+  const deleteAlert = async (alertId) => {
+    await userService.deleteAlert(alertId)
   }
 
   useEffect(() =>{
-    notificacionesUsuario() //esto va a estar en loop infinito actualizando las notificaciones
-  }, [notificaciones])
+    userNotifications() //This will be in an infinite loop updating notifications
+  }, [notifications])
 
   return (
     <>
@@ -155,7 +152,7 @@ export default function UserNavbar({ usuarioLogueado }) {
             color={colors}
           />
           <HStack color="white" spacing={8} alignItems={"center"}>
-            <Box>Tramitarte</Box>
+            <Box>Process</Box>
           </HStack>
           <Flex
             justifyContent="space-between"
@@ -177,14 +174,14 @@ export default function UserNavbar({ usuarioLogueado }) {
                   variant="solid"
                   bg="teal.300"
                 >
-                  <TagLeftIcon key={"fal"} boxSize="8" as={Email} color={notificaciones && notificaciones.length > 0 ? "red.500" : "white"} />
-                  <TagLabel key={"rem"} ml={"-.4rem"} color={notificaciones && notificaciones.length > 0 ? "red.500" : "white"} fontSize={20}>
-                    {notificaciones ? notificaciones.length : <div>0</div>}
+                  <TagLeftIcon key={"fal"} boxSize="8" as={Email} color={notifications && notifications.length > 0 ? "red.500" : "white"} />
+                  <TagLabel key={"rem"} ml={"-.4rem"} color={notifications && notifications.length > 0 ? "red.500" : "white"} fontSize={20}>
+                    {notifications ? notifications.length : <div>0</div>}
                   </TagLabel>
                 </Tag>
               </MenuButton>
               <MenuList color={useColorModeValue("blue.900", "white")}>
-                {notificaciones && notificaciones.length === 0 ? <div>No hay notificaciones</div>:notificaciones && notificaciones.map((notificacion, index) => (
+                {notifications && notifications.length === 0 ? <div>No notifications</div>:notifications && notifications.map((notification, index) => (
                   <>
                     <MenuItem
                       maxWidth={"17rem"}
@@ -198,10 +195,10 @@ export default function UserNavbar({ usuarioLogueado }) {
                         bg="red.500"
                         h="5em"
                         marginRight={"10px"}
-                        onClick={() => eliminarAlerta(notificacion.idNotificacion)}
+                        onClick={() => deleteAlert(notification.id)}
                         icon={<CloseIcon />}
                       />
-                      {notificacion.descripcion}
+                      {notification.description}
                     </MenuItem>
                   </>
                 ))}
@@ -218,16 +215,16 @@ export default function UserNavbar({ usuarioLogueado }) {
                 <Avatar
                   size={"sm"}
                   src={
-                    user ? user.picture : JSON.parse(window.localStorage.getItem('usuarioLogueado')).fotoPerfil
+                    user ? user.picture : JSON.parse(window.localStorage.getItem('loggedUser')).photo
                   }
                 />
               </MenuButton>
               <MenuList color={useColorModeValue("blue.900", "white")}>
                 <MenuItem
-                  onClick={() => navigate(`/usuario/${idUsuario}`)}
+                  onClick={() => navigate(`/user/${userId}`)}
                   icon={<AccountCircle />}
                 >
-                  Mi perfil
+                  Profile
                 </MenuItem>
                 <MenuDivider />
                 <MenuItem
@@ -237,7 +234,7 @@ export default function UserNavbar({ usuarioLogueado }) {
                   }}
                   icon={<Logout />}
                 >
-                  Cerrar sesi&oacute;n
+                  Log out
                 </MenuItem>
               </MenuList>
             </Menu>
@@ -257,8 +254,8 @@ export default function UserNavbar({ usuarioLogueado }) {
               <DrawerBody>
                 <Box py={12}>
                   <Stack as={"nav"} spacing={4}>
-                    {location.pathname.includes("solicitante") &&
-                      itemsMenuSolicitante.map((item, index) => (
+                    {location.pathname.includes("requester") &&
+                      itemsMenuRequester.map((item, index) => (
                         <Box
                           py={4}
                           borderBottom="1px solid"
@@ -266,14 +263,14 @@ export default function UserNavbar({ usuarioLogueado }) {
                           key={index}
                         >
                           <NavLink
-                            texto={item.texto}
-                            link={item.hipervinculo}
+                            text={item.text}
+                            link={item.hyperlink}
                             
                           />
                         </Box>
                       ))}
-                    {location.pathname.includes("traductor") &&
-                      itemsMenuTraductor.map((item, index) => (
+                    {location.pathname.includes("translator") &&
+                      itemsMenuTranslator.map((item, index) => (
                         <Box
                           py={4}
                           borderBottom="1px solid"
@@ -281,8 +278,8 @@ export default function UserNavbar({ usuarioLogueado }) {
                           key={index}
                         >
                           <NavLink
-                            texto={item.texto}
-                            link={item.hipervinculo}
+                            text={item.text}
+                            link={item.hyperlink}
                           />
                         </Box>
                       ))}
@@ -311,17 +308,17 @@ export default function UserNavbar({ usuarioLogueado }) {
           border="none"
           justifyContent="space-evenly"
         >
-          {location.pathname.includes("solicitante") &&
-            itemsMenuSolicitante.map((item, index) => (
-              <Tab key={index} onClick={() => navigate(item.hipervinculo)}>
-                {item.icono}
+          {location.pathname.includes("requester") &&
+            itemsMenuRequester.map((item, index) => (
+              <Tab key={index} onClick={() => navigate(item.hyperlink)}>
+                {item.icon}
               </Tab>
             ))}
 
-          {location.pathname.includes("traductor") &&
-            itemsMenuTraductor.map((item, index) => (
-              <Tab key={index} onClick={() => navigate(item.hipervinculo)}>
-                {item.icono}
+          {location.pathname.includes("translator") &&
+            itemsMenuTranslator.map((item, index) => (
+              <Tab key={index} onClick={() => navigate(item.hyperlink)}>
+                {item.icon}
               </Tab>
             ))}
         </TabList>

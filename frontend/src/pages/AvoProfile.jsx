@@ -1,5 +1,5 @@
 import { CalendarIcon } from "@chakra-ui/icons";
-import tramiteService from "../services/TramiteService";
+import processService from "../services/ProcessService";
 import {
   Box,
   Flex,
@@ -24,7 +24,7 @@ function AvoProfile() {
   const handleBack = () => navigate(-1);
     const fetchData = async () => {
       try{ 
-          const avoData=await tramiteService.getAVOData(JSON.parse(window.localStorage.getItem('loggedUser')).id);
+          const avoData=await processService.getAVOData(JSON.parse(window.localStorage.getItem('loggedUser')).id);
           setAvoData(avoData)
           if(avoData.gender === "Male"){setAvatar("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTujnrocNopBoCYAhK3G50mc6qYWSV4c8h6Gg&usqp=CAU")}
           else{setAvatar("https://img.freepik.com/vector-gratis/plantilla-etiqueta-cara-icono-emoji-anciana_1308-58444.jpg?w=2000")}

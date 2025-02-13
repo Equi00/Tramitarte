@@ -7,39 +7,38 @@ import {
   Stack,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
-import usuarioService from "../services/UsuarioService";
-import { UsuarioLogueadoContext } from "../App";
+import userService from "../services/UserService";
 
-export default function VerifyEmailForm({ setUsuarioLogueadoContext }) {
+export default function VerifyEmailForm({ setLoggedUserContext }) {
   const { user, isLoading, isAuthenticated } = useAuth0();
   const { loginWithRedirect } = useAuth0();
   const navigate = useNavigate();
   console.log(JSON.stringify(user));
 
-  const navegarToHome = () => {
+  const navigateToHome = () => {
     !isLoading &&
-      usuarioService
-        .traerUsuarioXMail(user.email)
+    userService
+        .getUserByEmail(user.email)
         .then((response) => {
           let { data } = response;
-          let usuario = data;
-          setUsuarioLogueadoContext(usuario);
-          navigate(`/home/${usuario.rol.toLowerCase()}/${usuario.id}`, {
+          let user = data;
+          setLoggedUserContext(user);
+          navigate(`/home/${user.rol.toLowerCase()}/${user.id}`, {
             replace: true,
           });
         })
-        .catch((error) => navigate("/eleccion-rol", { replace: true }));
+        .catch((error) => navigate("/role-election", { replace: true }));
   };
 
-  const navegar = () => {
+  const goNavigate = () => {
     console.log(isLoading);
-    !isLoading && navegarToHome();
+    !isLoading && navigateToHome();
   };
 
   useEffect(() => {
-    navegar();
+    goNavigate();
   }, [user]);
 
   return (
@@ -61,14 +60,14 @@ export default function VerifyEmailForm({ setUsuarioLogueadoContext }) {
       >
         <Center>
           <Heading lineHeight={1.1} fontSize={{ base: "2xl", md: "3xl" }}>
-            Verifica tu Email
+          Verify your email
           </Heading>
         </Center>
         <Center
           fontSize={{ base: "sm", sm: "md" }}
           color={useColorModeValue("gray.800", "gray.400")}
         >
-          Te enviamos la verificacion a tu email! Aceptá para poder continuar ;)
+          We sent you the verification to your email! Accept to continue ;)
         </Center>
         <FormControl></FormControl>
         <Stack spacing={6}>
@@ -80,7 +79,7 @@ export default function VerifyEmailForm({ setUsuarioLogueadoContext }) {
             }}
             onClick={loginWithRedirect}
           >
-            Ya lo verifiqué ;)
+            I already checked it ;)
           </Button>
         </Stack>
       </Stack>

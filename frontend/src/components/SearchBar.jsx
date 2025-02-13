@@ -30,7 +30,7 @@ function SearchBar({funcion}) {
         color="white"
         children={<Search />}
       />
-      <Input borderLeftRadius={"45px"} type="text" placeholder="Buscar..." border="1px solid" borderColor="white" value={searchValue}
+      <Input borderLeftRadius={"45px"} type="text" placeholder="Search..." border="1px solid" borderColor="white" value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)} onKeyDown={handleKeyPress}
       />
       <InputRightAddon borderRightRadius={"45px"} p={0} border="none">
@@ -43,7 +43,7 @@ function SearchBar({funcion}) {
           color="whiteAlpha.900"
           onClick={handleSearch}
         >
-          Buscar
+          Search
         </Button>
       </InputRightAddon>
     </InputGroup>

@@ -1,16 +1,15 @@
-import { useDisclosure } from "@chakra-ui/hooks";
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
-import processService from "../services/ProcessService";
-import { Box, Center, Flex, Text } from "@chakra-ui/layout";
-import { Button, IconButton } from "@chakra-ui/button";
-import { ArrowBack } from "@mui/icons-material";
-import { ScaleFade } from "@chakra-ui/transition";
-import InputFile from "../components/inputs/InputFile";
-import ModalError from "../components/modals/ModalError";
-import ModalIsLoading from "../components/modals/ModalIsLoading";
+import { useEffect, useState } from "react"
+import InputFile from "../components/inputs/InputFile"
+import { Box, Button, Center, Flex, IconButton, ScaleFade, Text, useDisclosure } from "@chakra-ui/react"
+import { ArrowBack } from "@mui/icons-material"
+import { useNavigate } from "react-router"
+import processService from "../services/ProcessService"
+import ModalError from "../components/modals/ModalError"
+import ModalIsLoading from "../components/modals/ModalIsLoading"
+import userService from "../services/UserService"
+import { useAuth0 } from "@auth0/auth0-react"
 
-const TranslatedDocumentation = () => {
+const LoadDocuments = () => {
     const navigate = useNavigate();
     const [documents, setDocuments] = useState([])
     const { isOpen, onToggle } = useDisclosure();
@@ -20,9 +19,9 @@ const TranslatedDocumentation = () => {
     const { isOpen: isOpenError, onOpen: onOpenError, onClose: onCloseError } = useDisclosure();
     const { isOpen: isOpenError2, onOpen: onOpenError2, onClose: onCloseError2 } = useDisclosure();
     const { isOpen: isOpenError3, onOpen: onOpenError3, onClose: onCloseError3 } = useDisclosure();
-    const [ certificate, setCertificates] = useState([])
+    const [ certificate, setCertificate] = useState([])
     const [count, setCount] = useState(0)
-    const { userId } = useParams();
+    const {user}=useAuth0()
 
     const handleBack = () => {
         navigate(-1);
@@ -30,32 +29,38 @@ const TranslatedDocumentation = () => {
 
       const completeDocumentation = async ({ id, file, index }) => {
         let updatedCertificate = [...certificate]; // Copy of certificate list
-        let ancestor = { ...updatedCertificate[index] }; // Copy of specific ancestor
+        let document = { ...updatedCertificate[index] }; 
         let base64 = await fileToBase64(file);
       
         if (id === "death-certificate") {
-            ancestor = {
+            document = {
             name: file.name,
             file_type: "death-certificate",
             file_base64: base64,
           };
         } else if (id === "marriage-certificate") {
-            ancestor = {
+            document = {
             name: file.name,
             file_type: "marriage-certificate",
             file_base64: base64,
           };
         } else if (id === "birth-certificate") {
-            ancestor = {
-                name: file.name,
-                file_type: "birth-certificate",
-                file_base64: base64,
+            document = {
+            name: file.name,
+            file_type: "birth-certificate",
+            file_base64: base64,
           };
         }
       
-        updatedCertificate[index] = ancestor; // Update only the specific descendant
-        setCertificates(updatedCertificate); // Update the list of certificates
-        setCount(count+1)
+        updatedCertificate[index] = document; 
+        setCertificate(updatedCertificate);
+         
+        certificate.forEach((certi) => {
+            if(certi.name !== ""){
+                setCount(count+1)
+            }
+        })
+        
     };
 
     const handleInputCertificate = async (e, index) => {
@@ -75,16 +80,16 @@ const TranslatedDocumentation = () => {
                     setIsLoading(false)
                     onOpenError()
                 }else{
-                    console.log("is a birth certificate")
+                    console.log("It is a birth certificate")
                     completeDocumentation({
                         id: "birth-certificate",
                         file: file,
                         index: index
                     });
                     setDocumentName((prevNames) => {
-                        const newNames = [...prevNames];
-                        newNames[index] = shorterName;
-                        return newNames;
+                        const newName = [...prevNames];
+                        newName[index] = shorterName;
+                        return newName;
                       });
                 }
             }
@@ -95,16 +100,16 @@ const TranslatedDocumentation = () => {
                     setIsLoading(false)
                     onOpenError()
                 }else{
-                    console.log("is a marriage certificate")
+                    console.log("It is a marriage certificate")
                     completeDocumentation({
                         id: "marriage-certificate",
                         file: file,
                         index: index
                     });
                     setDocumentName((prevNames) => {
-                        const newNames = [...prevNames];
-                        newNames[index] = shorterName;
-                        return newNames;
+                        const newName = [...prevNames];
+                        newName[index] = shorterName;
+                        return newName;
                       });
                 }
             }
@@ -115,16 +120,16 @@ const TranslatedDocumentation = () => {
                     setIsLoading(false)
                     onOpenError()
                 }else{
-                    console.log("is a death certificate")
+                    console.log("It is a death certificate")
                     completeDocumentation({
                         id: "death-certificate",
                         file: file,
                         index: index
                     });
                     setDocumentName((prevNames) => {
-                        const newNames = [...prevNames];
-                        newNames[index] = shorterName;
-                        return newNames;
+                        const newName = [...prevNames];
+                        newName[index] = shorterName;
+                        return newName;
                       });
                 }
             }
@@ -144,8 +149,12 @@ const TranslatedDocumentation = () => {
         if(documents.length !== count){
             onOpenError2()
         }else{
-            let response = await processService.uploadTranslatedDocumentation(certificate ,userId)
-            console.log("response: ", response.data)
+            let translatorId = JSON.parse(localStorage.getItem('translatorId'))
+            let requesterId = JSON.parse(localStorage.getItem('requesterId'))
+            let taskId = JSON.parse(localStorage.getItem('taskId'))
+            await userService.createDownloadRequest(requesterId, translatorId, certificate)
+            await userService.deleteTranslationTask(taskId)
+            await userService.sendAlert(translatorId, requesterId, "Translator "+user.name+" has sent the translated documents")
             navigate(-1)
         }
       }
@@ -166,18 +175,18 @@ const TranslatedDocumentation = () => {
       }
 
       const getProcess = async () =>{
-        let process = await processService.searchProcessByUserId(userId)
+        let process = await processService.searchProcessByUserId(JSON.parse(localStorage.getItem('requesterId')))
         let data = process.data
         let documents = data.attachments_to_translate
-        let typeNames = documents.map((docu) => docu.file_type)
+        let names = documents.map((docu) => docu.file_type)
         const certificates = Array(documents.length).fill({
             certificate: { name: "", file_type: "", file_base64: "" }
         })
         console.log("certificates: ", certificates)
-        setCertificates(certificates);
+        setCertificate(certificates);
         setDocuments(documents)
-        setTypeName(typeNames)
-        setDocumentName(typeNames)
+        setTypeName(names)
+        setDocumentName(names)
       }
 
     useEffect(() => {
@@ -258,15 +267,15 @@ const TranslatedDocumentation = () => {
                 onClose={onCloseError2}
             />
             <ModalError
-                question={"The file extension is not valid"}
-                dataToConfirm={
+                pregunta={"The file extension is not valid"}
+                datoAConfirmar={
                 "Please choose a file with the extension ¨.pdf¨."
                 }
                 isOpen={isOpenError3}
                 onClose={onCloseError3}
             />
             <ModalIsLoading
-                message={"Wait for us while we save the documentation ;)"}
+                message={"Please wait while we save the documentation ;)"}
                 isOpen={isLoading}
             />
         </Box>
@@ -274,4 +283,4 @@ const TranslatedDocumentation = () => {
     )
 }
 
-export default TranslatedDocumentation
+export default LoadDocuments

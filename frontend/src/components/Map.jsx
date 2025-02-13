@@ -2,12 +2,12 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect } from "react";
 import logo from "../assets/logo.png";
-import consulados from "../data/consulados";
+import consulates from "../data/consulates";
 
 function Map({bool}) {
   useEffect(() => {
-    const centroDelPais = [-34.6989, -65.0379677];
-    const map = L.map("map").setView(centroDelPais, 5);
+    const countryCenter = [-34.6989, -65.0379677];
+    const map = L.map("map").setView(countryCenter, 5);
 
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution:
@@ -22,16 +22,15 @@ function Map({bool}) {
       popupAnchor: [0, 0],
     });
 
-    consulados.map((consulado) => {
-      let latitud, longitud;
-      [latitud, longitud] = [consulado.latitud, consulado.longitud];
-      L.marker([latitud, longitud], {
+    consulates.map((consulate) => {
+      let latitude, longitude;
+      [latitude, longitude] = [consulate.latitude, consulate.longitude];
+      L.marker([latitude, longitude], {
         icon: iconoTramitarte,
-      }).addTo(map).bindPopup(`<b>${consulado.direccion}</b><br>
-        ${consulado.ciudad}<br>
-        <i>${consulado.telefono}</i><br>
+      }).addTo(map).bindPopup(`<b>${consulate.address}</b><br>
+        ${consulate.city}<br>
+        <i>${consulate.phone}</i><br>
         `).openPopup();
-        // <a href=${consulado.url} target="_blank">Página 🔗</a>
     });
     
 

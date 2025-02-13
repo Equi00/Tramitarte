@@ -1,8 +1,8 @@
 import { Box, Image } from '@chakra-ui/react';
 import logo from '../../assets/logo.png';
-import './logo-animado.css';
+import './animated-logo.css';
 
-function LogoAnimado() {
+function AnimatedLogo() {
     return <Image
             alt={"logo"}
             borderRadius="full"
@@ -17,4 +17,4 @@ function LogoAnimado() {
     ;
 }
 
-export default LogoAnimado;
+export default AnimatedLogo;

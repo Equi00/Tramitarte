@@ -2,7 +2,7 @@ import { ArrowBack } from "@mui/icons-material";
 import Faq from "../components/Faq";
 import { Box, Center, Flex, IconButton } from "@chakra-ui/react";
 import { useNavigate } from "react-router";
-function PreguntasFrecuentes() {
+function FrequentQuestions() {
   const navigate = useNavigate();
   const handleBack = () => navigate(-1);
   return (
@@ -24,4 +24,4 @@ function PreguntasFrecuentes() {
   );
 }
 
-export default PreguntasFrecuentes;
+export default FrequentQuestions;

@@ -1,6 +1,7 @@
 from typing import Optional
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
+from models.UpdateAVORequestModel import UpdateAVORequestModel
 from models.UserModel import UserModel
 from models.AVORequestModel import AVORequestModel
 from entities.AVORequest import AVORequest
@@ -24,13 +25,15 @@ class AVORequestService:
 
         return avo
 
-    def update(self, avo_request: AVORequestModel) -> AVORequestModel:
-        self._validate_existing_request(avo_request)
+    def update(self, avo_request: UpdateAVORequestModel) -> AVORequestModel:
+        avo: AVORequest = self.db.query(AVORequest).filter(AVORequest.id == avo_request.id).first()
 
-        avo = self.db.query(AVORequest).filter(AVORequest.id == avo_request.id).first()
+        self._validate_existing_request(avo)
 
-        for key, value in avo_request.model_dump().items():
-            setattr(avo, key, value)
+        avo.first_name = avo_request.first_name or avo.first_name
+        avo.last_name = avo_request.last_name or avo.last_name
+        avo.birth_date = avo_request.birth_date or avo.birth_date
+        avo.gender = avo_request.gender or avo.gender
 
         if not avo.is_valid():
             raise HTTPException(status_code=400, detail="AVO is not valid.")
@@ -45,6 +48,5 @@ class AVORequestService:
         return process.request_avo if process else None
 
     def _validate_existing_request(self, avo_request: AVORequestModel):
-        existing_request = self.db.query(AVORequest).filter(AVORequest.id == avo_request.id).first()
-        if not existing_request:
+         if not avo_request:
             raise HTTPException(status_code=404, detail="The AVO to modify does not exist.")

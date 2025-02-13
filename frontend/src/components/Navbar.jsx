@@ -9,7 +9,6 @@ import {
   Icon,
   Link,
   Popover,
-  Image,
   PopoverTrigger,
   PopoverContent,
   useColorModeValue,
@@ -29,7 +28,6 @@ import { useAuth0 } from "@auth0/auth0-react";
 export default function Navbar() {
   const { isOpen, onToggle } = useDisclosure();
   const { loginWithRedirect } = useAuth0();
-  const navigate=useNavigate()
 
   return (
     <Box>
@@ -82,7 +80,7 @@ export default function Navbar() {
             variant={"link"}
             onClick={()=>loginWithRedirect()}
           >
-            Iniciar sesi&oacute;n
+            Login
           </Button>
           <Button
             as={"a"}
@@ -97,7 +95,7 @@ export default function Navbar() {
               bg: "green.300",
             }}
           >
-            Registrarme
+            Sign up
           </Button>
         </Stack>
       </Flex>
@@ -265,40 +263,15 @@ const MobileNavItem = ({ label, children, href }) => {
 
 const NAV_ITEMS = [
   {
-    label: "¿Quiénes somos?",
-    href: "#sobre-nosotros"
-    // children: [
-    //   {
-    //     label: "Explore Design Work",
-    //     subLabel: "Trending Design to inspire you",
-    //     href: "#",
-    //   },
-    //   {
-    //     label: "New & Noteworthy",
-    //     subLabel: "Up-and-coming Designers",
-    //     href: "#",
-    //   },
-    // ],
+    label: "Who are we?",
+    href: "#about-us"
   },
   {
-    label: "Preguntas Frecuentes",
-    href:'#preguntas-frecuentes'
-    // children: [
-    //   {
-    //     label: "Job Board",
-    //     subLabel: "Find your dream design job",
-    //     href: "#",
-    //   },
-    //   {
-    //     label: "Freelance Projects",
-    //     subLabel: "An exclusive list for contract work",
-    //     href: "#",
-    //   },
-    // ],
+    label: "Frequently Asked Questions",
+    href:'#frequently-asked-questions'
   },
   {
-    label: "Testimonios",
+    label: "Testimonials",
     href:"#testimonials"
-    
   },
 ];

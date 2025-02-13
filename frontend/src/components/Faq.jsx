@@ -5,7 +5,6 @@ import {
   AccordionPanel,
   Text,
   Link,
-  useDisclosure,
 } from "@chakra-ui/react";
 
 import { ExternalLinkIcon } from "@chakra-ui/icons";
@@ -14,26 +13,26 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 import Map from "./Map";
 import { useRef, useState } from "react";
 import MapFamilySearch from "./MapFamilySearch";
-import MapTraductores from "./MapTraductores";
+import MapTranslators from "./MapTranslators";
 
 export default function Faq() {
   const [onOpenMap1, onToggleMap1] = useState(false)
   const [onOpenMap2, onToggleMap2] = useState(false)
   const [onOpenMap3, onToggleMap3] = useState(false)
 
-  const renderizarMapa1 = () => {
+  const renderMap1 = () => {
     setTimeout(() => {
       onToggleMap1(!onOpenMap1);
     }, 1);
   }
 
-  const renderizarMapa2 = () => {
+  const renderMap2 = () => {
     setTimeout(() => {
       onToggleMap2(!onOpenMap2);
     }, 1);
   }
 
-  const renderizarMapa3 = () => {
+  const renderMap3 = () => {
     setTimeout(() => {
       onToggleMap3(!onOpenMap2);
     }, 1);
@@ -58,13 +57,12 @@ export default function Faq() {
           w="full"
           _hover={{ bg: "teal.300" }}
         >
-          <Text fontSize="md">{"¿Cómo saber cuál es mi AVO?"}</Text>
+          <Text fontSize="md">{"How do I know what my AVO is?"}</Text>
           <ChevronDownIcon fontSize="24px" />
         </AccordionButton>
         <AccordionPanel pb={4}>
           <Text>
-            Pod&eacute;s realizar la b&uacute;squeda de tu AVO (antepasado
-            italiano que emigr&oacute;) en:&nbsp;
+          You can search for your AVO (Italian ancestor who emigrated) at:
             <Link
               color="teal.400"
               href="https://www.familysearch.org/"
@@ -72,12 +70,12 @@ export default function Faq() {
             >
               Family Search <ExternalLinkIcon mx="2px" />
             </Link>
-            &nbsp;o&nbsp;
+            &nbsp;or&nbsp;
             <Link color="teal.400" href="https://www.myheritage.es/" isExternal>
               My Heritage <ExternalLinkIcon mx="2px" />
             </Link>
             <br />
-            Una vez terminada la búsqueda, cargá los datos en la Etapa 1
+            Once the search is complete, load the data in Step 1
           </Text>
         </AccordionPanel>
       </AccordionItem>
@@ -90,10 +88,10 @@ export default function Faq() {
           justifyContent="space-between"
           p={4}
           _hover={{ bg: "teal.300" }}
-          onClick={renderizarMapa1}
+          onClick={renderMap1}
         >
           <Text fontSize="md">
-            {"¿Dónde está el consulado italiano más cercano?"}
+            {"Where is the nearest Italian consulate?"}
           </Text>
           <ChevronDownIcon fontSize="24px" />
         </AccordionButton>
@@ -110,10 +108,10 @@ export default function Faq() {
           justifyContent="space-between"
           p={4}
           _hover={{ bg: "teal.300" }}
-          onClick={renderizarMapa2}
+          onClick={renderMap2}
         >
           <Text fontSize="md">
-            {"¿Dónde está el centro de Family Search más cercano?"}
+            {"Where is the nearest Family Search center?"}
           </Text>
           <ChevronDownIcon fontSize="24px" />
         </AccordionButton>
@@ -130,15 +128,15 @@ export default function Faq() {
           justifyContent="space-between"
           p={4}
           _hover={{ bg: "teal.300" }}
-          onClick={renderizarMapa3}
+          onClick={renderMap3}
         >
           <Text fontSize="md">
-            {"¿Dónde está el Traductor más cercano?"}
+            {"Where is the nearest Translator?"}
           </Text>
           <ChevronDownIcon fontSize="24px" />
         </AccordionButton>
         <AccordionPanel pb={4}>
-          <MapTraductores bool={onOpenMap3} />
+          <MapTranslators bool={onOpenMap3} />
         </AccordionPanel>
       </AccordionItem>
       <AccordionItem>
@@ -151,14 +149,13 @@ export default function Faq() {
           p={4}
           _hover={{ bg: "teal.300" }}
         >
-          <Text fontSize="md">{'¿Cómo solicitar la partida de nacimiento de mi AVO?'}</Text>
+          <Text fontSize="md">{'How do I request my AVO birth certificate?'}</Text>
           <ChevronDownIcon fontSize="24px" />
         </AccordionButton>
         <AccordionPanel pb={4}>
           <Text>
-            {`Si el avo nació antes de 1861, la partida es de Bautismo y hay que
-              solicitarla en la Parroquia en que nació. Si nació después, es de
-              comuna y se solicita en la comuna correspondiente.`}
+            {`If the father was born before 1861, the certificate is a Baptismal certificate and must be requested in the Parish where he was born. 
+            If he was born after, it is a municipal certificate and must be requested in the corresponding municipality..`}
           </Text>
         </AccordionPanel>
       </AccordionItem>
@@ -172,14 +169,14 @@ export default function Faq() {
           p={4}
           _hover={{ bg: "teal.300" }}
         >
-          <Text fontSize="md">{'¿De dónde obtengo el mail y el teléfono de la Comuna en la que nació?'}</Text>
+          <Text fontSize="md">{'Where can I get the email and phone number of the municipality where I was born?'}</Text>
           <ChevronDownIcon fontSize="24px" />
         </AccordionButton>
         <AccordionPanel pb={4}>
           <Text>
-            En el sitio oficial de la comuna puede aparecer como:
-            <p>1- Ufficio Anagrafe</p>
-            <p>2- Ufficio di Stato Civile</p>
+          On the official site of the commune it can appear as:
+            <p>1- Office Anagrafe</p>
+            <p>2- Civil State Office</p>
           </Text>
         </AccordionPanel>
       </AccordionItem>
@@ -193,14 +190,14 @@ export default function Faq() {
           p={4}
           _hover={{ bg: "teal.300" }}
         >
-          <Text fontSize="md">{'¿Qué certificados necesito?'}</Text>
+          <Text fontSize="md">{'What certificates do I need?'}</Text>
           <ChevronDownIcon fontSize="24px" />
         </AccordionButton>
         <AccordionPanel pb={4}>
           <Text>
-            {`Necesitás el certificado de nacimiento de tu AVO, y todos los
-              descendientes directos hasta llegar a vos. Si se casó en Italia,
-              deberás tener el certificado de matrimonio.`}
+            {`You need the birth certificate of your AVO, and all the
+              direct ancestors up to you. If you got married in Italy,
+              you will need to have the marriage certificate.`}
           </Text>
         </AccordionPanel>
       </AccordionItem>

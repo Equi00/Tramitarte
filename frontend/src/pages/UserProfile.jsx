@@ -15,15 +15,15 @@ import {
 import { AccountCircle, Close, Edit } from "@mui/icons-material";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
-import usuarioService from "../services/UsuarioService";
+import userService from "../services/UserService";
 
 function UserProfile() {
   const [edit,setEdit]= useState(false)
   const [editNickname,setEditNickname]= useState("")
-  const [editNombre, setEditNombre]=useState("")
-  const [editApellido, setEditApellido]=useState("")
+  const [editName, setEditName]=useState("")
+  const [editSurname, setEditSurname]=useState("")
   const [userData, setUserData] = useState()
-  const { idUsuario } = useParams();
+  const { userId } = useParams();
   
   const {user}=useAuth0()
   const navigate = useNavigate();
@@ -37,23 +37,23 @@ function UserProfile() {
   const handleSave = async () => {
       let body={
         "username":editNickname,
-        "apellido":editApellido,
-        "nombre":editNombre
+        "surname":editSurname,
+        "name":editName
       }
       if(body.username === ""){
         body.username = userData.username
       }
-      if(body.apellido === ""){
-        body.apellido = userData.apellido
+      if(body.surname === ""){
+        body.surname = userData.surname
       }
-      if(body.nombre === ""){
-        body.nombre = userData.nombre
+      if(body.name === ""){
+        body.name = userData.name
       }
-      let usuarioActualizado = await usuarioService.actualizarDataUsuario(idUsuario,body)
-      setEditNickname(usuarioActualizado.username);
-      setEditNombre(usuarioActualizado.nombre);
-      setEditApellido(usuarioActualizado.apellido)
-      setUserData(usuarioActualizado)
+      let updatedUser = await userService.updateUserData(userId, body)
+      setEditNickname(updatedUser.username);
+      setEditName(updatedUser.name);
+      setEditSurname(updatedUser.surname)
+      setUserData(updatedUser)
       setEdit(false);
 };
 
@@ -63,14 +63,14 @@ function UserProfile() {
  
   const fetchDataUser = async () => {
     try{ 
-         let datosUsuario=await usuarioService.traerPorId(idUsuario);
-         console.log(datosUsuario)
-          setUserData(datosUsuario)
-          setEditApellido(datosUsuario.apellido)
-          setEditNickname(datosUsuario.username)
-          setEditNombre(datosUsuario.nombre)
+         let userData=await userService.getById(userId);
+         console.log(userData)
+          setUserData(userData)
+          setEditSurname(userData.surname)
+          setEditNickname(userData.username)
+          setEditName(userData.name)
   } catch (error) {
-      console.error('Error al obtener datos del Usuario:', error);
+      console.error('Error getting user data:', error);
     }
 }
 
@@ -104,7 +104,7 @@ useEffect(() => {
             <Avatar
               size="2xl"
               name="Segun Adebayo"
-              src={userData?.fotoPerfil}
+              src={userData?.photo}
             />
             <Center>
              <Heading size="xl"  style={{ fontSize:'14px' }}>
@@ -112,7 +112,7 @@ useEffect(() => {
                 <input 
                    type="text"
                    value={editNickname}
-                   placeholder="ingrese su nuevo Nickname"
+                   placeholder="Enter your new nickname"
                    onChange={(e) => setEditNickname(e.target.value)}
                    style={{
                     background: 'transparent',
@@ -136,9 +136,9 @@ useEffect(() => {
                {edit? (
                 <input 
                    type="text"
-                   value={editNombre}
-                   placeholder="ingrese su nombre"
-                   onChange={(e) => setEditNombre(e.target.value)}
+                   value={editName}
+                   placeholder="Enter your name"
+                   onChange={(e) => setEditName(e.target.value)}
                    style={{
                     background: 'transparent',
                     borderRadius:"5px",
@@ -147,16 +147,16 @@ useEffect(() => {
                   }}
                  />
                   ) : (
-                    <Heading size="md">{userData?.nombre} </Heading>
+                    <Heading size="md">{userData?.name} </Heading>
                )}
               </Heading>
               <Heading size="xl"  style={{ fontSize:'14px' }}>
                {edit? (
                 <input 
                    type="text"
-                   value={editApellido}
-                   placeholder="ingrese su apellido"
-                   onChange={(e) => setEditApellido(e.target.value)}
+                   value={editSurname}
+                   placeholder="Enter your surname"
+                   onChange={(e) => setEditSurname(e.target.value)}
                    style={{
                     background: 'transparent',
                     borderRadius:"5px",
@@ -165,7 +165,7 @@ useEffect(() => {
                   }}
                  />
                   ) : (
-                    <Heading size="md">{userData?.apellido} </Heading>
+                    <Heading size="md">{userData?.surname} </Heading>
                )}
               </Heading>
             </WrapItem>
@@ -173,7 +173,7 @@ useEffect(() => {
               <Box justifyContent="center" marginRight="2.4rem">
                 <CalendarIcon />
               </Box>
-              <Heading size="md">{userData?.fechaDeNacimiento}</Heading>
+              <Heading size="md">{userData?.birthdate}</Heading>
             </WrapItem>
           </Wrap>
                     {edit? ( <><Flex  w="90%" justifyContent="space-around" >
@@ -185,7 +185,7 @@ useEffect(() => {
             bg="blue.900"
             py="2%"
           >
-            {"Guardar"}
+            {"Save"}
           </Button>
              <Button
              onClick={() => handleCancel()}
@@ -194,11 +194,10 @@ useEffect(() => {
              w="40%"
              bg="teal.500"
                        >
-             {"Cancelar"}
+             {"Cancel"}
            </Button></Flex></>):<></>}
         </VStack>
       </Flex>
-      {/* <Circle zIndex="-1" size="40px" bg="teal.200" /> */}
     </Box>
   );
 }

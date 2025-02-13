@@ -30,7 +30,7 @@ import ConfirmationModal from "../components/modals/ConfirmationModal";
 function DocumentationUploaded() {
   const navigate = useNavigate();
   const [uploadedDocumentation, setUploadedDocumentation]=useState([])
-  const [isCharging, setIsCharging] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { isOpen: isOpenError, onOpen: onOpenError, onClose: onCloseError } = useDisclosure();
   const { isOpen: isOpenError2, onOpen: onOpenError2, onClose: onCloseError2 } = useDisclosure();
   const { isOpen: isOpenError3, onOpen: onOpenError3, onClose: onCloseError3 } = useDisclosure();
@@ -57,7 +57,7 @@ function DocumentationUploaded() {
 
   const handleInputCertificate = async (e, index) => {
     const file = e.target.files[0];
-    setIsCharging(true)
+    setIsLoading(true)
     if(file){
         let base64 = await fileToBase64(file);
         console.log("file: ", file)
@@ -65,7 +65,8 @@ function DocumentationUploaded() {
         console.log("Document changed",uploadedDocumentation[index])
         const lastPoint = file.name.lastIndexOf(".");
         const extension = file.name.slice(lastPoint + 1);
-        if(extension === "pdf"){
+        let isCertificate = await processService.isCertificate(file)
+        if(extension === "pdf" && isCertificate){
           let birthVerification = await processService.isBirthCertificate(file)
           let italianBirthCertification = await processService.isItalianBirthCertificate(file)
           let marriageCertificate = await processService.isMarriageCertificate(file)
@@ -96,9 +97,9 @@ function DocumentationUploaded() {
               })
           }else{
             onOpenError2()
-            setIsCharging(false)
+            setIsLoading(false)
           }
-          setIsCharging(false)
+          setIsLoading(false)
         }else if(extension === "jpg" || extension === "png"){
           let dniFrontVerification = await processService.isDNIFront(file)
           let dniBackVerification = await processService.isDNIBack(file)
@@ -118,13 +119,13 @@ function DocumentationUploaded() {
               })
           }else{
             onOpenError2()
-            setIsCharging(false)
+            setIsLoading(false)
           }
           
-          setIsCharging(false)
+          setIsLoading(false)
         }else{
           onOpenError()
-          setIsCharging(false)
+          setIsLoading(false)
         }
     }
   }
@@ -260,7 +261,7 @@ function DocumentationUploaded() {
               id="modal-confirmation"
               question={"Are you sure you want to download the documents?"}
               isOpen={isAcceptOpen}
-              handleConfirmacion={downloadFiles}
+              handleConfirmation={downloadFiles}
               onClose={closeModalSubmit}
       />
       <ModalError
@@ -289,7 +290,7 @@ function DocumentationUploaded() {
             />
       <ModalIsLoading
                 message={"Please wait while we save the documentation ;)"}
-                isOpen={isCharging}
+                isOpen={isLoading}
             />
     </Box>
   );

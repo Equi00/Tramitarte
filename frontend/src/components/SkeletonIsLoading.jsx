@@ -1,16 +1,16 @@
 import { Box, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
 
-function EsqueletoIsLoading({ estaCargando }) {
+function SkeletonIsLoading({ isLoading }) {
   return (
     <Box w="full" h="100%" padding="6" boxShadow="lg" bg="teal.200">
       <SkeletonCircle
-        isLoaded={!estaCargando}
+        isLoaded={!isLoading}
         startColor="teal.100"
         endColor="teal.300"
         size="10"
       />
       <SkeletonText
-        isLoaded={!estaCargando}
+        isLoaded={!isLoading}
         startColor="teal.100"
         endColor="teal.300"
         mt="6"
@@ -22,4 +22,4 @@ function EsqueletoIsLoading({ estaCargando }) {
   );
 }
 
-export default EsqueletoIsLoading;
+export default SkeletonIsLoading;

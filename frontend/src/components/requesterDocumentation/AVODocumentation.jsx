@@ -10,7 +10,7 @@ function AVODocumentation({ addAVODocuments, isOpenNO1, onToggle1, isOpenNO2, on
   const [name1, setName1] = useState("death certificate (.pdf)")
   const [name2, setName2] = useState("marriage certificate (.pdf)")
   const [name3, setName3] = useState("birth certificate (.pdf)")
-  const [isCharging, setIsCharging] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: isOpenError, onOpen: onOpenError, onClose: onCloseError } = useDisclosure();
 
@@ -19,11 +19,11 @@ function AVODocumentation({ addAVODocuments, isOpenNO1, onToggle1, isOpenNO2, on
     if(file){
       const lastPoint = file.name.lastIndexOf(".");
       const extension = file.name.slice(lastPoint + 1);
-      setIsCharging(true)
+      setIsLoading(true)
       if(extension === "pdf"){
         let verification = await processService.isDeathCertificate(file)
         if(verification === false){
-          setIsCharging(false)
+          setIsLoading(false)
           onOpen()
         }else{
           addAVODocuments({
@@ -32,10 +32,10 @@ function AVODocumentation({ addAVODocuments, isOpenNO1, onToggle1, isOpenNO2, on
         });
         const shorterName = file.name.length > 20 ? file.name.substring(0, 30) + '...' : file.name;
         setName1(shorterName)
-        setIsCharging(false)
+        setIsLoading(false)
         }
     }else{
-      setIsCharging(false)
+      setIsLoading(false)
       onOpenError()
     }
     }
@@ -46,11 +46,11 @@ function AVODocumentation({ addAVODocuments, isOpenNO1, onToggle1, isOpenNO2, on
     if(file){
       const lastPoint = file.name.lastIndexOf(".");
       const extension = file.name.slice(lastPoint + 1);
-      setIsCharging(true)
+      setIsLoading(true)
       if(extension === "pdf"){
         let verification = await processService.isMarriageCertificate(file)
         if(verification === false){
-          setIsCharging(false)
+          setIsLoading(false)
           onOpen()
         }else{
           addAVODocuments({
@@ -59,10 +59,10 @@ function AVODocumentation({ addAVODocuments, isOpenNO1, onToggle1, isOpenNO2, on
         });
         const shorterName = file.name.length > 20 ? file.name.substring(0, 30) + '...' : file.name;
         setName2(shorterName)
-        setIsCharging(false)
+        setIsLoading(false)
       }
     }else{
-      setIsCharging(false)
+      setIsLoading(false)
       onOpenError()
     }
     }
@@ -73,11 +73,11 @@ function AVODocumentation({ addAVODocuments, isOpenNO1, onToggle1, isOpenNO2, on
     if(file){
       const lastPoint = file.name.lastIndexOf(".");
       const extension = file.name.slice(lastPoint + 1);
-      setIsCharging(true)
+      setIsLoading(true)
         if(extension === "pdf"){
         let verification = await processService.isBirthCertificate(file)
         if(verification === false){
-          setIsCharging(false)
+          setIsLoading(false)
           onOpen()
         }else{
           addAVODocuments({
@@ -86,10 +86,10 @@ function AVODocumentation({ addAVODocuments, isOpenNO1, onToggle1, isOpenNO2, on
         });
         const shorterName = file.name.length > 20 ? file.name.substring(0, 30) + '...' : file.name;
         setName3(shorterName)
-        setIsCharging(false)
+        setIsLoading(false)
         }
     }else{
-      setIsCharging(false)
+      setIsLoading(false)
       onOpenError()
     }
     }
@@ -136,7 +136,7 @@ function AVODocumentation({ addAVODocuments, isOpenNO1, onToggle1, isOpenNO2, on
       />
       <ModalIsLoading
         message={"Please wait while we save the documentation ;)"}
-        isOpen={isCharging}
+        isOpen={isLoading}
       />
       <ModalError
                 question={"The file extension is not valid"}

@@ -10,27 +10,27 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-import ModalConfirmacion from "./ConfirmationModal";
-import tramiteService from "../services/TramiteService";
+import ConfirmationModal from "../modals/ConfirmationModal";
+import processService from "../../services/ProcessService";
 import { useNavigate, useParams } from "react-router";
 import { useState, useCallback } from "react";
-import ModalIsLoading from "./ModalIsLoading";
+import ModalIsLoading from "../modals/ModalIsLoading";
 
-function CardIniciarTramite() {
+function CardStartProcess() {
   const navigate = useNavigate();
-  const { idUsuario } = useParams();
-  const [estaCargando, setEstaCargando] = useState(false);
+  const { userId } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const handleConfirmacion = useCallback(() => {
-    setEstaCargando(true);
-    return tramiteService.guardarTramite(idUsuario)
+  const handleConfirmation = useCallback(() => {
+    setIsLoading(true);
+    return processService.saveProcess(userId)
       .then((response) => {
-        setEstaCargando(false);
+        setIsLoading(false);
         console.log(response);
         onClose();
         navigate(0);
-        navigate(`/home/solicitante/${idUsuario}`, { replace: true });
+        navigate(`/home/requester/${userId}`, { replace: true });
         return response;
       })
       .catch((error) => navigate("/network-error"));
@@ -45,10 +45,10 @@ function CardIniciarTramite() {
         p="1.6rem"
       >
         <CardHeader>
-          <Heading textAlign="center" size="md">{"Aún no iniciaste tu trámite"}</Heading>
+          <Heading textAlign="center" size="md">{"You have not started your process yet"}</Heading>
         </CardHeader>
         <CardBody align="center">
-          <Text>{"¡Inicialo acá y conseguí tu ciudadanía!"}</Text>
+          <Text>{"Start here and get your citizenship!"}</Text>
         </CardBody>
         <CardFooter w="100%">
           <Button
@@ -58,23 +58,23 @@ function CardIniciarTramite() {
             w="100%"
             bg="red.900"
           >
-            {"Iniciar trámite"}
+            {"Start Process"}
           </Button>
         </CardFooter>
       </Card>
-      <ModalConfirmacion
-        pregunta={'¿Estás seguro de iniciar el trámite?'}
-        datoAConfirmar={'Podés darlo de baja en cualquier momento luego de iniciado.'}
+      <ConfirmationModal
+        question={'Are you sure you want to start the process?'}
+        dataToConfirm={'You can unsubscribe at any time after it has started.'}
         isOpen={isOpen}
-        handleConfirmacion={handleConfirmacion}
+        handleConfirmation={handleConfirmation}
         onClose={onClose}
       />
       <ModalIsLoading
-        mensaje={"Esperanos mientras iniciamos tu trámite ;)"}
-        isOpen={estaCargando}
+        message={"Wait for us while we start your process ;)"}
+        isOpen={isLoading}
       />
     </Flex>
   );
 }
 
-export default CardIniciarTramite;
+export default CardStartProcess;
