@@ -16,19 +16,20 @@ function Process({ setProcessContext }) {
     processService
       .searchProcessByUserId(userId)
       .then((response) => {
+        if(response && response.data){
+          let persistedProcess = response.data;
+          setProcess(persistedProcess);
+          setProcessContext(persistedProcess);
+          window.localStorage.setItem(
+            "process",
+            JSON.stringify({
+              id: persistedProcess.id,
+              code: persistedProcess.code,
+            })
+          );
+        }
         setIsLoading(false);
-        let persistedProcess = response.data;
-        setProcess(persistedProcess);
-        setProcessContext(persistedProcess);
-        window.localStorage.setItem(
-          "process",
-          JSON.stringify({
-            id: persistedProcess.id,
-            code: persistedProcess.code,
-          })
-        );
       })
-      
   }, []);
 
   return (

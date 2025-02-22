@@ -31,8 +31,8 @@ function RoleElection({ setLoggedUserContext }) {
       role: chosenRole,
       email: user.email,
       birthdate: user.birthdate 
-      ? new Date(user.birthdate).toISOString().split('T')[0]  // Convertir a "YYYY-MM-DD"
-      : new Date().toISOString().split('T')[0],  // Fecha actual en formato ISO,
+      ? new Date(user.birthdate).toISOString().split('T')[0]
+      : new Date().toISOString().split('T')[0],
       need_traduction: true,
       photo: user.picture,
     };
