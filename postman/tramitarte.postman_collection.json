@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "261a52af-cbf5-42f5-80f5-5de2315b4351",
 		"name": "tramitarte",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "27971034"
 	},
 	"item": [
@@ -61,18 +61,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "localhost:8000/api/ocr/pdf",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"ocr",
-								"pdf"
-							]
-						}
+						"url": "localhost:8000/api/ocr/pdf"
 					},
 					"response": []
 				},
@@ -91,19 +80,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "localhost:8000/api/ocr/image/is_dni_front",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"ocr",
-								"image",
-								"is_dni_front"
-							]
-						}
+						"url": "localhost:8000/api/ocr/image/is_dni_front"
 					},
 					"response": []
 				},
@@ -122,19 +99,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "localhost:8000/api/ocr/image/is_dni_back",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"ocr",
-								"image",
-								"is_dni_back"
-							]
-						}
+						"url": "localhost:8000/api/ocr/image/is_dni_back"
 					},
 					"response": []
 				},
@@ -153,19 +118,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "localhost:8000/api/ocr/pdf/is_certificate",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"ocr",
-								"pdf",
-								"is_certificate"
-							]
-						}
+						"url": "localhost:8000/api/ocr/pdf/is_certificate"
 					},
 					"response": []
 				},
@@ -184,19 +137,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "localhost:8000/api/ocr/pdf/text_from_img",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"ocr",
-								"pdf",
-								"text_from_img"
-							]
-						}
+						"url": "localhost:8000/api/ocr/pdf/text_from_img"
 					},
 					"response": []
 				},
@@ -215,19 +156,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "localhost:8000/api/ocr/pdf/is_marriage",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"ocr",
-								"pdf",
-								"is_marriage"
-							]
-						}
+						"url": "localhost:8000/api/ocr/pdf/is_marriage"
 					},
 					"response": []
 				},
@@ -246,19 +175,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "localhost:8000/api/ocr/pdf/is_birth",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"ocr",
-								"pdf",
-								"is_birth"
-							]
-						}
+						"url": "localhost:8000/api/ocr/pdf/is_birth"
 					},
 					"response": []
 				},
@@ -277,19 +194,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "localhost:8000/api/ocr/pdf/is_death",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"ocr",
-								"pdf",
-								"is_death"
-							]
-						}
+						"url": "localhost:8000/api/ocr/pdf/is_death"
 					},
 					"response": []
 				},
@@ -308,19 +213,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "localhost:8000/api/ocr/pdf/is_marriage_italy",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"ocr",
-								"pdf",
-								"is_marriage_italy"
-							]
-						}
+						"url": "localhost:8000/api/ocr/pdf/is_marriage_italy"
 					},
 					"response": []
 				},
@@ -339,19 +232,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "localhost:8000/api/ocr/pdf/is_birth_italy",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"ocr",
-								"pdf",
-								"is_birth_italy"
-							]
-						}
+						"url": "localhost:8000/api/ocr/pdf/is_birth_italy"
 					},
 					"response": []
 				},
@@ -370,19 +251,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "localhost:8000/api/ocr/pdf/is_death_italy",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"ocr",
-								"pdf",
-								"is_death_italy"
-							]
-						}
+						"url": "localhost:8000/api/ocr/pdf/is_death_italy"
 					},
 					"response": []
 				}
@@ -396,18 +265,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "localhost:8000/api/user/translators",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"user",
-								"translators"
-							]
-						}
+						"url": "localhost:8000/api/user/translators"
 					},
 					"response": []
 				},
@@ -416,18 +274,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "localhost:8000/api/user/requesters",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"user",
-								"requesters"
-							]
-						}
+						"url": "localhost:8000/api/user/requesters"
 					},
 					"response": []
 				},
@@ -436,19 +283,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "localhost:8000/api/user/1/notifications",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"user",
-								"1",
-								"notifications"
-							]
-						}
+						"url": "localhost:8000/api/user/1/notifications"
 					},
 					"response": []
 				},
@@ -457,18 +292,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "localhost:8000/api/user/3",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"user",
-								"3"
-							]
-						}
+						"url": "localhost:8000/api/user/3"
 					},
 					"response": []
 				},
@@ -503,19 +327,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "localhost:8000/api/user/3/translation-requests",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"user",
-								"3",
-								"translation-requests"
-							]
-						}
+						"url": "localhost:8000/api/user/3/translation-requests"
 					},
 					"response": []
 				},
@@ -524,22 +336,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "localhost:8000/api/user/translation-requests/requester/1/translator/2",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"user",
-								"translation-requests",
-								"requester",
-								"1",
-								"translator",
-								"2"
-							]
-						}
+						"url": "localhost:8000/api/user/translation-requests/requester/1/translator/2"
 					},
 					"response": []
 				},
@@ -548,20 +345,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "localhost:8000/api/user/requests/requester/3",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"user",
-								"requests",
-								"requester",
-								"3"
-							]
-						}
+						"url": "localhost:8000/api/user/requests/requester/3"
 					},
 					"response": []
 				},
@@ -606,18 +390,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "localhost:8000/api/user/",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"user",
-								""
-							]
-						}
+						"url": "localhost:8000/api/user/"
 					},
 					"response": []
 				},
@@ -635,18 +408,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "localhost:8000/api/user/3",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"user",
-								"3"
-							]
-						}
+						"url": "localhost:8000/api/user/3"
 					},
 					"response": []
 				},
@@ -655,18 +417,7 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"url": {
-							"raw": "localhost:8000/api/user/2",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"user",
-								"2"
-							]
-						}
+						"url": "localhost:8000/api/user/2"
 					},
 					"response": []
 				}
@@ -680,18 +431,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "localhost:8000/api/notification/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"notification",
-								"1"
-							]
-						}
+						"url": "localhost:8000/api/notification/1"
 					},
 					"response": []
 				},
@@ -756,19 +496,7 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"url": {
-							"raw": "localhost:8000/api/notification/alert/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"notification",
-								"alert",
-								"1"
-							]
-						}
+						"url": "localhost:8000/api/notification/alert/1"
 					},
 					"response": []
 				},
@@ -777,19 +505,7 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"url": {
-							"raw": "localhost:8000/api/notification/request/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"notification",
-								"request",
-								"1"
-							]
-						}
+						"url": "localhost:8000/api/notification/request/1"
 					},
 					"response": []
 				},
@@ -798,20 +514,7 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"url": {
-							"raw": "localhost:8000/api/notification/request/requester/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"notification",
-								"request",
-								"requester",
-								"1"
-							]
-						}
+						"url": "localhost:8000/api/notification/request/requester/1"
 					},
 					"response": []
 				}
@@ -828,19 +531,7 @@
 						},
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "localhost:8000/api/download-request/requester/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"download-request",
-								"requester",
-								"1"
-							]
-						}
+						"url": "localhost:8000/api/download-request/requester/1"
 					},
 					"response": []
 				},
@@ -861,21 +552,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "localhost:8000/api/download-request/requester/1/translator/2",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"download-request",
-								"requester",
-								"1",
-								"translator",
-								"2"
-							]
-						}
+						"url": "localhost:8000/api/download-request/requester/1/translator/2"
 					},
 					"response": []
 				},
@@ -887,18 +564,7 @@
 						},
 						"method": "DELETE",
 						"header": [],
-						"url": {
-							"raw": "localhost:8000/api/download-request/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"download-request",
-								"1"
-							]
-						}
+						"url": "localhost:8000/api/download-request/1"
 					},
 					"response": []
 				}
@@ -915,19 +581,7 @@
 						},
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "localhost:8000/api/task/translator/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"task",
-								"translator",
-								"1"
-							]
-						}
+						"url": "localhost:8000/api/task/translator/1"
 					},
 					"response": []
 				},
@@ -939,19 +593,7 @@
 						},
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "localhost:8000/api/task/process/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"task",
-								"process",
-								"1"
-							]
-						}
+						"url": "localhost:8000/api/task/process/1"
 					},
 					"response": []
 				},
@@ -963,21 +605,7 @@
 						},
 						"method": "POST",
 						"header": [],
-						"url": {
-							"raw": "localhost:8000/api/task/requester/1/translator/2",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"task",
-								"requester",
-								"1",
-								"translator",
-								"2"
-							]
-						}
+						"url": "localhost:8000/api/task/requester/1/translator/2"
 					},
 					"response": []
 				},
@@ -989,18 +617,7 @@
 						},
 						"method": "DELETE",
 						"header": [],
-						"url": {
-							"raw": "localhost:8000/api/task/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"task",
-								"1"
-							]
-						}
+						"url": "localhost:8000/api/task/1"
 					},
 					"response": []
 				}
@@ -1017,19 +634,7 @@
 						},
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "localhost:8000/api/process/user/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"process",
-								"user",
-								"1"
-							]
-						}
+						"url": "localhost:8000/api/process/user/1"
 					},
 					"response": []
 				},
@@ -1041,20 +646,7 @@
 						},
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "localhost:8000/api/process/request/user/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"process",
-								"request",
-								"user",
-								"1"
-							]
-						}
+						"url": "localhost:8000/api/process/request/user/1"
 					},
 					"response": []
 				},
@@ -1066,19 +658,7 @@
 						},
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "localhost:8000/api/process/documentation/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"process",
-								"documentation",
-								"1"
-							]
-						}
+						"url": "localhost:8000/api/process/documentation/1"
 					},
 					"response": []
 				},
@@ -1090,18 +670,7 @@
 						},
 						"method": "POST",
 						"header": [],
-						"url": {
-							"raw": "localhost:8000/api/process/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"process",
-								"1"
-							]
-						}
+						"url": "localhost:8000/api/process/1"
 					},
 					"response": []
 				},
@@ -1122,19 +691,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "localhost:8000/api/process/upload-avo/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"process",
-								"upload-avo",
-								"1"
-							]
-						}
+						"url": "localhost:8000/api/process/upload-avo/1"
 					},
 					"response": []
 				},
@@ -1155,21 +712,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "localhost:8000/api/process/upload/documentation/user/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"process",
-								"upload",
-								"documentation",
-								"user",
-								"1"
-							]
-						}
+						"url": "localhost:8000/api/process/upload/documentation/user/1"
 					},
 					"response": []
 				},
@@ -1190,21 +733,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "localhost:8000/api/process/upload/documentation/avo/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"process",
-								"upload",
-								"documentation",
-								"avo",
-								"1"
-							]
-						}
+						"url": "localhost:8000/api/process/upload/documentation/avo/1"
 					},
 					"response": []
 				},
@@ -1225,21 +754,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "localhost:8000/api/process/upload/documentation/descendants/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"process",
-								"upload",
-								"documentation",
-								"descendants",
-								"1"
-							]
-						}
+						"url": "localhost:8000/api/process/upload/documentation/descendants/1"
 					},
 					"response": []
 				},
@@ -1260,21 +775,7 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "localhost:8000/api/process/upload/documentation/translated/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"process",
-								"upload",
-								"documentation",
-								"translated",
-								"1"
-							]
-						}
+						"url": "localhost:8000/api/process/upload/documentation/translated/1"
 					},
 					"response": []
 				},
@@ -1284,7 +785,7 @@
 						"auth": {
 							"type": "noauth"
 						},
-						"method": "POST",
+						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -1295,20 +796,28 @@
 								}
 							}
 						},
-						"url": {
-							"raw": "localhost:8000/api/process/modify/document/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"process",
-								"modify",
-								"document",
-								"1"
-							]
-						}
+						"url": "localhost:8000/api/process/modify/document/1"
+					},
+					"response": []
+				},
+				{
+					"name": "update avo request",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 0,\r\n    \"first_name\": \"Luigi\",\r\n    \"last_name\": \"Buco\",\r\n    \"birth_date\": \"1995-02-08\",\r\n    \"gender\": \"Male\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8000/api/process/avo"
 					},
 					"response": []
 				},
@@ -1320,18 +829,7 @@
 						},
 						"method": "DELETE",
 						"header": [],
-						"url": {
-							"raw": "localhost:8000/api/process/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"process",
-								"1"
-							]
-						}
+						"url": "localhost:8000/api/process/1"
 					},
 					"response": []
 				}

@@ -84,6 +84,9 @@ def advance_to_stage_2(session):
 
     client.post(f"/api/process/upload-avo/{process.id}", json=json_avo)
 
+    # expire session to obtain actual data
+    session.expire_all()
+
     return session.query(Process).filter_by(code="PRC123").first()
 
 def advance_to_stage_3(session):
@@ -113,7 +116,10 @@ def advance_to_stage_3(session):
         }
     ]
 
-    client.post(f"/api/process/upload/documentation/user/{process.user.id}", json=json_documents) 
+    client.post(f"/api/process/upload/documentation/user/{process.user.id}", json=json_documents)
+
+    # expire session to obtain actual data
+    session.expire_all() 
 
     return session.query(Process).filter_by(code="PRC123").first()
 
@@ -131,6 +137,9 @@ def advance_to_stage_4(session):
     ]
 
     client.post(f"/api/process/upload/documentation/avo/{process.user.id}", json=json_documents)
+
+    # expire session to obtain actual data
+    session.expire_all()
 
     return session.query(Process).filter_by(code="PRC123").first()
 
@@ -161,6 +170,9 @@ def advance_to_stage_5(session):
     ]
 
     client.post(f"/api/process/upload/documentation/ancestors/{process.user.id}", json=json_documents)
+
+    # expire session to obtain actual data
+    session.expire_all()
 
     return session.query(Process).filter_by(code="PRC123").first()
 
@@ -567,7 +579,7 @@ def test_modify_doc(session):
                 "file_base64": "asdsdasadfasdfsdaf",
             }
     
-    response = client.post(f"/api/process/modify/document/{document.id}", json=updated_document)
+    response = client.put(f"/api/process/modify/document/{document.id}", json=updated_document)
 
     # expire session to obtain actual data
     session.expire_all()
@@ -586,7 +598,7 @@ def test_modify_doc_failed(session):
                 "file_base64": "asdsdasadfasdfsdaf",
             }
     
-    response = client.post(f"/api/process/modify/document/{343434}", json=updated_document)
+    response = client.put(f"/api/process/modify/document/{343434}", json=updated_document)
 
     assert response.status_code == 404
     assert response.json() == {"detail": "Documentation not found."}
@@ -611,3 +623,58 @@ def test_get_avo_by_user_failed(session):
 
     assert response.status_code == 404
     assert response.json() == {"detail": "User not found."}
+
+def test_update_avo(session):
+    process: Process = advance_to_stage_2(session)
+
+    assert process.request_avo.last_name == "Doe"
+
+    json_avo = {
+        "id": process.request_avo.id,
+        "first_name": "Luigi",
+        "last_name": "Buco",
+        "birth_date": "1995-02-08",
+        "gender": "Male"
+    }
+
+    response = client.put(f"/api/process/avo", json=json_avo)
+
+    # expire session to obtain actual data
+    session.expire_all()
+
+    assert response.status_code == 200
+    assert response.json() == {"message": "AVO updated successfully"}
+    assert process.request_avo.last_name == "Buco"
+
+def test_update_avo_failed(session):
+    process: Process = advance_to_stage_2(session)
+
+    json_avo = {
+        "id": process.request_avo.id,
+        "first_name": "Luigi",
+        "last_name": "Buco",
+        "birth_date": "3000-02-08",
+        "gender": "Male"
+    }
+
+    response = client.put(f"/api/process/avo", json=json_avo)
+
+    # expire session to obtain actual data
+    session.expire_all()
+
+    assert response.status_code == 400
+    assert response.json() == {"detail": "AVO is not valid."}
+
+def test_update_avo_not_found(session):
+    json_avo = {
+        "id": 0,
+        "first_name": "Luigi",
+        "last_name": "Buco",
+        "birth_date": "1995-02-08",
+        "gender": "Male"
+    }
+
+    response = client.put(f"/api/process/avo", json=json_avo)
+
+    assert response.status_code == 404
+    assert response.json() == {"detail": "The AVO to modify does not exist."}

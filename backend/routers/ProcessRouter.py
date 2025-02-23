@@ -42,6 +42,25 @@ async def get_process_by_user(user_id: int, service: ProcessService = Depends(ge
         return service.find_by_user(user_id)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+    
+
+@p_router.get("/request/user/{user_id}", response_model=Optional[UpdateAVORequestModel])
+async def get_avo_request_by_user(user_id: int, user_service: UserService = Depends(get_user_service), avo_service: AVORequestService = Depends(get_avo_service)):
+    try:
+        user = user_service.find_by_id(user_id)
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found.")
+        return avo_service.find_avo_by_user(user)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@p_router.get("/documentation/{process_id}", response_model=List[DocumentationModel])
+async def get_documentation(process_id: int, service: ProcessService = Depends(get_process_service)):
+    try:
+        return service.get_documents(process_id)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @p_router.post("/{user_id}", response_model=ProcessModel)
@@ -97,19 +116,19 @@ async def upload_translated_documentation(user_id: int, documentation: List[Docu
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@p_router.get("/documentation/{process_id}", response_model=List[DocumentationModel])
-async def get_documentation(process_id: int, service: ProcessService = Depends(get_process_service)):
-    try:
-        return service.get_documents(process_id)
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-
-@p_router.post("/modify/document/{document_id}")
+@p_router.put("/modify/document/{document_id}")
 async def modify_document(document_id: int, document: DocumentationUpdateModel, service: DocumentationService = Depends(get_documentation_service)) -> dict:
     try:
         service.update(document_id, document)
         return {"message": "Documentation successfully saved"}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
+@p_router.put("/avo")
+async def update_avo(avo_request: UpdateAVORequestModel, service: AVORequestService = Depends(get_avo_service)) -> dict:
+    try:
+        service.update(avo_request)
+        return {"message": "AVO updated successfully"}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -119,16 +138,5 @@ async def delete_process(process_id: int, service: ProcessService = Depends(get_
     try:
         service.delete_process(process_id)
         return {"message": "Process successfully deleted"}
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-
-@p_router.get("/request/user/{user_id}", response_model=Optional[UpdateAVORequestModel])
-async def get_avo_request_by_user(user_id: int, user_service: UserService = Depends(get_user_service), avo_service: AVORequestService = Depends(get_avo_service)):
-    try:
-        user = user_service.find_by_id(user_id)
-        if not user:
-            raise HTTPException(status_code=404, detail="User not found.")
-        return avo_service.find_avo_by_user(user)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))

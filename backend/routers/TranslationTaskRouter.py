@@ -19,14 +19,6 @@ db_dependency = Annotated[Session, Depends(get_db)]
 def get_translation_task_service(db: db_dependency):
     return TranslationTaskService(db)
 
-@tk_router.post("/requester/{requester_id}/translator/{translator_id}")
-async def create_translation_task(
-    requester_id: int,
-    translator_id: int,
-    service: TranslationTaskService = Depends(get_translation_task_service),
-):
-    return service.create_translation_task(requester_id, translator_id)
-
 
 @tk_router.get("/translator/{translator_id}", response_model=List[TranslationTaskModel])
 async def get_tasks_by_translator(
@@ -42,6 +34,15 @@ async def get_tasks_by_process(
     service: TranslationTaskService = Depends(get_translation_task_service),
 ):
     return service.find_by_process(process_id)
+
+
+@tk_router.post("/requester/{requester_id}/translator/{translator_id}")
+async def create_translation_task(
+    requester_id: int,
+    translator_id: int,
+    service: TranslationTaskService = Depends(get_translation_task_service),
+):
+    return service.create_translation_task(requester_id, translator_id)
 
 
 @tk_router.delete("/{request_id}")

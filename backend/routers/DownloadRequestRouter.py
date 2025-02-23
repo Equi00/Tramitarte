@@ -26,6 +26,14 @@ def get_download_request_service(db: db_dependency):
     return DownloadRequestService(db)
 
 
+@dr_router.get("/requester/{requester_id}")
+async def get_download_requests_by_requester(
+    requester_id: int,
+    service: DownloadRequestService = Depends(get_download_request_service)
+) -> List[DownloadRequestModel]:
+    return service.find_requests_by_requester(requester_id)
+
+
 @dr_router.post("/requester/{requester_id}/translator/{translator_id}")
 async def create_download_request(
     requester_id: int,
@@ -34,14 +42,6 @@ async def create_download_request(
     service: DownloadRequestService = Depends(get_download_request_service)
 ):
     return service.create_download_request(requester_id, translator_id, documents)
-
-
-@dr_router.get("/requester/{requester_id}")
-async def get_download_requests_by_requester(
-    requester_id: int,
-    service: DownloadRequestService = Depends(get_download_request_service)
-) -> List[DownloadRequestModel]:
-    return service.find_requests_by_requester(requester_id)
 
 
 @dr_router.delete("/{request_id}")
