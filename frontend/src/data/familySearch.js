@@ -381,7 +381,7 @@ const familySearch = [
                 phone: "+54 388-4243124",
                 email: "ARG_Jujuy@familyhistorymail.org",
                 latitude: -24.183680642589337,
-                length: -65.31895941583582
+                longitude: -65.31895941583582
                 },
                 {
                 city: "La Plata",
@@ -597,7 +597,7 @@ const familySearch = [
                     phone: "+54 0341-4301001",
                      email: "ARG_RosarioOeste@familyhistorymail.org",
                      latitude: -32.944521782636926,
-                     length: -60.669894265317616
+                     longitude: -60.669894265317616
                      },
                      {
                         city: "Salta",

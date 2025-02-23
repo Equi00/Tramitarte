@@ -14,6 +14,7 @@ function RoleElection({ setLoggedUserContext }) {
   const { user, isAuthenticated } = useAuth0();
   const [isLoading, setIsLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [show, setShow] = useState(false);
 
   const handleClick = (e) => {
     console.log(e.target.innerText);
@@ -65,62 +66,70 @@ function RoleElection({ setLoggedUserContext }) {
           navigate(`/home/${persistedUser.role.toLowerCase()}/${persistedUser.id}`, {
             replace: true,
           });
+        }else{
+          setShow(true);
         }
       });
-       
+    
   }, []);
 
   return (
-    <Box minH="100%" bg="teal.200">
-      <Center
-        gap="2.4rem"
-        flexWrap="wrap"
-        justifyContent="space-around"
-        alignItems="center"
-        spacing="3.6rem"
-        bg="teal.200"
-        p="2.4rem"
-      >
-        <Box w="sm">
-          <Button
-            onClick={(e) => handleClick(e)}
-            borderRadius="45px"
-            color="white"
-            w="100%"
-            bg="blue.900"
-          >
-            {"REQUESTER"}
-          </Button>
-        </Box>
-        <Box w="sm">
-          <Button
-            onClick={(e) => handleClick(e)}
-            borderRadius="45px"
-            color="white"
-            w="100%"
-            bg="teal.500"
-          >
-            {"TRANSLATOR"}
-          </Button>
-        </Box>
-      </Center>
-      <Center>
-        <Box maxW="sm">
-          <AnimatedLogo />
-        </Box>
-      </Center>
-      <ConfirmationModal
-        question={`Are you sure you want to register as ${role}?`}
-        dataToConfirm={""}
-        isOpen={isOpen}
-        handleConfirmation={() => handleConfirmation(role)}
-        onClose={onClose}
-      />
-      <ModalIsLoading
-        mensaje={"Please wait while we save your data... ;)"}
-        isOpen={isLoading}
-      />
-    </Box>
+    <>
+      {show ? (
+        <Box minH="100%" bg="teal.200">
+        <Center
+          gap="2.4rem"
+          flexWrap="wrap"
+          justifyContent="space-around"
+          alignItems="center"
+          spacing="3.6rem"
+          bg="teal.200"
+          p="2.4rem"
+        >
+          <Box w="sm">
+            <Button
+              onClick={(e) => handleClick(e)}
+              borderRadius="45px"
+              color="white"
+              w="100%"
+              bg="blue.900"
+            >
+              {"REQUESTER"}
+            </Button>
+          </Box>
+          <Box w="sm">
+            <Button
+              onClick={(e) => handleClick(e)}
+              borderRadius="45px"
+              color="white"
+              w="100%"
+              bg="teal.500"
+            >
+              {"TRANSLATOR"}
+            </Button>
+          </Box>
+        </Center>
+        <Center>
+          <Box maxW="sm">
+            <AnimatedLogo />
+          </Box>
+        </Center>
+        <ConfirmationModal
+          question={`Are you sure you want to register as ${role}?`}
+          dataToConfirm={""}
+          isOpen={isOpen}
+          handleConfirmation={() => handleConfirmation(role)}
+          onClose={onClose}
+        />
+        <ModalIsLoading
+          message={"Please wait while we save your data... ;)"}
+          isOpen={isLoading}
+        />
+      </Box>
+      ):(
+        <ModalIsLoading/>
+      )}
+    </>
   );
 }
 

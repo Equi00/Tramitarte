@@ -244,7 +244,7 @@ function PersonalDocumentation() {
         onClose={onCloseError}
       />
       <ModalIsLoading
-        mensaje={"Please wait while we save the documentation ;)"}
+        message={"Please wait while we save the documentation ;)"}
         isOpen={isLoading}
       />
     </Box>

@@ -10,8 +10,8 @@ function FrequentQuestions() {
       <Flex w="100%" p=".8rem" justify="space-between">
         <IconButton
           onClick={() => handleBack()}
-          color="white"
-          bg="teal.600"
+          color="black"
+          bg="white"
           borderRadius="50%"
           size="lg"
           icon={<ArrowBack />}

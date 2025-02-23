@@ -6,7 +6,7 @@ const WarningCard = ({text}) => {
         <Card
         borderRadius="45px"
         bg="rgba(255, 255, 255, 0.8)"
-        align="center"
+        justifyContent="center"
         p="1.6rem"
       >
         <CardHeader>

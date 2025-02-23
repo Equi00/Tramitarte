@@ -136,7 +136,7 @@ function RegisteredTranslators() {
         justifyContent={"center"}
         alignItems={"center"}
       >
-        {translators.length === 0 ? <WarningCard text={"No Translators Available"}/> :
+        {translators.length === 0 ? <Box h='calc(85vh)' alignContent={"center"}><WarningCard text={"No Translators Available"}/></Box> :
         translators.map((translator, index) => (
           <WrapItem
             w="sm"

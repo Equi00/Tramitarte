@@ -48,8 +48,8 @@ function DocumentationUploaded() {
     setIsAcceptOpen(false);
   };
 
-  const uploadDocumentation = async() => {
-    if(JSON.parse(window.localStorage.getItem('process')).id){
+  const loadDocumentation = async() => {
+    if(JSON.parse(window.localStorage.getItem('process'))){
       const documentation= await userService.getDocumentationUploaded(JSON.parse(window.localStorage.getItem('process')).id)
       setUploadedDocumentation(documentation)
     }
@@ -196,7 +196,7 @@ function DocumentationUploaded() {
     navigate(-1);
   };
   useEffect(() => {
-    uploadDocumentation();
+    loadDocumentation();
   }, [uploadedDocumentation]); 
 
   return (
@@ -226,9 +226,14 @@ function DocumentationUploaded() {
         spacing={"1.2rem"}
         bg="teal.200"
         p="1.4rem"
+        display={"flex"}
         justifyContent={"center"}
+        alignItems={"center"}
       >
-        {uploadedDocumentation.length === 0 ? <WarningCard text={"There are no certificates uploaded yet"}/> :uploadedDocumentation.map((document, index) => (
+        {uploadedDocumentation.length === 0 ? 
+        <Box h='calc(85vh)' alignContent={"center"}><WarningCard text={"There are no certificates uploaded yet"}/></Box> 
+        :
+        uploadedDocumentation.map((document, index) => (
           <Flex py="1.2rem" justifyContent="center" alignItems={"center"} alignContent={"center"} display={"flex"}>
             <Card
               borderRadius="45px"

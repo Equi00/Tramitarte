@@ -12,7 +12,7 @@ import {
   Wrap,
   WrapItem,
 } from "@chakra-ui/react";
-import { AccountCircle, Close, Edit } from "@mui/icons-material";
+import { AccountCircle, ArrowBack, Edit } from "@mui/icons-material";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import userService from "../services/UserService";
@@ -80,17 +80,17 @@ useEffect(() => {
 
 
   return (
-    <Box minH="100%" h="100%" p="3%" bg="blue.800">
+    <Box minH="100%" h="100%" p="3%" bg="teal.200">
       <Flex minH="100%" bg="whiteAlpha.700" borderRadius="20px">
         <VStack w="100%">
           <Flex w="100%" p=".8rem" justify="space-between">
             <IconButton
               onClick={() => handleBack()}
-              color="white"
-              bg="blue.900"
+              color="black"
+              bg="white"
               borderRadius="50%"
               size="lg"
-              icon={<Close />}
+              icon={<ArrowBack />}
             />
             <IconButton
               onClick={() => handleEdit() }
@@ -107,7 +107,8 @@ useEffect(() => {
               src={userData?.photo}
             />
             <Center>
-             <Heading size="xl"  style={{ fontSize:'14px' }}>
+             <Heading size="xl"  style={{ fontSize:'14px' }} padding={"1rem"} color="blue.900">
+              <Heading size="md">Username:</Heading>
                {edit? (
                 <input 
                    type="text"
@@ -115,10 +116,12 @@ useEffect(() => {
                    placeholder="Enter your new nickname"
                    onChange={(e) => setEditNickname(e.target.value)}
                    style={{
-                    background: 'transparent',
+                    background: 'white',
                     borderRadius:"5px",
-                    color: 'white',
-                    minWidth:'195px'
+                    minHeight: "100%",
+                    minWidth: "100%",
+                    color: 'black',
+                    fontSize: "14px"
                   }}
                  />
                   ) : (
@@ -132,7 +135,8 @@ useEffect(() => {
               <Box justifyContent="center" marginRight="2.4rem">
                 <AccountCircle size="lg" />
               </Box>
-              <Heading size="xl"  style={{ fontSize:'14px' }}>
+              <Heading size="xl"  style={{ fontSize:'14px' }} padding={"1rem"}>
+                <Heading size="md">Name:</Heading>
                {edit? (
                 <input 
                    type="text"
@@ -140,17 +144,20 @@ useEffect(() => {
                    placeholder="Enter your name"
                    onChange={(e) => setEditName(e.target.value)}
                    style={{
-                    background: 'transparent',
+                    background: 'white',
                     borderRadius:"5px",
-                    color: 'white',
-                    minWidth:'195px'
+                    minHeight: "100%",
+                    minWidth: "100%",
+                    color: 'black',
+                    fontSize: "14px"
                   }}
                  />
                   ) : (
                     <Heading size="md">{userData?.name} </Heading>
                )}
               </Heading>
-              <Heading size="xl"  style={{ fontSize:'14px' }}>
+              <Heading size="xl"  style={{ fontSize:'14px' }} padding={"1rem"}>
+                <Heading size="md">Surname:</Heading>
                {edit? (
                 <input 
                    type="text"
@@ -158,10 +165,12 @@ useEffect(() => {
                    placeholder="Enter your surname"
                    onChange={(e) => setEditSurname(e.target.value)}
                    style={{
-                    background: 'transparent',
+                    background: 'white',
                     borderRadius:"5px",
-                    color: 'white',
-                    minWidth:'195px'
+                    minHeight: "100%",
+                    minWidth: "100%",
+                    color: 'black',
+                    fontSize: "14px"
                   }}
                  />
                   ) : (
@@ -169,33 +178,36 @@ useEffect(() => {
                )}
               </Heading>
             </WrapItem>
-            <WrapItem p="2.4rem" w="sm">
-              <Box justifyContent="center" marginRight="2.4rem">
-                <CalendarIcon />
-              </Box>
-              <Heading size="md">{userData?.birthdate}</Heading>
-            </WrapItem>
+              <WrapItem p="2.4rem" w="sm" flexDir={"column"}>
+                <Heading size="md">Birthdate:</Heading>
+                <Box>
+                  <Box justifyContent="center" marginRight="2.4rem">
+                    <CalendarIcon />
+                  </Box>
+                  <Heading size="md">{userData?.birthdate}</Heading>
+                </Box>
+              </WrapItem>
           </Wrap>
-                    {edit? ( <><Flex  w="90%" justifyContent="space-around" >
-                      <Button
-            onClick={() => handleSave()}
-            borderRadius="45px"
-            color="white"
-            w="40%"
-            bg="blue.900"
-            py="2%"
-          >
-            {"Save"}
-          </Button>
-             <Button
-             onClick={() => handleCancel()}
-             borderRadius="45px"
-             color="white"
-             w="40%"
-             bg="teal.500"
-                       >
-             {"Cancel"}
-           </Button></Flex></>):<></>}
+          {edit? ( <><Flex  w="90%" justifyContent="space-around" >
+            <Button
+              onClick={() => handleSave()}
+              borderRadius="45px"
+              color="white"
+              w="40%"
+              bg="blue.900"
+              py="2%"
+            >
+              {"Save"}
+            </Button>
+              <Button
+              onClick={() => handleCancel()}
+              borderRadius="45px"
+              color="white"
+              w="40%"
+              bg="teal.500"
+                        >
+              {"Cancel"}
+            </Button></Flex></>):<></>}
         </VStack>
       </Flex>
     </Box>

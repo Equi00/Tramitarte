@@ -15,7 +15,7 @@ function MapFamilySearch({bool}) {
         maxZoom: 18,
       }).addTo(map);
   
-      const iconoTramitarte = L.icon({
+      const tramitarteIcon = L.icon({
         iconUrl: logo,
         iconSize: [50, 50],
         iconAnchor: [10, 10],
@@ -26,7 +26,7 @@ function MapFamilySearch({bool}) {
         let latitude, longitude;
         [latitude, longitude] = [familySearch.latitude, familySearch.longitude];
         L.marker([latitude, longitude], {
-          icon: iconoTramitarte,
+          icon: tramitarteIcon,
         }).addTo(map).bindPopup(`<b>${familySearch.address}</b><br>
           ${familySearch.city}<br>
           <i>${familySearch.phone}</i><br>

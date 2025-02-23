@@ -23,7 +23,7 @@ import {
 import { useNavigate, useParams } from "react-router";
 import { ArrowBack } from "@mui/icons-material";
 import { CalendarIcon, ChevronDownIcon } from "@chakra-ui/icons";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 
 import ConfirmationModal from "../components/modals/ConfirmationModal";
 import ModalIsLoading from "../components/modals/ModalIsLoading";
@@ -101,15 +101,7 @@ function AVORequest() {
           {
             first_name: AVOName,
             last_name: AVOSurname,
-            birth_date: `${
-              birthdate.day < 10
-                ? "0" + birthdate.day
-                : birthdate.day
-            }/${
-              birthdate.month < 10
-                ? "0" + birthdate.month
-                : birthdate.month
-            }/${birthdate.year}`,
+            birth_date: `${birthdate.year}-${String(birthdate.month).padStart(2, "0")}-${String(birthdate.day).padStart(2, "0")}`,
             gender: AVOGender,
           },
           idProcess
@@ -330,7 +322,7 @@ function AVORequest() {
                     colorScheme="teal"
                     color="blue.900"
                     p=".4rem"
-                    isChecked={isChecked}
+                    isChecked={!isChecked}
                     onChange={(e) => handleOnChangeSexRadioButton(e)}
                     name={"Female"}
                   >
@@ -341,7 +333,7 @@ function AVORequest() {
                     color="blue.900"
                     p=".4rem"
                     name={"Male"}
-                    isChecked={!isChecked}
+                    isChecked={isChecked}
                     onChange={(e) => handleOnChangeSexRadioButton(e)}
                   >
                     Male

@@ -9,6 +9,7 @@ class ProcessService {
   }
 
   async uploadAVO(avo, process_id) {
+    console.log(avo)
     let persisted_avo = await axios.post(
       `${this.urlBackend}/process/upload-avo/${process_id}`,
       avo

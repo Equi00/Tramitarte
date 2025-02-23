@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from typing import Annotated, List, Optional
 from sqlalchemy.orm import Session
+from models.UpdateAVORequestModel import UpdateAVORequestModel
 from models.ProcessModel import ProcessModel
 from models.StageModel import StageModel
 from models.DocumentationUpdateModel import DocumentationUpdateModel
@@ -122,7 +123,7 @@ async def delete_process(process_id: int, service: ProcessService = Depends(get_
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@p_router.get("/request/user/{user_id}", response_model=Optional[AVORequestModel])
+@p_router.get("/request/user/{user_id}", response_model=Optional[UpdateAVORequestModel])
 async def get_avo_request_by_user(user_id: int, user_service: UserService = Depends(get_user_service), avo_service: AVORequestService = Depends(get_avo_service)):
     try:
         user = user_service.find_by_id(user_id)

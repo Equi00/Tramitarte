@@ -1,6 +1,9 @@
 
 import { useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
+import {
+  Box
+} from "@chakra-ui/react";
 import Stage from "../components/Stage";
 import processService from "../services/ProcessService";
 import CardStartProcess from "../components/cards/CardStartProcess";
@@ -33,15 +36,15 @@ function Process({ setProcessContext }) {
   }, []);
 
   return (
-    <>
+    <Box h='calc(85vh)' alignContent={"center"}>
       {isLoading ? (
-        <SkeletonIsLoading isLoading={isLoading} />
-      ) : process ? (
-        <Stage process={process} />
-      ) : (
-        <CardStartProcess></CardStartProcess>
-      )}
-    </>
+          <SkeletonIsLoading isLoading={isLoading} />
+        ) : process ? (
+          <Stage process={process} />
+        ) : (
+          <CardStartProcess></CardStartProcess>
+        )}
+    </Box>
   );
 }
 
