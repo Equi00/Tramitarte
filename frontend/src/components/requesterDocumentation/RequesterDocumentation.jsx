@@ -100,10 +100,10 @@ function RequesterDocumentation({
 
   return (
     <Box w="100%" borderRadius="30px" bg="teal.100">
-      <Center flexWrap="wrap" gap={2} w="100%" p="2%">
-        <InputFile handleOnInput={handleInputDniFront} accion={name1} />
-        <InputFile handleOnInput={handleInputDniBack} accion={name2} />
-        <InputFile handleOnInput={handleInputBirthCertificate} accion={name3} />
+      <Center flexWrap="wrap" gap={2} w="100%" p="2%" flexDir={"column"}>
+        <InputFile handleOnInput={handleInputDniFront} action={name1} />
+        <InputFile handleOnInput={handleInputDniBack} action={name2} />
+        <InputFile handleOnInput={handleInputBirthCertificate} action={name3} />
       </Center>
       <ModalError
         question={"The selected file is not valid."}

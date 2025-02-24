@@ -35,7 +35,7 @@ function InputNoObligatoryCertificate({ confirmationQuestion, action, handleOnIn
         </GridItem>
         <GridItem colSpan={2}>
           <Collapse in={isOpen}>
-            <InputFile handleOnInput={handleOnInput} accion={action} />
+            <InputFile handleOnInput={handleOnInput} action={action} />
           </Collapse>
         </GridItem>
       </Grid>

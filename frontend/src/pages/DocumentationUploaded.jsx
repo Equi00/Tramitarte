@@ -50,7 +50,14 @@ function DocumentationUploaded() {
 
   const loadDocumentation = async() => {
     if(JSON.parse(window.localStorage.getItem('process'))){
-      const documentation= await userService.getDocumentationUploaded(JSON.parse(window.localStorage.getItem('process')).id)
+      let documentation= await userService.getDocumentationUploaded(JSON.parse(window.localStorage.getItem('process')).id)
+        .catch((error) => {
+          if (error.response && error.response.status === 404) {
+            console.warn("Process not found:", error.response.data.detail);
+          } else {
+            console.error("Process not found:", error);
+          }
+        });
       setUploadedDocumentation(documentation)
     }
   };
@@ -195,9 +202,10 @@ function DocumentationUploaded() {
   const handleBack = () => {
     navigate(-1);
   };
+
   useEffect(() => {
     loadDocumentation();
-  }, [uploadedDocumentation]); 
+  }, []); 
 
   return (
     <Box minH="100%" bg="teal.200">
@@ -230,7 +238,7 @@ function DocumentationUploaded() {
         justifyContent={"center"}
         alignItems={"center"}
       >
-        {uploadedDocumentation.length === 0 ? 
+        {uploadedDocumentation === null ? 
         <Box h='calc(85vh)' alignContent={"center"}><WarningCard text={"There are no certificates uploaded yet"}/></Box> 
         :
         uploadedDocumentation.map((document, index) => (

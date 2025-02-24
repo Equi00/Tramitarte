@@ -21,8 +21,8 @@ class UserService {
         return user
     }
     async getDocumentationUploaded(id){
-        let documentacion= await axios?.get(`${this.urlBackend}/process/documentation/${id}`)
-        return documentacion.data.documentList
+        let documentation= await axios?.get(`${this.urlBackend}/process/documentation/${id}`)
+        return documentation.data
     }
 
     async getTranslators(){

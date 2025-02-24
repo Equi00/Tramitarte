@@ -139,7 +139,11 @@ class ProcessService {
   }
 
   async modifyFile(document_id,document){
-    await axios.post(`${this.urlBackend}/process/modify/document/${document_id}`, document)
+    await axios.put(`${this.urlBackend}/process/modify/document/${document_id}`, document)
+  }
+
+  async updateAVOData(data){
+    await axios.put(`${this.urlBackend}/process/avo`, data)
   }
 }
 

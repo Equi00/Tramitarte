@@ -55,23 +55,31 @@ function RoleElection({ setLoggedUserContext }) {
   }, []);
 
   useEffect(() => {
-     userService
+    userService
       .getUserByEmail(user.email)
       .then((response) => {
-        if(response){
+        if (response) {
           let { data: data_2 } = response;
           let persistedUser = data_2;
           setLoggedUserContext(persistedUser);
-          window.localStorage.setItem('loggedUser', JSON.stringify(persistedUser));
+          window.localStorage.setItem("loggedUser", JSON.stringify(persistedUser));
           navigate(`/home/${persistedUser.role.toLowerCase()}/${persistedUser.id}`, {
             replace: true,
           });
-        }else{
+        } else {
           setShow(true);
         }
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 404) {
+          console.warn("User not found:", error.response.data.detail);
+          setShow(true);
+        } else {
+          console.error("User not found:", error);
+        }
       });
-    
   }, []);
+  
 
   return (
     <>

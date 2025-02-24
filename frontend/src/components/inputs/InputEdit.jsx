@@ -3,7 +3,7 @@ import { Input } from "@chakra-ui/input";
 import { Edit } from "@mui/icons-material";
 import { useRef } from "react";
 
-function InputEdit({ accion, handleOnInput }) {
+function InputEdit({ action, handleOnInput }) {
     const inputOculto = useRef(null);
     const openInput = () => {
       inputOculto.current.click();
@@ -21,10 +21,10 @@ function InputEdit({ accion, handleOnInput }) {
           textTransform={"uppercase"}
           textAlign={"center"}
         >
-          {accion}
+          {action}
           <Edit />
         </Button>
-        <Input id={accion} onInput={handleOnInput} ref={inputOculto} type="file" accept="image/*" display="none" />
+        <Input id={action} onInput={handleOnInput} ref={inputOculto} type="file" accept="image/*" display="none" />
       </>
     );
   }

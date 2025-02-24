@@ -64,7 +64,7 @@ function AvoProfile() {
       "id":avoData.id,
       "first_name":editFirstName,
       "last_name":editLastName,
-      "birth_date":birthdate,
+      "birth_date":`${birthdate.year}-${String(birthdate.month).padStart(2, "0")}-${String(birthdate.day).padStart(2, "0")}`,
       "gender":gender
     }
     if(body.first_name === ""){
@@ -76,8 +76,9 @@ function AvoProfile() {
     if(body.gender === ""){
       body.gender = avoData.gender
     }
-    let updatedAVO = await processService.updateAVOData(avoData.id, body)
+    let updatedAVO = await processService.updateAVOData(body)
     setAvoData(updatedAVO)
+    fetchData();
     setEdit(false);
   };
 
@@ -109,6 +110,11 @@ function AvoProfile() {
         year: year,
       });
       setGender(avoData.gender);
+      setEditFirstName(avoData.first_name);
+      setEditLastName(avoData.last_name);
+      if (avoData.gender === "Male"){
+        setIsChecked(true);
+      }
     }
   }, []); 
   
@@ -149,7 +155,7 @@ function AvoProfile() {
                 <>
                 <input 
                     type="text"
-                    value={avoData?.first_name}
+                    value={editFirstName}
                     placeholder="Enter the first name"
                     onChange={(e) => setEditFirstName(e.target.value)}
                     style={{
@@ -162,7 +168,7 @@ function AvoProfile() {
                   />
                   <input 
                     type="text"
-                    value={avoData?.last_name}
+                    value={editLastName}
                     placeholder="Enter the last name"
                     onChange={(e) => setEditLastName(e.target.value)}
                     style={{
@@ -346,7 +352,19 @@ function AvoProfile() {
         </VStack>
       </Flex>
       :
-      <Box h='calc(85vh)' alignContent={"center"}><WarningCard text={"No AVO Available"}/></Box>
+      <>
+        <Flex w="100%" p=".8rem" justify="space-between">
+          <IconButton
+            onClick={() => handleBack()}
+            color="black"
+            bg="white"
+            borderRadius="50%"
+            size="lg"
+            icon={<ArrowBack />}
+          />
+        </Flex>
+        <Box h='calc(85vh)' alignContent={"center"}><WarningCard text={"No AVO Available"}/></Box>
+      </>
       }
     </Box>
   );

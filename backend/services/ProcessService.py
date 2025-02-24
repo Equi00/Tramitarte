@@ -143,8 +143,8 @@ class ProcessService:
         if not process:
             raise HTTPException(status_code=404, detail="The process to delete does not exist.")
         
-        self.db.delete(process.stage)
-        self.db.delete(process.request_avo)
+        if process.stage: self.db.delete(process.stage)
+        if process.request_avo: self.db.delete(process.request_avo)
         self.db.delete(process)
         self.db.commit()
 

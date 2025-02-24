@@ -181,11 +181,10 @@ function PersonalDocumentation() {
         </Center>
       </Center>
 
-      <Center flexWrap="wrap" p={{ base: '8', md: '16'}}>
+      <Center flexWrap="wrap" p={{ md: '8'}}>
         <ScaleFade style={{width: "100%", minWidth: "sm"}} in={!isOpen} initialScale={1}>
           <Flex
             textAlign="center"
-            pb="2%"
             w={"full"}
             flexWrap="wrap"
           >
@@ -220,7 +219,7 @@ function PersonalDocumentation() {
               bg="blue.900"
               textTransform={"uppercase"}
             >
-              {"Keep personal documentation"}
+              {"Share personal documentation"}
             </Button>
           </Flex>
         </ScaleFade>
