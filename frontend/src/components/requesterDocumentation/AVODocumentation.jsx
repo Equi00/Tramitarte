@@ -109,10 +109,10 @@ function AVODocumentation({ addAVODocuments, isOpenNO1, onToggle1, isOpenNO2, on
 
   return (
     <Box w="100%" borderRadius="30px" bg="teal.100">
-      <Center flexWrap="wrap" gap={2} w="100%" p="2%">
+      <Center flexWrap="wrap" gap={2} w="100%" p="2%" justifyContent={"space-evenly"}>
         <InputNoObligatoryCertificate
           handleOnInput={handleInputDeathCertificate}
-          confirmationQuestion={"¿Is dead?"}
+          confirmationQuestion={"Is dead?"}
           action={name1}
           isOpen={isOpenNO1}
           onToggle={onToggle1}

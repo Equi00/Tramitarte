@@ -100,8 +100,16 @@ function RegisteredTranslators() {
 
   const translatorsSearched = async (mail) =>{
     try{
-      let translators = await userService.searchTranslatorByEmail(mail)
-      setTranslators(translators)
+      let translators = await userService.searchTranslatorByEmail(mail).catch((error) => {
+        if (error.response && error.response.status === 400) {
+          console.warn("User not found:", error.response.data.detail);
+        } else {
+          console.error("User not found:", error);
+        }
+      });
+      if (translators){
+        setTranslators(translators)
+      }
     }catch(e){
       navigate("/network-error");
     }

@@ -20,7 +20,7 @@
 								{
 									"key": "img",
 									"type": "file",
-									"src": "/C:/Users/Usuario/Desktop/Tramitarte/backend/test_files/dni_front_argentina.jpg"
+									"src": "/C:/Users/Usuario/Desktop/Tramitarte/backend/test_files/dni_back_argentina.jpg"
 								}
 							]
 						},
@@ -57,7 +57,7 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/C:/Users/Usuario/Desktop/Tramitarte/backend/test_files/marriage_certificate.pdf"
+									"src": "/C:/Users/Usuario/Desktop/Tramitarte/backend/test_files/birth_certificate.pdf"
 								}
 							]
 						},
@@ -114,7 +114,7 @@
 								{
 									"key": "pdf",
 									"type": "file",
-									"src": "/C:/Users/Usuario/Desktop/Tramitarte/backend/test_files/death_certificate.pdf"
+									"src": "/C:/Users/Usuario/Desktop/Tramitarte/backend/test_files/birth_certificate.pdf"
 								}
 							]
 						},
@@ -408,7 +408,7 @@
 								}
 							}
 						},
-						"url": "localhost:8000/api/user/3"
+						"url": "localhost:8000/api/user/1"
 					},
 					"response": []
 				},
@@ -417,7 +417,7 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"url": "localhost:8000/api/user/2"
+						"url": "localhost:8000/api/user/1"
 					},
 					"response": []
 				}
@@ -747,14 +747,14 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n  {\r\n    \"id\": 0,\r\n    \"name\": \"string\",\r\n    \"file_type\": \"string\",\r\n    \"file_base64\": \"string\",\r\n    \"process_id\": 0\r\n  }\r\n]",
+							"raw": "{\r\n    \"count\": 2,\r\n        \"documentation\": [{\r\n            \"id\": 4,\r\n            \"name\": \"ancestor document\",\r\n            \"file_type\": \"png\",\r\n            \"file_base64\": \"dGVzdA==\",\r\n            \"process_id\": 0\r\n        },\r\n        {\r\n            \"id\": 5,\r\n            \"name\": \"ancestor document\",\r\n            \"file_type\": \"png\",\r\n            \"file_base64\": \"dGVzdA==\",\r\n            \"process_id\": 0\r\n        }]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
-						"url": "localhost:8000/api/process/upload/documentation/descendants/1"
+						"url": "localhost:8000/api/process/upload/documentation/ancestors/1"
 					},
 					"response": []
 				},

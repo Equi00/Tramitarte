@@ -136,50 +136,54 @@ function AncestorsDocumentFile({ ancestorCount, persons, setAncestorsDocumentati
   }, [ancestorCount]);
 
   useEffect(() => { //Here if you check "no", then the button name returns to its original state
-    verified1.forEach((verified, index) => {
-      if (verified1[index] === false) {
-        setName1((prevNames) => {
-          const newNames = [...prevNames];
-          newNames[index] = "death certificate (.pdf)";
-          return newNames;
-        });
-        if(!(persons[index].deathCertificate.name === "")){
-          deleteDocuments({
-            id: "death-certificate",
-            index: index
-          })
+    if(persons.length){
+      verified1.forEach((verified, index) => {
+        if (verified1[index] === false) {
+          setName1((prevNames) => {
+            const newNames = [...prevNames];
+            newNames[index] = "death certificate (.pdf)";
+            return newNames;
+          });
+          if(!(persons[index].deathCertificate.name === "")){
+            deleteDocuments({
+              id: "death-certificate",
+              index: index
+            })
+          }
         }
-      }
-    });
-    setCheck1(verified1)
+      });
+      setCheck1(verified1)
+    }
   }, [verified1])
 
   useEffect(() => { //Here if you check "no", then the button name returns to its original state
-    verified2.forEach((verified, index) => {
-      if (verified2[index] === false) {
-        setName2((prevNames) => {
-          const newNames = [...prevNames];
-          newNames[index] = "marriage certificate (.pdf)";
-          return newNames;
-        });
-        if(!(persons[index].marriageCertificate.name === "")){
-          deleteDocuments({
-            id: "marriage-certificate",
-            index: index
-          })
+    if (persons.length){
+      verified2.forEach((verified, index) => {
+        if (verified2[index] === false) {
+          setName2((prevNames) => {
+            const newNames = [...prevNames];
+            newNames[index] = "marriage certificate (.pdf)";
+            return newNames;
+          });
+          if(!(persons[index].marriageCertificate.name === "")){
+            deleteDocuments({
+              id: "marriage-certificate",
+              index: index
+            })
+          }
         }
-      }
-    });
-    setCheck2(verified2)
+      });
+      setCheck2(verified2)
+    }
   }, [verified2])
 
   return (
     <Box borderRadius="30px" bg="teal.100">
-      {persons.map((persona, index) => (
-        <Box key={index}>
+      {persons.map((person, index) => (
+        <Box key={index} borderTopColor={"black"} borderTopWidth={index === 0 ? 0 : 1}>
           <Center py="2%">
           <InputNoObligatoryCertificateMultiple
-            confirmationQuestion={"Is he dead?"}
+            confirmationQuestion={"Is dead?"}
             action={name1[index]}
             handleOnInput={(e) => handleInputDeathCertificate(e, index)}
             handleCheckbox={setVerified1}
@@ -188,7 +192,7 @@ function AncestorsDocumentFile({ ancestorCount, persons, setAncestorsDocumentati
           </Center>
           <Center py="2%">
             <InputNoObligatoryCertificateMultiple
-              confirmationQuestion={"Was he in a marital relationship??"}
+              confirmationQuestion={"Was in a marital relationship??"}
               action={name2[index]}
               handleOnInput={(e) => handleInputMarriageCertificate(e, index)}
               handleCheckbox={setVerified2}

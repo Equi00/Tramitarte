@@ -1,6 +1,7 @@
 from datetime import date
 import pytest
 from fastapi import HTTPException
+from models.AncestorDocumentationModel import AncestorDocumentationModel
 from models.DocumentationModel import DocumentationModel
 from models.AVORequestModel import AVORequestModel
 from enums.Gender import Gender
@@ -106,7 +107,9 @@ def advance_to_stage_5(session, process_service):
         DocumentationModel(id=5, name="ancestor document", file_type="PDF", file_base64="dGVzdA==", process_id=process.id)
     ]
 
-    return process_service.upload_ancestors_documents(process.id, documents)
+    ancestor_document = AncestorDocumentationModel(count=2, documentation=documents)
+
+    return process_service.upload_ancestors_documents(process.id, ancestor_document)
 
 def test_start_process_success(process_service, session):
     user = User(
@@ -227,8 +230,6 @@ def test_upload_avo_documents_failed(process_service, session):
 def test_upload_ancestor_documents_success(process_service, session):
     process: Process = advance_to_stage_4(session, process_service)
 
-    process.ancestor_count = 2
-
     session.add(process)
     session.commit()
     session.refresh(process)
@@ -238,7 +239,9 @@ def test_upload_ancestor_documents_success(process_service, session):
         DocumentationModel(id=5, name="ancestor document", file_type="PDF", file_base64="dGVzdA==", process_id=process.id)
     ]
 
-    updated_process = process_service.upload_ancestors_documents(process.id, documents)
+    ancestor_document = AncestorDocumentationModel(count=2, documentation=documents)
+
+    updated_process = process_service.upload_ancestors_documents(process.id, ancestor_document)
 
     retrieved_process: Process = session.query(Process).filter_by(code="PRC123").first()
     assert len(retrieved_process.ancestors_documentation) == 2
@@ -260,8 +263,10 @@ def test_upload_ancestor_documents_failed(process_service, session):
         DocumentationModel(id=4, name="ancestor document", file_type="PDF", file_base64="dGVzdA==", process_id=process.id),
     ]
 
+    ancestor_document = AncestorDocumentationModel(count=2, documentation=documents)
+
     with pytest.raises(InvalidDocumentationException, match="The process is missing necessary ancestor documents"):
-        process_service.upload_ancestors_documents(process.id, documents)
+        process_service.upload_ancestors_documents(process.id, ancestor_document)
 
 def test_upload_translated_documents_success(process_service, session):
     process: Process = advance_to_stage_5(session, process_service)

@@ -17,7 +17,7 @@ function InputNoObligatoryCertificate({ confirmationQuestion, action, handleOnIn
     >
       <Grid
         templateRows="repeat(2, 1fr)"
-        templateColumns="repeat(2, 1fr)"
+        templateColumns="repeat(1, 1fr)"
         gap={1}
       >
         <GridItem colSpan={1}>
@@ -26,8 +26,8 @@ function InputNoObligatoryCertificate({ confirmationQuestion, action, handleOnIn
           </Text>
         </GridItem>
         <GridItem colSpan={1}>
-          <Checkbox isChecked={isOpen} onChange={onToggle}>
-            {"Sí"}
+          <Checkbox isChecked={isOpen} onChange={onToggle} pr={1}>
+            {"Yes"}
           </Checkbox>
           <Checkbox isChecked={!isOpen} onChange={onToggle}>
             No

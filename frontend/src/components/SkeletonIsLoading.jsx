@@ -2,7 +2,7 @@ import { Box, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
 
 function SkeletonIsLoading({ isLoading }) {
   return (
-    <Box w="full" h="100%" padding="6" boxShadow="lg" bg="teal.200">
+    <Box w="calc(85vw)" h="100%" padding="6" boxShadow="lg" bg="teal.200">
       <SkeletonCircle
         isLoaded={!isLoading}
         startColor="teal.100"

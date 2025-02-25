@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from typing import Annotated, List, Optional
 from sqlalchemy.orm import Session
+from models.AncestorDocumentationModel import AncestorDocumentationModel
 from models.UpdateAVORequestModel import UpdateAVORequestModel
 from models.ProcessModel import ProcessModel
 from models.StageModel import StageModel
@@ -100,7 +101,7 @@ async def upload_avo_documentation(process_id: int, documentation: List[Document
 
 
 @p_router.post("/upload/documentation/ancestors/{process_id}")
-async def upload_ancestors_documentation(process_id: int, documentation: List[DocumentationModel], service: ProcessService = Depends(get_process_service)) -> dict:
+async def upload_ancestors_documentation(process_id: int, documentation: AncestorDocumentationModel, service: ProcessService = Depends(get_process_service)) -> dict:
     try:
         service.upload_ancestors_documents(process_id, documentation)
         return {"message": "Documentation successfully saved"}

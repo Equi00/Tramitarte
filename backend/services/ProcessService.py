@@ -1,6 +1,7 @@
 import uuid
 from typing import List, Optional
 from fastapi import Depends, HTTPException
+from models.AncestorDocumentationModel import AncestorDocumentationModel
 from models.StageModel import StageModel
 from models.ProcessModel import ProcessModel
 from models.DocumentationModel import DocumentationModel
@@ -86,13 +87,15 @@ class ProcessService:
 
         return process
 
-    def upload_ancestors_documents(self, process_id: int, ancestors_documents: List[DocumentationModel]) -> ProcessModel:
+    def upload_ancestors_documents(self, process_id: int, ancestor_documentation: AncestorDocumentationModel) -> ProcessModel:
         process: Process = self.db.query(Process).filter(Process.id == process_id).first()
         if not process:
             raise HTTPException(status_code=404, detail="Process not found.")
         
+        process.ancestor_count = ancestor_documentation.count
+        
         ancestor_documentation_list = []
-        for doc in ancestors_documents:
+        for doc in ancestor_documentation.documentation:
             document = AncestorDocumentation(**doc.model_dump())
             ancestor_documentation_list.append(document)
 
@@ -134,7 +137,11 @@ class ProcessService:
         if not process:
             raise HTTPException(status_code=404, detail="Process not found.")
 
-        document_list = process.documentations
+        document_list = []
+        document_list.extend(process.user_documentation)
+        document_list.extend(process.avo_documentation)
+        document_list.extend(process.ancestors_documentation)
+        document_list.extend(process.translated_documentation)
 
         return document_list
 

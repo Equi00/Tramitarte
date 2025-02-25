@@ -101,7 +101,9 @@ function AvoProfile() {
 
   useEffect(() => {
     fetchData();
+  }, [avoData])
 
+  useEffect(() => {
     if (avoData) {
       const [year, month, day] = avoData.birth_date.split("-");
       setBirthdate({

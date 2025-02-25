@@ -37,7 +37,7 @@ function DocumentationUploaded() {
   const [isAcceptOpen, setIsAcceptOpen] = useState(false);
   
   const openModalSubmit = () => {
-    if(uploadedDocumentation.length > 0){
+    if(uploadedDocumentation && uploadedDocumentation.length > 0){
       setIsAcceptOpen(true);
     }else{
       onOpenError3()
@@ -72,36 +72,38 @@ function DocumentationUploaded() {
         console.log("Document changed",uploadedDocumentation[index])
         const lastPoint = file.name.lastIndexOf(".");
         const extension = file.name.slice(lastPoint + 1);
-        let isCertificate = await processService.isCertificate(file)
-        if(extension === "pdf" && isCertificate){
-          let birthVerification = await processService.isBirthCertificate(file)
-          let italianBirthCertification = await processService.isItalianBirthCertificate(file)
-          let marriageCertificate = await processService.isMarriageCertificate(file)
-          let italianMarriageCertificate= await processService.isItalianMarriageCertificate(file)
-          let deathCertificate = await processService.isDeathCertificate(file)
-          let italianDeathCertificate = await processService.isItalianDeathCertification(file)
+        if(extension === "pdf"){
+          let isCertificate = await processService.isCertificate(file)
+          if(isCertificate){
+            let birthVerification = await processService.isBirthCertificate(file)
+            let italianBirthCertification = await processService.isItalianBirthCertificate(file)
+            let marriageCertificate = await processService.isMarriageCertificate(file)
+            let italianMarriageCertificate= await processService.isItalianMarriageCertificate(file)
+            let deathCertificate = await processService.isDeathCertificate(file)
+            let italianDeathCertificate = await processService.isItalianDeathCertification(file)
 
-          if(deathCertificate || italianDeathCertificate){
-            processService.modifyFile(file_id
-              , {
-                name: file.name,
-                file_type: "death-certificate",
-                file_base64: base64
-              })
-          }else if(marriageCertificate || italianMarriageCertificate){
-            processService.modifyFile(file_id
-              , {
-                name: file.name,
-                file_type: "marriage-certificate",
-                file_base64: base64
-              })
-          }else if(birthVerification || italianBirthCertification){
-            processService.modifyFile(file_id
-              , {
-                name: file.name,
-                file_type: "birth-certificate",
-                file_base64: base64
-              })
+            if(deathCertificate || italianDeathCertificate){
+              processService.modifyFile(file_id
+                , {
+                  name: file.name,
+                  file_type: "death-certificate",
+                  file_base64: base64
+                })
+            }else if(marriageCertificate || italianMarriageCertificate){
+              processService.modifyFile(file_id
+                , {
+                  name: file.name,
+                  file_type: "marriage-certificate",
+                  file_base64: base64
+                })
+            }else if(birthVerification || italianBirthCertification){
+              processService.modifyFile(file_id
+                , {
+                  name: file.name,
+                  file_type: "birth-certificate",
+                  file_base64: base64
+                })
+            }
           }else{
             onOpenError2()
             setIsLoading(false)
@@ -120,7 +122,7 @@ function DocumentationUploaded() {
           }else if(dniFrontVerification){
             processService.modifyFile(file_id
               , {
-                tname: file.name,
+                name: file.name,
                 file_type: "dni-front",
                 file_base64: base64
               })
@@ -205,7 +207,7 @@ function DocumentationUploaded() {
 
   useEffect(() => {
     loadDocumentation();
-  }, []); 
+  }, [uploadedDocumentation]); 
 
   return (
     <Box minH="100%" bg="teal.200">
@@ -238,7 +240,7 @@ function DocumentationUploaded() {
         justifyContent={"center"}
         alignItems={"center"}
       >
-        {uploadedDocumentation === null ? 
+        {uploadedDocumentation === undefined || uploadedDocumentation.length === 0 ? 
         <Box h='calc(85vh)' alignContent={"center"}><WarningCard text={"There are no certificates uploaded yet"}/></Box> 
         :
         uploadedDocumentation.map((document, index) => (
@@ -262,7 +264,7 @@ function DocumentationUploaded() {
               </CardBody>
               <CardFooter w="100%">
                 <Text color="white" w="100%" bg="red.900" borderRadius={"45px"}>
-                  <Center>{document.id}</Center>
+                  <Center>Document ID: {document.id}</Center>
                 </Text>
               </CardFooter >
               <InputEdit handleOnInput={(e) => handleInputCertificate(e, index)}/>
@@ -286,7 +288,7 @@ function DocumentationUploaded() {
                 onClose={onCloseError}
             />
       <ModalError
-                question={"The file extension is not valid"}
+                question={"The file is not valid"}
                 dataToConfirm={
                 "Please choose the appropriate file to continue. If the file is correct, please try again with better resolution and clearer images."
                 }

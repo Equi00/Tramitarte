@@ -28,7 +28,7 @@ class ProcessService {
 
   async uploadAVODocumentation(documentation, process_id) {
     let generated_documentation = await axios.post(
-      `${this.urlBackend}/process/upload/documentation/user/${process_id}`,
+      `${this.urlBackend}/process/upload/documentation/avo/${process_id}`,
       documentation
     );
     return generated_documentation;
@@ -139,6 +139,7 @@ class ProcessService {
   }
 
   async modifyFile(document_id,document){
+    console.log(document);
     await axios.put(`${this.urlBackend}/process/modify/document/${document_id}`, document)
   }
 

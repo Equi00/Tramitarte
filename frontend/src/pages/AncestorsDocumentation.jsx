@@ -23,6 +23,7 @@ function AncestorsDocumentation() {
   const navigate = useNavigate();
   const { isOpen, onToggle } = useDisclosure();
   const [ancestorCount, setAncestorCount] = useState(0);
+  const [people, setPeople] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [ancestorDocumentation, setAncestorDocumentation] = useState([]);
@@ -38,21 +39,21 @@ function AncestorsDocumentation() {
     const ancestorsCount = Number(e.target.value);
     setAncestorCount(ancestorsCount);
   
-    const people = Array(ancestorsCount).fill({
+    const ancestors = Array(ancestorsCount).fill({
       deathCertificate: { name: "", file_type: "", file_base64: "" },
       marriageCertificate: { name: "", file_type: "", file_base64: "" },
       birthCertificate: { name: "", file_type: "", file_base64: "" },
     });
   
-    setAncestorCount(people);
+    setPeople(ancestors);
   };
 
   const openModal = () => {
     if(ancestorDocumentation.some((element, index) => {
       return (
-        (element.deathCertificate.name === "" && verified1[index]) ||
-        (element.marriageCertificate.name === "" && verified2[index]) ||
-        (element.birthCertificate.name === "")
+        (element?.deathCertificate?.name === "" && verified1[index]) ||
+        (element?.marriageCertificate?.name === "" && verified2[index]) || 
+        (element?.birthCertificate?.name === "")
       );
     }))
     {
@@ -126,20 +127,25 @@ function AncestorsDocumentation() {
 
     try {
       ancestorDocumentation.forEach((person) => {
-        if (person.deathCertificate.name !== "") {
+        if (person?.deathCertificate?.name) {
           documents.push(person.deathCertificate);
         }
-        if (person.marriageCertificate.name !== "") {
+        if (person?.marriageCertificate?.name) {
           documents.push(person.marriageCertificate);
         }
-        if (person.birthCertificate.name !== "") {
+        if (person?.birthCertificate?.name) {
           documents.push(person.birthCertificate);
         }
       });
 
-      
+      let json_documents = {
+        count: ancestorCount,
+        documentation: documents
+      };
 
-      let response = await ProcessService.uploadAncestorsDocumentation(documents, Number(process.id));
+      console.log(json_documents)
+
+      let response = await ProcessService.uploadAncestorsDocumentation(json_documents, Number(process.id));
       console.log(documents)
       console.log(response);
       let names = documents.map((docu) => docu.name)
@@ -151,6 +157,7 @@ function AncestorsDocumentation() {
         }`
       );
     } catch (error) {
+      console.log(error);
       navigate("/network-error");
     }
   }
@@ -275,7 +282,7 @@ function AncestorsDocumentation() {
             </Text>
             <AncestorsDocumentFile
               ancestorCount={ancestorCount}
-              persons={ancestorDocumentation}
+              persons={people}
               setAncestorsDocumentation={completeAncestorDocumentation}
               deleteDocuments={deleteDocuments}
               setCheck1={setVerified1}

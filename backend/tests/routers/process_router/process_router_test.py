@@ -152,8 +152,9 @@ def advance_to_stage_5(session):
     session.commit()
     session.refresh(process)
 
-    json_documents = [
-        {
+    json_documents = {
+        "count": 2,
+        "documentation": [{
             "id": 4,
             "name": "ancestor document",
             "file_type": "png",
@@ -166,8 +167,8 @@ def advance_to_stage_5(session):
             "file_type": "png",
             "file_base64": "dGVzdA==",
             "process_id": process.id
-        }
-    ]
+        }]
+    }
 
     client.post(f"/api/process/upload/documentation/ancestors/{process.user.id}", json=json_documents)
 
@@ -378,28 +379,27 @@ def test_upload_avo_documents_failed(session):
 def test_upload_ancestors_documents_success(session):
     process: Process = advance_to_stage_4(session)
 
-    process.ancestor_count = 2
-
     session.add(process)
     session.commit()
     session.refresh(process)
 
-    json_documents = [
-        {
+    json_documents = {
+        "count": 2,
+        "documentation": [{
             "id": 4,
             "name": "ancestor document",
-            "file_type": "PDF",
+            "file_type": "png",
             "file_base64": "dGVzdA==",
             "process_id": process.id
         },
         {
             "id": 5,
             "name": "ancestor document",
-            "file_type": "PDF",
+            "file_type": "png",
             "file_base64": "dGVzdA==",
             "process_id": process.id
-        }
-    ]
+        }]
+    }
 
     response = client.post(f"/api/process/upload/documentation/ancestors/{process.id}", json=json_documents)
 
@@ -419,21 +419,20 @@ def test_upload_ancestors_documents_success(session):
 def test_upload_ancestor_documents_insufficient(session):
     process: Process = advance_to_stage_4(session)
 
-    process.ancestor_count = 2
-
     session.add(process)
     session.commit()
     session.refresh(process)
 
-    json_documents = [
-        {
+    json_documents = {
+        "count": 2,
+        "documentation": [{
             "id": 4,
             "name": "ancestor document",
-            "file_type": "PDF",
+            "file_type": "png",
             "file_base64": "dGVzdA==",
             "process_id": process.id
-        }
-    ]
+        }]
+    }
 
     with pytest.raises(InvalidDocumentationException, match="The process is missing necessary ancestor documents"):
         client.post(f"/api/process/upload/documentation/ancestors/{process.id}", json=json_documents)
@@ -441,15 +440,23 @@ def test_upload_ancestor_documents_insufficient(session):
 def test_upload_ancestor_documents_failed(session):
     process = advance_to_stage_3(session)
 
-    json_documents = [
-        {
-            "id": 3,
-            "name": "avo document",
-            "file_type": "PDF",
+    json_documents = {
+        "count": 2,
+        "documentation": [{
+            "id": 4,
+            "name": "ancestor document",
+            "file_type": "png",
             "file_base64": "dGVzdA==",
             "process_id": process.id
-        }
-    ]
+        },
+        {
+            "id": 5,
+            "name": "ancestor document",
+            "file_type": "png",
+            "file_base64": "dGVzdA==",
+            "process_id": process.id
+        }]
+    }
     
     response = client.post(f"/api/process/upload/documentation/ancestors/{343434}", json=json_documents)
 
