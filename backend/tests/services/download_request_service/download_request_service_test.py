@@ -127,7 +127,7 @@ def test_find_requests_by_requester_not_found(download_request_service, session)
 def test_delete_download_request_by_id(download_request_service, session):
     requester = session.query(User).filter_by(username="Jose55xx").first()
     translator = session.query(User).filter_by(username="user2").first()
-    documents = [DocumentationModel(name="Test Document", file_type="PDF", file_base64="dGVzdA==")]
+    documents = [DocumentationModel(id=1, name="Test Document", file_type="PDF", file_base64="dGVzdA==")]
 
     download_request_service.create_download_request(requester.id, translator.id, documents)
 

@@ -119,6 +119,7 @@ def test_find_requests_by_requester_success(session):
     translator = session.query(User).filter_by(username="user2").first()
     json_documents = [
         {
+            "id": 0,
             "name": "Test Document",
             "file_type": "PDF",
             "file_base64": "dGVzdA==",
@@ -146,6 +147,7 @@ def test_delete_download_request_by_id(session):
     translator = session.query(User).filter_by(username="user2").first()
     json_documents = [
         {
+            "id": 0,
             "name": "Test Document",
             "file_type": "PDF",
             "file_base64": "dGVzdA==",

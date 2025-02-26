@@ -9,6 +9,7 @@ import {
     Grid,
     HStack,
     IconButton,
+    Box
   } from "@chakra-ui/react";
   
   import { useNavigate, useParams } from "react-router";
@@ -115,7 +116,7 @@ import ConfirmationModal from "../components/modals/ConfirmationModal";
   
     return (
       <Grid py="1.2rem" justifyContent="center">
-        {tasks.length === 0 ? <WarningCard text={"There are no translation jobs"}/> :
+        {tasks.length === 0 ? <Box h='calc(80vh)' alignContent={"center"}><WarningCard text={"There are no translation jobs"}/></Box> :
         tasks.map((task, index) => (
         <Card
           key={index}

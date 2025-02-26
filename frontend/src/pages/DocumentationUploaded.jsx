@@ -232,46 +232,49 @@ function DocumentationUploaded() {
           icon={<DownloadIcon />}
         />
       </Flex>
-      <Wrap
-        spacing={"1.2rem"}
-        bg="teal.200"
-        p="1.4rem"
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        {uploadedDocumentation === undefined || uploadedDocumentation.length === 0 ? 
-        <Box h='calc(85vh)' alignContent={"center"}><WarningCard text={"There are no certificates uploaded yet"}/></Box> 
-        :
-        uploadedDocumentation.map((document, index) => (
-          <Flex py="1.2rem" justifyContent="center" alignItems={"center"} alignContent={"center"} display={"flex"}>
-            <Card
-              borderRadius="45px"
-              bg="rgba(255, 255, 255, 0.8)"
-              align="center"
-              p="1.6rem"
-              w={"25rem"}
-              h={"18rem"}
-              key={index}
-            >           
-              <CardHeader>
-                <Heading textAlign="center" size="md">
-                  {document.name}
-                </Heading>
-              </CardHeader>
-              <CardBody align="center">
-                <Text>{document.file_type}</Text>
-              </CardBody>
-              <CardFooter w="100%">
-                <Text color="white" w="100%" bg="red.900" borderRadius={"45px"}>
-                  <Center>Document ID: {document.id}</Center>
-                </Text>
-              </CardFooter >
-              <InputEdit handleOnInput={(e) => handleInputCertificate(e, index)}/>
-            </Card>
-          </Flex>
-        ))}
-      </Wrap>
+      <Box minH="100%" bg="teal.200" justifyContent={"center"} display={"flex"}>
+        <Wrap
+          spacing={"1.2rem"}
+          bg="teal.200"
+          p="1.4rem"
+          display={"flex"}
+          width={"81.25rem"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          {uploadedDocumentation === undefined || uploadedDocumentation.length === 0 ? 
+          <Box h='calc(85vh)' alignContent={"center"}><WarningCard text={"There are no certificates uploaded yet"}/></Box> 
+          :
+          uploadedDocumentation.map((document, index) => (
+            <Flex py="1.2rem" justifyContent="center" alignItems={"center"} alignContent={"center"} display={"flex"}>
+              <Card
+                borderRadius="45px"
+                bg="rgba(255, 255, 255, 0.8)"
+                align="center"
+                p="1.6rem"
+                w={"25rem"}
+                h={"18rem"}
+                key={index}
+              >           
+                <CardHeader>
+                  <Heading textAlign="center" size="md">
+                    {document.name}
+                  </Heading>
+                </CardHeader>
+                <CardBody align="center">
+                  <Text>{document.file_type}</Text>
+                </CardBody>
+                <CardFooter w="100%">
+                  <Text color="white" w="100%" bg="red.900" borderRadius={"45px"}>
+                    <Center>Document ID: {document.id}</Center>
+                  </Text>
+                </CardFooter >
+                <InputEdit handleOnInput={(e) => handleInputCertificate(e, index)}/>
+              </Card>
+            </Flex>
+          ))}
+        </Wrap>
+      </Box>
       <ConfirmationModal
               id="modal-confirmation"
               question={"Are you sure you want to download the documents?"}

@@ -75,7 +75,6 @@ def advance_to_stage_2(session):
     process = session.query(Process).filter_by(code="PRC123").first()
 
     json_avo = {
-        "id": 0,
         "first_name": "avo name",
         "last_name": "Doe",
         "birth_date": "2025-02-08",
@@ -94,25 +93,19 @@ def advance_to_stage_3(session):
 
     json_documents = [
         {
-            "id": 0,
             "name": "user document",
             "file_type": "png",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         },
         {
-            "id": 1,
             "name": "user document 2",
             "file_type": "png",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         },
         {
-            "id": 2,
             "name": "user document 3",
             "file_type": "PDF",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         }
     ]
 
@@ -128,11 +121,9 @@ def advance_to_stage_4(session):
 
     json_documents = [
         {
-            "id": 3,
             "name": "avo document",
             "file_type": "png",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         }
     ]
 
@@ -146,8 +137,6 @@ def advance_to_stage_4(session):
 def advance_to_stage_5(session):
     process: Process = advance_to_stage_4(session)
 
-    process.ancestor_count = 2
-
     session.add(process)
     session.commit()
     session.refresh(process)
@@ -155,18 +144,14 @@ def advance_to_stage_5(session):
     json_documents = {
         "count": 2,
         "documentation": [{
-            "id": 4,
             "name": "ancestor document",
             "file_type": "png",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         },
         {
-            "id": 5,
             "name": "ancestor document",
             "file_type": "png",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         }]
     }
 
@@ -211,7 +196,6 @@ def test_upload_avo(session):
     process = session.query(Process).filter_by(code="PRC123").first()
 
     json_avo = {
-        "id": 0,
         "first_name": "John",
         "last_name": "Doe",
         "birth_date": "2025-02-08",
@@ -235,7 +219,6 @@ def test_upload_invalid_avo(session):
     process = session.query(Process).filter_by(code="PRC123").first()
 
     json_avo = {
-        "id": 0,
         "first_name": "",
         "last_name": "",
         "birth_date": "2025-02-08",
@@ -247,7 +230,6 @@ def test_upload_invalid_avo(session):
 
 def test_upload_avo_failed(session):
     json_avo = {
-        "id": 0,
         "first_name": "",
         "last_name": "",
         "birth_date": "2025-02-08",
@@ -264,25 +246,19 @@ def test_upload_user_documents_success(session):
 
     json_documents = [
         {
-            "id": 0,
             "name": "user document",
             "file_type": "png",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         },
         {
-            "id": 1,
             "name": "user document 2",
             "file_type": "png",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         },
         {
-            "id": 2,
             "name": "user document 3",
             "file_type": "PDF",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         }
     ]
 
@@ -306,11 +282,9 @@ def test_upload_user_documents_process_failed(session):
 
     json_documents = [
         {
-            "id": 0,
             "name": "user document",
             "file_type": "png",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         }
     ]
 
@@ -327,11 +301,9 @@ def test_upload_avo_documents_success(session):
 
     json_documents = [
         {
-            "id": 3,
             "name": "avo document",
             "file_type": "PDF",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         }
     ]
 
@@ -363,11 +335,9 @@ def test_upload_avo_documents_failed(session):
 
     json_documents = [
         {
-            "id": 3,
             "name": "avo document",
             "file_type": "PDF",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         }
     ]
     
@@ -386,18 +356,14 @@ def test_upload_ancestors_documents_success(session):
     json_documents = {
         "count": 2,
         "documentation": [{
-            "id": 4,
             "name": "ancestor document",
             "file_type": "png",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         },
         {
-            "id": 5,
             "name": "ancestor document",
             "file_type": "png",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         }]
     }
 
@@ -426,11 +392,9 @@ def test_upload_ancestor_documents_insufficient(session):
     json_documents = {
         "count": 2,
         "documentation": [{
-            "id": 4,
             "name": "ancestor document",
             "file_type": "png",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         }]
     }
 
@@ -443,18 +407,14 @@ def test_upload_ancestor_documents_failed(session):
     json_documents = {
         "count": 2,
         "documentation": [{
-            "id": 4,
             "name": "ancestor document",
             "file_type": "png",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         },
         {
-            "id": 5,
             "name": "ancestor document",
             "file_type": "png",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         }]
     }
     
@@ -468,11 +428,9 @@ def test_upload_translated_documents_success(session):
 
     translated_docs = [
         {
-            "id": 6 + i,
             "name": f"translated doc{i}",
             "file_type": "PDF",
-            "file_base64": "encoded",
-            "process_id": process.id
+            "file_base64": "encoded"
         }
         for i in range(len(process.attachments_to_translate))
     ]    
@@ -497,11 +455,9 @@ def test_upload_translated_documents_insufficient(session):
 
     translated_docs = [
             {
-                "id": 6 + i,
                 "name": f"translated doc{i}",
                 "file_type": "PDF",
-                "file_base64": "encoded",
-                "process_id": process.id
+                "file_base64": "encoded"
             }
             for i in range(len(process.attachments_to_translate)-1)
         ]     
@@ -514,11 +470,9 @@ def test_upload_translated_documents_failed(session):
 
     translated_docs = [
             {
-                "id": 6 + i,
                 "name": f"translated doc{i}",
                 "file_type": "PDF",
-                "file_base64": "encoded",
-                "process_id": process.id
+                "file_base64": "encoded"
             }
             for i in range(len(process.attachments_to_translate)-1)
         ]     
@@ -534,7 +488,7 @@ def test_get_documents_success(session):
     response = client.get(f"/api/process/documentation/{process.id}")
 
     assert response.status_code == 200
-    assert len(response.json()) == 10
+    assert len(response.json()) == 6
 
 def test_get_documents_process_not_found(session):
     response = client.get(f"/api/process/documentation/{4333434}")

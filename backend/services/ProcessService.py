@@ -1,6 +1,7 @@
 import uuid
 from typing import List, Optional
 from fastapi import Depends, HTTPException
+from models.DocumentationUpdateModel import DocumentationUpdateModel
 from models.AncestorDocumentationModel import AncestorDocumentationModel
 from models.StageModel import StageModel
 from models.ProcessModel import ProcessModel
@@ -38,15 +39,17 @@ class ProcessService:
 
         avo_request = AVORequest(**avo.model_dump())
         process.assign_avo_request(avo_request)
+        previous_stage = process.stage
         process.advance_stage()
 
         self.db.add(process.stage)
+        self.db.delete(previous_stage)
         self.db.commit()
         self.db.refresh(process)
 
         return process
 
-    def upload_user_documents(self, process_id: int, user_documents: List[DocumentationModel]) -> ProcessModel:
+    def upload_user_documents(self, process_id: int, user_documents: List[DocumentationUpdateModel]) -> ProcessModel:
         process: Process = self.db.query(Process).filter(Process.id == process_id).first()
         if not process:
             raise HTTPException(status_code=404, detail="Process not found.")
@@ -59,15 +62,17 @@ class ProcessService:
         process.add_user_documentation(user_documentation_list)
         selected_documents = [doc for doc in user_documents if doc.file_type.lower() == "pdf"]
         process.add_attachments_to_translate(selected_documents)
+        previous_stage = process.stage
         process.advance_stage()
 
         self.db.add(process.stage)
+        self.db.delete(previous_stage)
         self.db.commit()
         self.db.refresh(process)
 
         return process
 
-    def upload_avo_documents(self, process_id: int, avo_documents: List[DocumentationModel]) -> ProcessModel:
+    def upload_avo_documents(self, process_id: int, avo_documents: List[DocumentationUpdateModel]) -> ProcessModel:
         process: Process = self.db.query(Process).filter(Process.id == process_id).first()
         if not process:
             raise HTTPException(status_code=404, detail="Process not found.")
@@ -79,9 +84,11 @@ class ProcessService:
 
         process.add_avo_documentation(avo_documentation_list)
         process.add_attachments_to_translate(avo_documentation_list)
+        previous_stage = process.stage
         process.advance_stage()
 
         self.db.add(process.stage)
+        self.db.delete(previous_stage)
         self.db.commit()
         self.db.refresh(process)
 
@@ -101,15 +108,17 @@ class ProcessService:
 
         process.add_ancestors_documentation(ancestor_documentation_list)
         process.add_attachments_to_translate(ancestor_documentation_list)
+        previous_stage = process.stage
         process.advance_stage()
 
         self.db.add(process.stage)
+        self.db.delete(previous_stage)
         self.db.commit()
         self.db.refresh(process)
 
         return process
 
-    def upload_translated_documents(self, user_id: int, translated_documents: List[DocumentationModel]) -> ProcessModel:
+    def upload_translated_documents(self, user_id: int, translated_documents: List[DocumentationUpdateModel]) -> ProcessModel:
         user = self.db.query(User).filter(User.id == user_id).first()
         if not user:
             raise HTTPException(status_code=404, detail="User not found.")
@@ -124,9 +133,11 @@ class ProcessService:
             translated_documentation_list.append(document)
 
         process.add_translated_documentation(translated_documentation_list)
+        previous_stage = process.stage
         process.advance_stage()
 
         self.db.add(process.stage)
+        self.db.delete(previous_stage)
         self.db.commit()
         self.db.refresh(process)
 

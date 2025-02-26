@@ -118,7 +118,7 @@ function AvoProfile() {
         setIsChecked(true);
       }
     }
-  }, []); 
+  }, [edit]); 
   
   return (
     <Box minH="100%" h="100%" p="3%" bg="teal.200">
@@ -337,7 +337,6 @@ function AvoProfile() {
               color="white"
               w="40%"
               bg="blue.900"
-              py="2%"
             >
               {"Save"}
             </Button>

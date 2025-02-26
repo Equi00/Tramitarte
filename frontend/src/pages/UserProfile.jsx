@@ -195,7 +195,6 @@ useEffect(() => {
               color="white"
               w="40%"
               bg="blue.900"
-              py="2%"
             >
               {"Save"}
             </Button>

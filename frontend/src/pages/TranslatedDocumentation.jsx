@@ -221,13 +221,13 @@ const TranslatedDocumentation = () => {
                     {"Enter the translated documentation"}
                 </Text>
                 </Flex>
-                <Center flexWrap="wrap" gap={2} w="100%" p="2%">
+                <Center flexWrap="wrap" gap={2} w="100%" p="2%" display={"grid"}>
                     {documents.map((document, index) => (
                         <InputFile key={index} action={documentName[index] === typeName[index] ? typeName[index] + "(.pdf)" : documentName[index]} handleOnInput={(e) => handleInputCertificate(e, index)}/>
                     ))}
                 </Center>
             </Flex>
-            <Flex justifyContent="center" w="full" py="16">
+            <Flex justifyContent="center" w="full">
                 <Button
                 onClick={handleSend}
                 borderRadius="45px"

@@ -1,7 +1,7 @@
 from typing import List
 from pydantic import BaseModel
-from models.DocumentationModel import DocumentationModel
+from models.DocumentationUpdateModel import DocumentationUpdateModel
 
 class AncestorDocumentationModel(BaseModel):
     count: int
-    documentation: List[DocumentationModel]
+    documentation: List[DocumentationUpdateModel]

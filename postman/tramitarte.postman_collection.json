@@ -684,7 +684,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"id\": 0,\r\n  \"first_name\": \"string\",\r\n  \"last_name\": \"string\",\r\n  \"birth_date\": \"2025-02-09\",\r\n  \"gender\": \"Male\"\r\n}",
+							"raw": "{\r\n  \"first_name\": \"string\",\r\n  \"last_name\": \"string\",\r\n  \"birth_date\": \"2025-02-09\",\r\n  \"gender\": \"Male\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -705,7 +705,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n  {\r\n    \"id\": 0,\r\n    \"name\": \"string\",\r\n    \"file_type\": \"string\",\r\n    \"file_base64\": \"string\",\r\n    \"process_id\": 0\r\n  }\r\n]",
+							"raw": "[\r\n  {\r\n    \"name\": \"string\",\r\n    \"file_type\": \"string\",\r\n    \"file_base64\": \"string\"\r\n  }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -726,7 +726,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n  {\r\n    \"id\": 0,\r\n    \"name\": \"string\",\r\n    \"file_type\": \"string\",\r\n    \"file_base64\": \"string\",\r\n    \"process_id\": 0\r\n  }\r\n]",
+							"raw": "[\r\n  {\r\n    \"name\": \"string\",\r\n    \"file_type\": \"string\",\r\n    \"file_base64\": \"string\"\r\n  }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -747,7 +747,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"count\": 2,\r\n        \"documentation\": [{\r\n            \"id\": 4,\r\n            \"name\": \"ancestor document\",\r\n            \"file_type\": \"png\",\r\n            \"file_base64\": \"dGVzdA==\",\r\n            \"process_id\": 0\r\n        },\r\n        {\r\n            \"id\": 5,\r\n            \"name\": \"ancestor document\",\r\n            \"file_type\": \"png\",\r\n            \"file_base64\": \"dGVzdA==\",\r\n            \"process_id\": 0\r\n        }]\r\n}",
+							"raw": "{\r\n    \"count\": 2,\r\n        \"documentation\": [{\r\n            \"name\": \"ancestor document\",\r\n            \"file_type\": \"png\",\r\n            \"file_base64\": \"dGVzdA==\"\r\n        },\r\n        {\r\n            \"name\": \"ancestor document\",\r\n            \"file_type\": \"png\",\r\n            \"file_base64\": \"dGVzdA==\"\r\n        }]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -768,7 +768,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n  {\r\n    \"id\": 0,\r\n    \"name\": \"string\",\r\n    \"file_type\": \"string\",\r\n    \"file_base64\": \"string\",\r\n    \"process_id\": 0\r\n  }\r\n]",
+							"raw": "[\r\n  {\r\n    \"name\": \"string\",\r\n    \"file_type\": \"string\",\r\n    \"file_base64\": \"string\"\r\n  }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"

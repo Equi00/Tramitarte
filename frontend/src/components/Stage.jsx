@@ -88,7 +88,8 @@ const openCancelModal = (requestHooked) => {
   }
 
   const downloadFiles = async () => {
-    const arrayFiles = savedRequest.documentation;
+    let process = await processService.searchProcessByUserId(userId)
+    const arrayFiles = await userService.getDocumentationUploaded(process.id);
     console.log(arrayFiles)
     const zip = new JSZip();
   
@@ -128,8 +129,7 @@ const openCancelModal = (requestHooked) => {
 
   const downloadAllRequester = async () => {
     setIsLoading(true)
-    let process = await processService.searchProcessByUserId(userId)
-    const allDocumentation = process.data.documentations;
+    const allDocumentation = await userService.getDocumentationUploaded(process.id);
     const arrayFiles = allDocumentation;
     console.log(arrayFiles)
     const zip = new JSZip();
@@ -243,7 +243,7 @@ const openCancelModal = (requestHooked) => {
         </CardBody>
         <CardFooter w="100%">
           <Button
-            onClick={() => {process.stage.description === "Process completed, click to download files" ? openDownloadModal() :
+            onClick={() => {process.stage.description.toUpperCase() === "PROCESS COMPLETED, CLICK TO DOWNLOAD FILES" ? openDownloadModal() :
               navigate(chooseRoute(process.stage.description));
             }}
             textTransform="uppercase"

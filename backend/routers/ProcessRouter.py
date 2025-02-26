@@ -85,7 +85,7 @@ async def upload_avo(
 
 
 @p_router.post("/upload/documentation/user/{user_id}")
-async def upload_user_documentation(user_id: int, documentation: List[DocumentationModel], service: ProcessService = Depends(get_process_service)) -> dict:
+async def upload_user_documentation(user_id: int, documentation: List[DocumentationUpdateModel], service: ProcessService = Depends(get_process_service)) -> dict:
     try:
         service.upload_user_documents(user_id, documentation)
         return {"message": "Documentation successfully saved"}
@@ -94,7 +94,7 @@ async def upload_user_documentation(user_id: int, documentation: List[Documentat
 
 
 @p_router.post("/upload/documentation/avo/{process_id}")
-async def upload_avo_documentation(process_id: int, documentation: List[DocumentationModel], service: ProcessService = Depends(get_process_service)) -> dict:
+async def upload_avo_documentation(process_id: int, documentation: List[DocumentationUpdateModel], service: ProcessService = Depends(get_process_service)) -> dict:
     service.upload_avo_documents(process_id, documentation)
     return {"message": "Documentation successfully saved"}
     
@@ -110,7 +110,7 @@ async def upload_ancestors_documentation(process_id: int, documentation: Ancesto
 
 
 @p_router.post("/upload/documentation/translated/{user_id}", response_model=ProcessModel)
-async def upload_translated_documentation(user_id: int, documentation: List[DocumentationModel], service: ProcessService = Depends(get_process_service)):
+async def upload_translated_documentation(user_id: int, documentation: List[DocumentationUpdateModel], service: ProcessService = Depends(get_process_service)):
     try:
         return service.upload_translated_documents(user_id, documentation)
     except ValueError as e:

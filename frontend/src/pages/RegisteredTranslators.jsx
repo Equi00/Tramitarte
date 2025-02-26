@@ -44,8 +44,8 @@ function RegisteredTranslators() {
       console.log(process)
       const requests = await userService.searchRequestByRequesterAndTranslator(userId, translatorTemp.id);
       const requesterRequest = await userService.searchRequestByRequester(userId)
-      if(process.data !== ""){
-        if(process && (process.data.stage.descripcion === "Load Translated Documentation" || process.data.stage.descripcion === "Process Completed, click to download files")){
+      if(process.data !== null){
+        if(process.data.stage.description === "Load Translated Documentation" || process.data.stage.description === "Process Completed, click to download files"){
           if (requests && requests.length > 0) {
             onOpenError();
           } else if(requesterRequest) {
