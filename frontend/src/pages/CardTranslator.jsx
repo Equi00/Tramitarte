@@ -141,7 +141,7 @@ import ConfirmationModal from "../components/modals/ConfirmationModal";
             <Heading textAlign="center" size="md">{"Translation Request"}</Heading>
           </CardHeader>
           <CardBody align="center">
-            <Text>{"Requester email: "}<Text fontWeight={700}>{task.process.user.name}</Text></Text>
+            <Text>{"Requester email: "}<Text fontWeight={700}>{task.process.user.email}</Text></Text>
             <Text>{"Attachments to translate: "+task.process.attachments_to_translate.length}</Text>
           </CardBody>
           <CardFooter w="20rem" justifyContent={"center"}>

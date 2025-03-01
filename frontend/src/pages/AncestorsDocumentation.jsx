@@ -46,14 +46,15 @@ function AncestorsDocumentation() {
     });
   
     setPeople(ancestors);
+    setAncestorDocumentation(ancestors);
   };
 
   const openModal = () => {
     if(ancestorDocumentation.some((element, index) => {
       return (
-        (element?.deathCertificate?.name === "" && verified1[index]) ||
-        (element?.marriageCertificate?.name === "" && verified2[index]) || 
-        (element?.birthCertificate?.name === "")
+        (element.deathCertificate.name === "" && verified1[index]) ||
+        (element.marriageCertificate.name === "" && verified2[index]) || 
+        (element.birthCertificate.name === "")
       );
     }))
     {
@@ -314,8 +315,8 @@ function AncestorsDocumentation() {
         onClose={closeModal}
       />
       <ModalError
-        pregunta={"One or more files are missing."}
-        datoAConfirmar={
+        question={"One or more files are missing."}
+        dataToConfirm={
           "Please enter all necessary files to complete this step."
         }
         isOpen={isOpenError}

@@ -60,7 +60,7 @@ class ProcessService:
             user_documentation_list.append(document)
 
         process.add_user_documentation(user_documentation_list)
-        selected_documents = [doc for doc in user_documents if doc.file_type.lower() == "pdf"]
+        selected_documents = [doc for doc in user_documents if ".pdf" in doc.name.lower()]
         process.add_attachments_to_translate(selected_documents)
         previous_stage = process.stage
         process.advance_stage()

@@ -11,8 +11,8 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <Auth0Provider
-      domain="dev-ojseedpow7eya4ne.us.auth0.com"
-      clientId="mtwlRPa0mHPrfTP7ZULvKF2HFOyzQnoJ"
+      domain={auth0Domain}
+      clientId={auth0ClientId}
       authorizationParams={{
         redirect_uri: "http://localhost:3000/verificacion",
       }}

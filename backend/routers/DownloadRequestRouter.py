@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import Annotated, List
 from sqlalchemy.orm import Session
+from models.DocumentationUpdateModel import DocumentationUpdateModel
 from models.DownloadRequestModel import DownloadRequestModel
 from models.DocumentationModel import DocumentationModel
 from entities.Documentation import Documentation
@@ -38,7 +39,7 @@ async def get_download_requests_by_requester(
 async def create_download_request(
     requester_id: int,
     translator_id: int,
-    documents: List[DocumentationModel],
+    documents: List[DocumentationUpdateModel],
     service: DownloadRequestService = Depends(get_download_request_service)
 ):
     return service.create_download_request(requester_id, translator_id, documents)

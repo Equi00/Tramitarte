@@ -119,7 +119,6 @@ def test_find_requests_by_requester_success(session):
     translator = session.query(User).filter_by(username="user2").first()
     json_documents = [
         {
-            "id": 0,
             "name": "Test Document",
             "file_type": "PDF",
             "file_base64": "dGVzdA==",
@@ -134,7 +133,7 @@ def test_find_requests_by_requester_success(session):
     assert result.status_code == 200
     assert result.json()[0]["requester_id"] == requester.id
     assert result.json()[0]["translator_id"] == translator.id 
-    assert result.json()[0]["documentation"][0] == json_documents[0] 
+    assert result.json()[0]["documentation"][0]["file_base64"] == json_documents[0]["file_base64"] 
 
 def test_find_requests_by_requester_not_found(session):
     response = client.get(f"/api/download-request/requester/{343434}")

@@ -141,20 +141,19 @@ const LoadDocuments = () => {
         }
       }
 
-      const handleSend = async () => {
-        console.log("documentation: ", certificate)
-        
+      const handleSend = async () => {        
         let names = certificate.map((document) => document.name);
-        console.log("names", names)
-        if(documents.length !== count){
+        if(names.some(element => element === undefined)){
             onOpenError2()
         }else{
             let translatorId = JSON.parse(localStorage.getItem('translatorId'))
             let requesterId = JSON.parse(localStorage.getItem('requesterId'))
             let taskId = JSON.parse(localStorage.getItem('taskId'))
+            let translator = userService.getById(translatorId)
+            
             await userService.createDownloadRequest(requesterId, translatorId, certificate)
             await userService.deleteTranslationTask(taskId)
-            await userService.sendAlert(translatorId, requesterId, "Translator "+user.name+" has sent the translated documents")
+            await userService.sendAlert(translatorId, requesterId, "Translator "+translator.name+" has sent the translated documents")
             navigate(-1)
         }
       }
@@ -230,7 +229,7 @@ const LoadDocuments = () => {
                     {"Enter the translated documentation"}
                 </Text>
                 </Flex>
-                <Center flexWrap="wrap" gap={2} w="100%" p="2%">
+                <Center flexWrap="wrap" gap={2} w="100%" p="2%" display={"grid"}>
                     {documents.map((document, index) => (
                         <InputFile key={index} action={documentName[index] === typeName[index] ? typeName[index] + "(.pdf)" : documentName[index]} handleOnInput={(e) => handleInputCertificate(e, index)}/>
                     ))}
@@ -267,8 +266,8 @@ const LoadDocuments = () => {
                 onClose={onCloseError2}
             />
             <ModalError
-                pregunta={"The file extension is not valid"}
-                datoAConfirmar={
+                question={"The file extension is not valid"}
+                dataToConfirm={
                 "Please choose a file with the extension ¨.pdf¨."
                 }
                 isOpen={isOpenError3}

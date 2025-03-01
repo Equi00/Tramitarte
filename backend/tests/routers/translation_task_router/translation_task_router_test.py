@@ -130,7 +130,7 @@ def test_find_by_process_success(session):
 
     assert response.status_code == 200
     assert response.json()[0]["translator_id"] == translator.id
-    assert response.json()[0]["process_id"] == process.id
+    assert response.json()[0]["process"]["id"] == process.id
 
 
 def test_find_by_process_not_found(session):

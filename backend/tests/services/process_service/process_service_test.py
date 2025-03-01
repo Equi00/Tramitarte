@@ -79,7 +79,7 @@ def advance_to_stage_3(session, process_service):
     documents = [
         DocumentationUpdateModel(name="user document", file_type="png", file_base64="dGVzdA=="),
         DocumentationUpdateModel(name="user document 2", file_type="png", file_base64="dGVzdA=="),
-        DocumentationUpdateModel(name="user document 3", file_type="PDF", file_base64="dGVzdA==")
+        DocumentationUpdateModel(name="user document 3.pdf", file_type="PDF", file_base64="dGVzdA==")
     ]
 
     return process_service.upload_user_documents(process.id, documents)
@@ -175,7 +175,7 @@ def test_upload_user_documents_success(process_service, session):
     documents = [
         DocumentationUpdateModel(name="user document", file_type="png", file_base64="dGVzdA=="),
         DocumentationUpdateModel(name="user document 2", file_type="png", file_base64="dGVzdA=="),
-        DocumentationUpdateModel(name="user document 3", file_type="PDF", file_base64="dGVzdA==")
+        DocumentationUpdateModel(name="user document 3.pdf", file_type="PDF", file_base64="dGVzdA==")
     ]
 
     updated_process = process_service.upload_user_documents(process.id, documents)

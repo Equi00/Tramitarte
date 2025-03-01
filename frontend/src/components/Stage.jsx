@@ -88,8 +88,7 @@ const openCancelModal = (requestHooked) => {
   }
 
   const downloadFiles = async () => {
-    let process = await processService.searchProcessByUserId(userId)
-    const arrayFiles = await userService.getDocumentationUploaded(process.id);
+    const arrayFiles = savedRequest.documentation;
     console.log(arrayFiles)
     const zip = new JSZip();
   

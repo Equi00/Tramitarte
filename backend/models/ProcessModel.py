@@ -1,6 +1,6 @@
 from typing import List, Optional
 from openai import BaseModel
-from models.AVORequestModel import AVORequestModel
+from models.ShortUserModel import ShortUserModel
 from models.StageModel import StageModel
 from models.DocumentationModel import DocumentationModel
 
@@ -8,7 +8,7 @@ from models.DocumentationModel import DocumentationModel
 class ProcessModel(BaseModel):
     id: int
     code: str
-    user_id: int
+    user: ShortUserModel
     request_avo_id: Optional[int] = None
     descendant_count: int = 0
 

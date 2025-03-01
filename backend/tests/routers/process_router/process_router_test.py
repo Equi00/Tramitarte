@@ -103,7 +103,7 @@ def advance_to_stage_3(session):
             "file_base64": "dGVzdA=="
         },
         {
-            "name": "user document 3",
+            "name": "user document 3.pdf",
             "file_type": "PDF",
             "file_base64": "dGVzdA=="
         }
@@ -256,7 +256,7 @@ def test_upload_user_documents_success(session):
             "file_base64": "dGVzdA=="
         },
         {
-            "name": "user document 3",
+            "name": "user document 3.pdf",
             "file_type": "PDF",
             "file_base64": "dGVzdA=="
         }

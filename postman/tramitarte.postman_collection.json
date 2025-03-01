@@ -545,7 +545,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"id\": 0,\r\n        \"name\": \"Test Document\",\r\n        \"file_type\": \"PDF\",\r\n        \"file_base64\": \"dGVzdA==\",\r\n        \"process_id\": 0\r\n    }\r\n]",
+							"raw": "[\r\n    {\r\n        \"name\": \"Test Document\",\r\n        \"file_type\": \"PDF\",\r\n        \"file_base64\": \"dGVzdA==\"\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"

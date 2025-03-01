@@ -24,7 +24,6 @@ function TranslationRequests() {
   const [savedRequest, setSavedRequest] = useState()
   const [requests, setRequests] = useState([]) 
   const { userId } = useParams();
-  const [requesterNames, setRequesterNames] = useState({});
 
   const handleBack = () => {
     navigate(-1);
@@ -48,15 +47,15 @@ function TranslationRequests() {
     setIsCancelOpen(false);
   };
 
-  const soli = async () =>{
+  const getRequests = async () =>{
     let requests = await userService.searchTranslateRequests(userId)
     setRequests(requests)
   }
 
   const sendAcceptNotification = async () => {
     let user = await userService.getById(userId)
-    await userService.createTranslationTask(savedRequest.requester_id, userId)
-    await userService.sendAlert(userId, savedRequest.requester_id, "Translator "+user.name+" has accepted your request")
+    await userService.createTranslationTask(savedRequest.requester.id, userId)
+    await userService.sendAlert(userId, savedRequest.requester.id, "Translator "+user.name+" has accepted your request")
     await userService.deleteTranslationRequest(savedRequest.id)
     closeConfirmationModal()
   }
@@ -64,29 +63,12 @@ function TranslationRequests() {
   const sendCancelNotification = async () => {
     let user = await userService.getById(userId)
     await userService.deleteTranslationRequest(savedRequest.id)
-    await userService.sendAlert(userId, savedRequest.requester_id, "Translator "+user.name+" has rejected your request")
+    await userService.sendAlert(userId, savedRequest.requester.id, "Translator "+user.name+" has rejected your request")
     closeCancelModal()
   }
-
-  useEffect(() => {
-    const fetchRequesterNames = async () => {
-      let names = {};
-      for (let request of requests) {
-        let user = await userService.getById(request.requester_id);
-        console.log(user.data)
-        names[request.requester_id] = user.data.name;
-      }
-      setRequesterNames(names);
-    };
   
-    if (requests.length > 0) {
-      fetchRequesterNames();
-    }
-  }, [requests]);
-  
-
   useEffect(() => {
-    soli()
+    getRequests()
   }, [requests])
 
   return (
@@ -137,7 +119,8 @@ function TranslationRequests() {
             </Flex>
             <Center h="100%" flexBasis="50%">
               <VStack alignItems="center" justifyContent="center">
-                <Heading textAlign="center" fontSize={15}>{requesterNames[request.requester_id] || "Loading..."}</Heading>
+                <Heading textAlign="center" fontSize={15}>{request.requester.username}</Heading>
+                <Heading textAlign="center" fontSize={15}>{request.requester.email}</Heading>
                 <Text>{"Ask for your services"}</Text>
               </VStack>
             </Center>
@@ -158,14 +141,14 @@ function TranslationRequests() {
       </Wrap>
       <ConfirmationModal
               id="modal-confirmation"
-              question={savedRequest && "Are you sure you want to accept the order "+requesterNames[savedRequest.requester_id]+"?"}
+              question={savedRequest && "Are you sure you want to accept the order "+savedRequest.requester.username+"?"}
               isOpen={isConfirmationOpen}
               handleConfirmation={sendAcceptNotification}
               onClose={closeConfirmationModal}
       />
       <ConfirmationModal
               id="modal-confirmation"
-              question={savedRequest && "Are you sure you want to reject the request of "+requesterNames[savedRequest.requester_id]+"?"}
+              question={savedRequest && "Are you sure you want to reject the request of "+savedRequest.requester.username+"?"}
               isOpen={isCancelOpen}
               handleConfirmation={sendCancelNotification}
               onClose={closeCancelModal}
