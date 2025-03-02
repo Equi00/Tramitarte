@@ -25,7 +25,6 @@ export const RouterApp = ({ setProcessContext, setLoggedUserContext }) => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<Login />} />
         <Route
           path="role-election"
           element={
@@ -97,12 +96,9 @@ export const RouterApp = ({ setProcessContext, setLoggedUserContext }) => {
         <Route path="/user" element={<UserProfile />} />
         <Route path="/avo-profile" element={<AvoProfile />} />
         <Route path="/frequently-asked-questions" element={<FrequentQuestions />} />
-        <Route path="/requesters" element={<div>requesters</div>} />
         <Route path="/pending-orders" element={<TranslationRequests />} />
         <Route path="/documentation-uploaded" element={<DocumentationUploaded />} />
         <Route path="/network-error" element={<div>Error</div>} />
-        
-        <Route path="*" element={<ConfirmationModal />} />
       </Routes>
     </BrowserRouter>
   );
