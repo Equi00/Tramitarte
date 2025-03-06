@@ -41,5 +41,5 @@
 - Docker
 - React
 - Javascript
-- Chakra ui
+- Tesseract
 - Auth0
