@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
-from typing import Annotated, List, Optional, Union
+from typing import Annotated, List, Optional
 from models.TranslationRequestModel import TranslationRequestModel
 from models.UserModel import UserModel
 from models.NotificationModel import NotificationModel
@@ -8,7 +8,6 @@ from entities.User import User
 from database.Database import SessionLocal
 from models.UpdateUserModel import UpdateUserModel
 from models.CreateUserModel import CreateUserModel
-from entities.TranslationRequest import TranslationRequest
 from sqlalchemy.orm import Session
 from enums.Role import Role
 
@@ -60,11 +59,11 @@ async def get_translation_requests_by_requester_and_translator(
 ):
     return service.find_translation_requests_by_requester_and_translator(requester_id, translator_id)
 
-@u_router.get("/requests/requester/{requester_id}", response_model=Union[TranslationRequestModel|None])
+@u_router.get("/requests/requester/{requester_id}", response_model=Optional[TranslationRequestModel])
 async def get_request_by_requester(requester_id: int, service: UserService = Depends(get_user_service)):
     return service.find_request_by_requester(requester_id)
 
-@u_router.get("/translator/email", response_model=Union[UserModel|None])
+@u_router.get("/translator/email", response_model=Optional[UserModel])
 async def get_translator_by_email(email: str, service: UserService = Depends(get_user_service)):
     return service.find_translator_by_email(email)
 

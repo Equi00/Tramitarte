@@ -4,8 +4,7 @@ pybase64
 databases
 datetime
 fastapi
-fitz
-importlib
+PyMuPDF
 openai
 pdf2image
 pydantic
@@ -15,3 +14,4 @@ pytest
 sqlalchemy
 typing
 uuid
+psycopg2-binary

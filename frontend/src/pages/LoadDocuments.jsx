@@ -153,7 +153,7 @@ const LoadDocuments = () => {
             
             await userService.createDownloadRequest(requesterId, translatorId, certificate)
             await userService.deleteTranslationTask(taskId)
-            await userService.sendAlert(translatorId, requesterId, "Translator "+translator.name+" has sent the translated documents")
+            await userService.sendAlert(translatorId, requesterId, "You have received the translated documents")
             navigate(-1)
         }
       }

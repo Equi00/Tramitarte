@@ -90,7 +90,7 @@ function RegisteredTranslators() {
       console.log(savedTranslator.id)
       let user = await userService.getById(userId)
       console.log(user)
-      await userService.sendNotification(userId, savedTranslator.id, "El usuario " + user.name + " requiere de sus servicios");
+      await userService.sendNotification(userId, savedTranslator.id, "The user " + user.email + " requires your services");
     } catch (e) {
       console.log(e)
       navigate("/network-error");
@@ -186,13 +186,13 @@ function RegisteredTranslators() {
       </Wrap>
       <ConfirmationModal
               id="modal-confirmation"
-              question={savedTranslator && "Are you sure you want to order the services of the translator "+savedTranslator.name+"?"}
+              question={savedTranslator && "Are you sure you want to order the services of the translator "+savedTranslator.email+"?"}
               isOpen={isModalOpen}
               handleConfirmation={sendNotificationTranslator}
               onClose={closeModal}
             />
       <ModalError
-        question={savedTranslator && "Already sent a request to the translator "+savedTranslator.nombre}
+        question={savedTranslator && "Already sent a request to the translator "+savedTranslator.email}
         dataToConfirm={
           "Please wait for the request to be accepted or you can ask another translator for the service."
         }
@@ -211,7 +211,7 @@ function RegisteredTranslators() {
         id="modal-confirmation"
         question={"¡WARNING!"}
         dataToConfirm={savedTranslator && 
-          "You have already sent a translation request to another translator. Are you sure you want to send a request to "+savedTranslator.nombre+"?"}
+          "You have already sent a translation request to another translator. Are you sure you want to send a request to "+savedTranslator.email+"?"}
         secondParagraph={"If you accept, your previous request will be deleted."}
         isOpen={isOpenWarning}
         handleConfirmation={deletePreviousRequest}

@@ -55,7 +55,7 @@ function TranslationRequests() {
   const sendAcceptNotification = async () => {
     let user = await userService.getById(userId)
     await userService.createTranslationTask(savedRequest.requester.id, userId)
-    await userService.sendAlert(userId, savedRequest.requester.id, "Translator "+user.name+" has accepted your request")
+    await userService.sendAlert(userId, savedRequest.requester.id, "Translator "+user.email+" has accepted your request")
     await userService.deleteTranslationRequest(savedRequest.id)
     closeConfirmationModal()
   }
@@ -63,7 +63,7 @@ function TranslationRequests() {
   const sendCancelNotification = async () => {
     let user = await userService.getById(userId)
     await userService.deleteTranslationRequest(savedRequest.id)
-    await userService.sendAlert(userId, savedRequest.requester.id, "Translator "+user.name+" has rejected your request")
+    await userService.sendAlert(userId, savedRequest.requester.id, "Translator "+user.email+" has rejected your request")
     closeCancelModal()
   }
   
@@ -141,14 +141,14 @@ function TranslationRequests() {
       </Wrap>
       <ConfirmationModal
               id="modal-confirmation"
-              question={savedRequest && "Are you sure you want to accept the order "+savedRequest.requester.username+"?"}
+              question={savedRequest && "Are you sure you want to accept the order "+savedRequest.requester.email+"?"}
               isOpen={isConfirmationOpen}
               handleConfirmation={sendAcceptNotification}
               onClose={closeConfirmationModal}
       />
       <ConfirmationModal
               id="modal-confirmation"
-              question={savedRequest && "Are you sure you want to reject the request of "+savedRequest.requester.username+"?"}
+              question={savedRequest && "Are you sure you want to reject the request of "+savedRequest.requester.email+"?"}
               isOpen={isCancelOpen}
               handleConfirmation={sendCancelNotification}
               onClose={closeCancelModal}

@@ -1,12 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "../pages/Home";
-import Login from "../pages/Login";
 import Process from "../pages/Process";
 import UserHome from "../pages/UserHome";
 import UserProfile from "../pages/UserProfile";
 import FrequentQuestions from "../pages/FrequentQuestions";
 import RegisteredTranslators from "../pages/RegisteredTranslators";
-import ConfirmationModal from "../components/modals/ConfirmationModal";
 import RoleElection from "../pages/RoleElection";
 import AVORequest from "../pages/AVORequest";
 import TranslationRequests from "../pages/TranslationRequests";

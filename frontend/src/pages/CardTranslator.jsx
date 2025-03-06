@@ -64,7 +64,7 @@ import ConfirmationModal from "../components/modals/ConfirmationModal";
 
     const sendCancelNotification = async () => {
         await userService.deleteTranslationTask(savedTask.id)
-        await userService.sendAlert(userId, savedTask.process.user.id, "Translator "+user.name+" has rejected your translation request")
+        await userService.sendAlert(userId, savedTask.process.user.id, "Translator "+user.email+" has rejected your translation request")
         closeCancelModal()
       }
 
@@ -169,14 +169,14 @@ import ConfirmationModal from "../components/modals/ConfirmationModal";
         ))}
         <ConfirmationModal
               id="modal-confirmation"
-              question={savedTask && "Are you sure you want to reject the request from "+savedTask.process.user.name+"?"}
+              question={savedTask && "Are you sure you want to reject the request from "+savedTask.process.user.email+"?"}
               isOpen={isDeleteOpen}
               handleConfirmation={sendCancelNotification}
               onClose={closeCancelModal}
       />
       <ConfirmationModal
               id="modal-confirmation"
-              question={savedTask && "Are you sure you want to download the documents of "+savedTask.process.user.name+"?"}
+              question={savedTask && "Are you sure you want to download the documents of "+savedTask.process.user.email+"?"}
               isOpen={isDownloadOpen}
               handleConfirmation={downloadFiles}
               onClose={closeDownloadModal}
