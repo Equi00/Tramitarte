@@ -1,6 +1,8 @@
 from datetime import date
 import pytest
 from fastapi import HTTPException
+from models.DocumentationUpdateModel import DocumentationUpdateModel
+from models.AncestorDocumentationModel import AncestorDocumentationModel
 from models.DocumentationModel import DocumentationModel
 from models.AVORequestModel import AVORequestModel
 from enums.Gender import Gender
@@ -63,7 +65,6 @@ def advance_to_stage_2(session, process_service):
     process = session.query(Process).filter_by(code="PRC123").first()
 
     avo_request = AVORequestModel(
-        id = 1,
         first_name="John",
         last_name="Doe",
         birth_date=date(1990, 1, 1),
@@ -76,9 +77,9 @@ def advance_to_stage_3(session, process_service):
     process = advance_to_stage_2(session, process_service)
 
     documents = [
-        DocumentationModel(id=0, name="user document", file_type="png", file_base64="dGVzdA==", process_id=process.id),
-        DocumentationModel(id=1, name="user document 2", file_type="png", file_base64="dGVzdA==", process_id=process.id),
-        DocumentationModel(id=2, name="user document 3", file_type="PDF", file_base64="dGVzdA==", process_id=process.id)
+        DocumentationUpdateModel(name="user document", file_type="png", file_base64="dGVzdA=="),
+        DocumentationUpdateModel(name="user document 2", file_type="png", file_base64="dGVzdA=="),
+        DocumentationUpdateModel(name="user document 3.pdf", file_type="PDF", file_base64="dGVzdA==")
     ]
 
     return process_service.upload_user_documents(process.id, documents)
@@ -87,7 +88,7 @@ def advance_to_stage_4(session, process_service):
     process = advance_to_stage_3(session, process_service)
 
     documents = [
-        DocumentationModel(id=3, name="avo document", file_type="PDF", file_base64="dGVzdA==", process_id=process.id),
+        DocumentationUpdateModel(name="avo document", file_type="PDF", file_base64="dGVzdA=="),
     ]
 
     return process_service.upload_avo_documents(process.id, documents)
@@ -95,18 +96,18 @@ def advance_to_stage_4(session, process_service):
 def advance_to_stage_5(session, process_service):
     process: Process = advance_to_stage_4(session, process_service)
 
-    process.descendant_count = 2
-
     session.add(process)
     session.commit()
     session.refresh(process)
 
     documents = [
-        DocumentationModel(id=4, name="descendant document", file_type="PDF", file_base64="dGVzdA==", process_id=process.id),
-        DocumentationModel(id=5, name="descendant document", file_type="PDF", file_base64="dGVzdA==", process_id=process.id)
+        DocumentationUpdateModel(name="ancestor document", file_type="PDF", file_base64="dGVzdA=="),
+        DocumentationUpdateModel(name="ancestor document", file_type="PDF", file_base64="dGVzdA==")
     ]
 
-    return process_service.upload_descendants_documents(process.id, documents)
+    ancestor_document = AncestorDocumentationModel(count=2, documentation=documents)
+
+    return process_service.upload_ancestors_documents(process.id, ancestor_document)
 
 def test_start_process_success(process_service, session):
     user = User(
@@ -142,7 +143,6 @@ def test_upload_avo(process_service, session):
     process = session.query(Process).filter_by(code="PRC123").first()
 
     avo_request = AVORequestModel(
-        id = 1,
         first_name="John",
         last_name="Doe",
         birth_date=date(1990, 1, 1),
@@ -160,7 +160,6 @@ def test_upload_invalid_avo(process_service, session):
     process = session.query(Process).filter_by(code="PRC123").first()
 
     avo_request = AVORequestModel(
-        id = 1,
         first_name="",
         last_name="",
         birth_date=date(1990, 1, 1),
@@ -174,9 +173,9 @@ def test_upload_user_documents_success(process_service, session):
     process = advance_to_stage_2(session, process_service)
 
     documents = [
-        DocumentationModel(id=0, name="user document", file_type="png", file_base64="dGVzdA==", process_id=process.id),
-        DocumentationModel(id=1, name="user document 2", file_type="png", file_base64="dGVzdA==", process_id=process.id),
-        DocumentationModel(id=2, name="user document 3", file_type="PDF", file_base64="dGVzdA==", process_id=process.id)
+        DocumentationUpdateModel(name="user document", file_type="png", file_base64="dGVzdA=="),
+        DocumentationUpdateModel(name="user document 2", file_type="png", file_base64="dGVzdA=="),
+        DocumentationUpdateModel(name="user document 3.pdf", file_type="PDF", file_base64="dGVzdA==")
     ]
 
     updated_process = process_service.upload_user_documents(process.id, documents)
@@ -204,7 +203,7 @@ def test_upload_avo_documents_success(process_service, session):
     process = advance_to_stage_3(session, process_service)
 
     documents = [
-        DocumentationModel(id=3, name="avo document", file_type="PDF", file_base64="dGVzdA==", process_id=process.id),
+        DocumentationUpdateModel(name="avo document", file_type="PDF", file_base64="dGVzdA=="),
     ]
 
     updated_process = process_service.upload_avo_documents(process.id, documents)
@@ -214,7 +213,7 @@ def test_upload_avo_documents_success(process_service, session):
     assert len(retrieved_process.attachments_to_translate) == 2 # the avo document and the pdf user document
     assert len(retrieved_process.documentations) == 6 # the avo document, the user documents adn the attachments to translate
     assert retrieved_process.code == updated_process.code
-    assert retrieved_process.stage.description == "Load Descendant Documentation"
+    assert retrieved_process.stage.description == "Load Ancestors Documentation"
 
 def test_upload_avo_documents_failed(process_service, session):
     process = advance_to_stage_3(session, process_service)
@@ -224,62 +223,64 @@ def test_upload_avo_documents_failed(process_service, session):
     with pytest.raises(InvalidDocumentationException, match="The AVO documentation presented is insufficient"):
         process_service.upload_avo_documents(process.id, documents)
 
-def test_upload_descendant_documents_success(process_service, session):
+def test_upload_ancestor_documents_success(process_service, session):
     process: Process = advance_to_stage_4(session, process_service)
-
-    process.descendant_count = 2
 
     session.add(process)
     session.commit()
     session.refresh(process)
 
     documents = [
-        DocumentationModel(id=4, name="descendant document", file_type="PDF", file_base64="dGVzdA==", process_id=process.id),
-        DocumentationModel(id=5, name="descendant document", file_type="PDF", file_base64="dGVzdA==", process_id=process.id)
+        DocumentationUpdateModel(name="ancestor document", file_type="PDF", file_base64="dGVzdA=="),
+        DocumentationUpdateModel(name="ancestor document", file_type="PDF", file_base64="dGVzdA==")
     ]
 
-    updated_process = process_service.upload_descendants_documents(process.id, documents)
+    ancestor_document = AncestorDocumentationModel(count=2, documentation=documents)
+
+    updated_process = process_service.upload_ancestors_documents(process.id, ancestor_document)
 
     retrieved_process: Process = session.query(Process).filter_by(code="PRC123").first()
-    assert len(retrieved_process.descendant_documentation) == 2
-    assert len(retrieved_process.attachments_to_translate) == 4 # the avo document, the pdf user document, the descendant documents
-    assert len(retrieved_process.documentations) == 10 # the avo document(1), the user documents(3), the attachments to translate(4) and the descendant documents(2)
+    assert len(retrieved_process.ancestors_documentation) == 2
+    assert len(retrieved_process.attachments_to_translate) == 4 # the avo document, the pdf user document, the ancestor documents
+    assert len(retrieved_process.documentations) == 10 # the avo document(1), the user documents(3), the attachments to translate(4) and the ancestor documents(2)
     assert retrieved_process.code == updated_process.code
     assert retrieved_process.stage.description == "Load Translated Documentation"
 
-def test_upload_descendant_documents_failed(process_service, session):
+def test_upload_ancestor_documents_failed(process_service, session):
     process: Process = advance_to_stage_4(session, process_service)
 
-    process.descendant_count = 2
+    process.ancestor_count = 2
 
     session.add(process)
     session.commit()
     session.refresh(process)
 
     documents = [
-        DocumentationModel(id=4, name="descendant document", file_type="PDF", file_base64="dGVzdA==", process_id=process.id),
+        DocumentationUpdateModel(name="ancestor document", file_type="PDF", file_base64="dGVzdA=="),
     ]
 
-    with pytest.raises(InvalidDocumentationException, match="The process is missing necessary descendant documents"):
-        process_service.upload_descendants_documents(process.id, documents)
+    ancestor_document = AncestorDocumentationModel(count=2, documentation=documents)
+
+    with pytest.raises(InvalidDocumentationException, match="The process is missing necessary ancestor documents"):
+        process_service.upload_ancestors_documents(process.id, ancestor_document)
 
 def test_upload_translated_documents_success(process_service, session):
     process: Process = advance_to_stage_5(session, process_service)
 
-    translated_docs = [DocumentationModel(id=6+i, name=f"translated doc{i}", file_type="PDF", file_base64="encoded", process_id=process.id) for i in range(len(process.attachments_to_translate))]
+    translated_docs = [DocumentationUpdateModel(name=f"translated doc{i}", file_type="PDF", file_base64="encoded") for i in range(len(process.attachments_to_translate))]
     updated_process = process_service.upload_translated_documents(process.id, translated_docs)
 
     retrieved_process: Process = session.query(Process).filter_by(code="PRC123").first()
     assert len(retrieved_process.translated_documentation) == 4
-    assert len(retrieved_process.attachments_to_translate) == 4 # the avo document, the pdf user document, the descendant documents
-    assert len(retrieved_process.documentations) == 14 # the avo document(1), the user documents(3), the attachments to translate(4), the descendant documents(2), translated documents(4)
+    assert len(retrieved_process.attachments_to_translate) == 4 # the avo document, the pdf user document, the ancestor documents
+    assert len(retrieved_process.documentations) == 14 # the avo document(1), the user documents(3), the attachments to translate(4), the ancestor documents(2), translated documents(4)
     assert retrieved_process.code == updated_process.code
     assert retrieved_process.stage.description == "Process Completed, click to download files"
 
 def test_upload_translated_documents_failed(process_service, session):
     process: Process = advance_to_stage_5(session, process_service)
 
-    translated_docs = [DocumentationModel(id=6+i, name=f"translated doc{i}", file_type="PDF", file_base64="encoded", process_id=process.id) for i in range(len(process.attachments_to_translate)-1)]
+    translated_docs = [DocumentationUpdateModel(name=f"translated doc{i}", file_type="PDF", file_base64="encoded") for i in range(len(process.attachments_to_translate)-1)]
     
     with pytest.raises(InvalidDocumentationException, match="The process is missing translated documents"):
         process_service.upload_translated_documents(process.id, translated_docs)
@@ -289,7 +290,7 @@ def test_get_documents_success(process_service, session):
 
     documents = process_service.get_documents(process.id)
 
-    assert len(documents) == 10
+    assert len(documents) == 6
 
 def test_get_documents_process_not_found(process_service):
     with pytest.raises(HTTPException) as exc:

@@ -5,4 +5,3 @@ class DocumentationModel(BaseModel):
     name: str
     file_type: str
     file_base64: str
-    process_id: int

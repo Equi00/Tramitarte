@@ -22,11 +22,11 @@ class Process(Base):
 
     avo_documentation = relationship("AvoDocumentation", back_populates="process", cascade="all, delete-orphan")
     user_documentation = relationship("UserDocumentation", back_populates="process", cascade="all, delete-orphan")
-    descendant_documentation = relationship("DescendantDocumentation", back_populates="process", cascade="all, delete-orphan")
+    ancestors_documentation = relationship("AncestorDocumentation", back_populates="process", cascade="all, delete-orphan")
     translated_documentation = relationship("TranslatedDocumentation", back_populates="process", cascade="all, delete-orphan")
     attachments_to_translate = relationship("AttachmentDocumentation", back_populates="process", cascade="all, delete-orphan")
 
-    descendant_count = Column(Integer, default=0)
+    ancestor_count = Column(Integer, default=0)
 
     def assign_avo_request(self, avo_request: AVORequest):
         self.request_avo = avo_request
@@ -63,18 +63,18 @@ class Process(Base):
         
         self.user_documentation.extend(user_documents)
 
-    def add_descendant_documentation(self, documents: list[Documentation]):
-        descendant_documents = []
+    def add_ancestors_documentation(self, documents: list[Documentation]):
+        ancestor_documents = []
         for doc in documents:
-            descendant_doc = DescendantDocumentation(
+            ancestor_doc = AncestorDocumentation(
                 name=doc.name,
                 file_type=doc.file_type,
                 file_base64=doc.file_base64,
             )
-            descendant_doc.process_id = self.id
-            descendant_documents.append(descendant_doc)
+            ancestor_doc.process_id = self.id
+            ancestor_documents.append(ancestor_doc)
         
-        self.descendant_documentation.extend(descendant_documents)
+        self.ancestors_documentation.extend(ancestor_documents)
 
     def add_attachments_to_translate(self, documents: list[Documentation]):
         attachments = []

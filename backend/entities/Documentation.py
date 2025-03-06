@@ -10,7 +10,7 @@ class Documentation(Base):
     file_type = Column(String, nullable=False)
     file_base64 = Column(String, nullable=False)
 
-    process_id = Column(Integer, ForeignKey("processes.id"), nullable=False)
+    process_id = Column(Integer, ForeignKey("processes.id"), nullable=True)
     download_request_id = Column(Integer, ForeignKey("download_requests.id"), nullable=True)
 
     document_type = Column(String, nullable=False)
@@ -49,15 +49,15 @@ class UserDocumentation(Documentation):
     }
 
 
-class DescendantDocumentation(Documentation):
-    __tablename__ = "descendant_documentation"
+class AncestorDocumentation(Documentation):
+    __tablename__ = "ancestor_documentation"
 
     id = Column(Integer, ForeignKey("documentation.id"), primary_key=True)
 
-    process = relationship("Process", back_populates="descendant_documentation")
+    process = relationship("Process", back_populates="ancestors_documentation")
 
     __mapper_args__ = {
-        "polymorphic_identity": "descendant",
+        "polymorphic_identity": "ancestor",
     }
 
 

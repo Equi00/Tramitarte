@@ -127,14 +127,13 @@ def test_find_requests_by_requester_not_found(download_request_service, session)
 def test_delete_download_request_by_id(download_request_service, session):
     requester = session.query(User).filter_by(username="Jose55xx").first()
     translator = session.query(User).filter_by(username="user2").first()
-    process = session.query(Process).filter_by(code="PRC123").first()
-    documents = [DocumentationModel(id=1, name="Test Document", file_type="PDF", file_base64="dGVzdA==", process_id=process.id)]
+    documents = [DocumentationModel(id=1, name="Test Document", file_type="PDF", file_base64="dGVzdA==")]
 
     download_request_service.create_download_request(requester.id, translator.id, documents)
 
     retrieved_download_request: DownloadRequest = session.query(DownloadRequest).filter_by(requester_id=requester.id).first()
 
-    assert retrieved_download_request.documentation[0].process_id == documents[0].process_id
+    assert retrieved_download_request.documentation[0].name == documents[0].name
 
     response = download_request_service.delete_download_request_by_id(retrieved_download_request.id)
 

@@ -32,3 +32,14 @@
 - View the process tracking.
 - Download and modify at any time the documents uploaded to the application.
 - Be able to view the consulates and important areas on a map.
+
+## Technologies used by this project:
+
+- Python
+- FastAPI
+- PostgreSQL
+- Docker
+- React
+- Javascript
+- Chakra ui
+- Auth0

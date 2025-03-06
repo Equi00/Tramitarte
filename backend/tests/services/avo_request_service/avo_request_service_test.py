@@ -2,6 +2,7 @@ from datetime import date
 import pytest
 from fastapi import HTTPException
 from unittest.mock import MagicMock
+from models.UpdateAVORequestModel import UpdateAVORequestModel
 from models.AVORequestModel import AVORequestModel
 from services.AVORequestService import AVORequestService
 from enums.Gender import Gender
@@ -61,7 +62,6 @@ def avo_request_service(session):
 
 def test_save_valid_avo_request(avo_request_service, session):
     avo_request = AVORequestModel(
-        id = 0,
         first_name="John",
         last_name="Doe",
         birth_date=date(1990, 1, 1),
@@ -75,7 +75,6 @@ def test_save_valid_avo_request(avo_request_service, session):
 
 def test_save_invalid_avo_request(avo_request_service):
     avo_request = AVORequestModel(
-        id = 0,
         first_name="",
         last_name="",
         birth_date=date(1990, 1, 1),
@@ -90,7 +89,6 @@ def test_save_invalid_avo_request(avo_request_service):
 
 def test_update_existing_avo_request(avo_request_service, session):
     avo_request = AVORequestModel(
-        id = 0,
         first_name="asdf",
         last_name="asdf",
         birth_date=date(1990, 1, 1),
@@ -99,12 +97,9 @@ def test_update_existing_avo_request(avo_request_service, session):
 
     result = avo_request_service.save(avo_request)
 
-    avo_request = AVORequestModel(
-        id = 0,
-        first_name="JOSE",
-        last_name="asdf",
-        birth_date=date(1990, 1, 1),
-        gender=Gender.MALE
+    avo_request = UpdateAVORequestModel(
+        id = result.id,
+        first_name="JOSE"
     )
 
     updated_avo = avo_request_service.update(avo_request)
@@ -116,7 +111,7 @@ def test_update_existing_avo_request(avo_request_service, session):
     assert retrieved_avo.id == updated_avo.id == result.id == avo_request.id
 
 def test_update_non_existent_avo_request(avo_request_service):
-    avo_request = AVORequestModel(
+    avo_request = UpdateAVORequestModel(
         id = 0,
         first_name="asdf",
         last_name="asdf",

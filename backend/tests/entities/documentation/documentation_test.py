@@ -97,7 +97,7 @@ def test_missing_fields(session):
         session.commit()
     
     with pytest.raises(Exception):
-        doc = DescendantDocumentation(name="Test", file_type="PDF", file_base64=None)
+        doc = AncestorDocumentation(name="Test", file_type="PDF", file_base64=None)
         doc.process_id = process.id
         session.add(doc)
         session.commit()

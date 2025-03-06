@@ -68,7 +68,7 @@ class Stage3(Stage):
     def verify_stage(self, process):
         if len(process.avo_documentation) < 1:
             raise InvalidDocumentationException("The AVO documentation presented is insufficient")
-        process.stage = Stage4(description="Load Descendant Documentation")
+        process.stage = Stage4(description="Load Ancestors Documentation")
 
 class Stage4(Stage):
     __tablename__ = 'stage4'
@@ -79,12 +79,12 @@ class Stage4(Stage):
         "polymorphic_identity": "stage4"
     }
 
-    def __init__(self, description="Load Descendant Documentation"):
+    def __init__(self, description="Load Ancestors Documentation"):
         super().__init__(description=description)
 
     def verify_stage(self, process):
-        if len(process.descendant_documentation) < process.descendant_count:
-            raise InvalidDocumentationException("The process is missing necessary descendant documents")
+        if len(process.ancestors_documentation) < process.ancestor_count:
+            raise InvalidDocumentationException("The process is missing necessary ancestor documents")
         process.stage = Stage5(description="Load Translated Documentation")
 
 class Stage5(Stage):

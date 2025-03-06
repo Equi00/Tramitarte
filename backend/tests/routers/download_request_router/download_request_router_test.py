@@ -117,14 +117,11 @@ def test_create_download_request_requester_not_found(session):
 def test_find_requests_by_requester_success(session):
     requester = session.query(User).filter_by(username="Jose55xx").first()
     translator = session.query(User).filter_by(username="user2").first()
-    process = session.query(Process).filter_by(code="PRC123").first()
     json_documents = [
         {
-            "id": 0,
             "name": "Test Document",
             "file_type": "PDF",
             "file_base64": "dGVzdA==",
-            "process_id": process.id
         }
     ]
 
@@ -136,7 +133,7 @@ def test_find_requests_by_requester_success(session):
     assert result.status_code == 200
     assert result.json()[0]["requester_id"] == requester.id
     assert result.json()[0]["translator_id"] == translator.id 
-    assert result.json()[0]["documentation"][0] == json_documents[0] 
+    assert result.json()[0]["documentation"][0]["file_base64"] == json_documents[0]["file_base64"] 
 
 def test_find_requests_by_requester_not_found(session):
     response = client.get(f"/api/download-request/requester/{343434}")
@@ -147,14 +144,12 @@ def test_find_requests_by_requester_not_found(session):
 def test_delete_download_request_by_id(session):
     requester = session.query(User).filter_by(username="Jose55xx").first()
     translator = session.query(User).filter_by(username="user2").first()
-    process = session.query(Process).filter_by(code="PRC123").first()
     json_documents = [
         {
             "id": 0,
             "name": "Test Document",
             "file_type": "PDF",
             "file_base64": "dGVzdA==",
-            "process_id": process.id
         }
     ]
 
@@ -162,7 +157,7 @@ def test_delete_download_request_by_id(session):
 
     retrieved_download_request: DownloadRequest = session.query(DownloadRequest).filter_by(requester_id=requester.id).first()
 
-    assert retrieved_download_request.documentation[0].process_id == json_documents[0]["process_id"]
+    assert retrieved_download_request.documentation[0].name == json_documents[0]["name"]
 
     response = client.delete(f"/api/download-request/{requester.id}")
 

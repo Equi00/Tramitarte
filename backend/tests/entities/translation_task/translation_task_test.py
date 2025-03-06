@@ -33,7 +33,7 @@ def session():
         photo="profile2.jpg"
     )
 
-    process = Process(code="PRC123", descendant_count=2, user=translator)
+    process = Process(code="PRC123", ancestor_count=2, user=translator)
     process.stage = stage
 
     db_session.add(process)

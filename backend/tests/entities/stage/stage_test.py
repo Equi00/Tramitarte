@@ -150,7 +150,7 @@ def test_stage3_to_stage4(session):
     retrieved.advance_stage()
 
     assert isinstance(retrieved.stage, Stage4)
-    assert retrieved.stage.description == "Load Descendant Documentation"
+    assert retrieved.stage.description == "Load Ancestors Documentation"
 
 def test_stage3_fails_without_avo_docs(session):
     stage3 = Stage3(description="Load AVO Documentation")
@@ -168,13 +168,13 @@ def test_stage3_fails_without_avo_docs(session):
         retrieved.advance_stage()
 
 def test_stage4_to_stage5(session):
-    stage4 = Stage4(description="Load Descendant Documentation")
+    stage4 = Stage4(description="Load Ancestor Documentation")
     user = session.query(User).filter_by(name="John").first()
 
     process = Process(code="PRC001", stage=stage4, user=user)
 
-    descendant_docs = [DescendantDocumentation(name="desc_doc", file_type="PDF", file_base64="encoded")]
-    process.descendant_documentation.extend(descendant_docs)
+    ancestor_docs = [AncestorDocumentation(name="desc_doc", file_type="PDF", file_base64="encoded")]
+    process.ancestors_documentation.extend(ancestor_docs)
 
     session.add(stage4)
     session.add(process)
@@ -187,11 +187,11 @@ def test_stage4_to_stage5(session):
     assert isinstance(retrieved.stage, Stage5)
     assert retrieved.stage.description == "Load Translated Documentation"
 
-def test_stage4_fails_without_descendant_docs(session):
-    stage4 = Stage4(description="Load Descendant Documentation")
+def test_stage4_fails_without_ancestor_docs(session):
+    stage4 = Stage4(description="Load Ancestor Documentation")
     user = session.query(User).filter_by(name="John").first()
 
-    process = Process(code="PRC001", stage=stage4, user=user, descendant_count=2)
+    process = Process(code="PRC001", stage=stage4, user=user, ancestor_count=2)
 
     session.add(stage4)
     session.add(process)
@@ -199,7 +199,7 @@ def test_stage4_fails_without_descendant_docs(session):
 
     retrieved = session.query(Process).filter_by(code="PRC001").first()
 
-    with pytest.raises(InvalidDocumentationException, match="The process is missing necessary descendant documents"):
+    with pytest.raises(InvalidDocumentationException, match="The process is missing necessary ancestor documents"):
         retrieved.advance_stage()
 
 def test_stage5_completion(session):

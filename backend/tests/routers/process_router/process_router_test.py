@@ -75,7 +75,6 @@ def advance_to_stage_2(session):
     process = session.query(Process).filter_by(code="PRC123").first()
 
     json_avo = {
-        "id": 0,
         "first_name": "avo name",
         "last_name": "Doe",
         "birth_date": "2025-02-08",
@@ -84,6 +83,9 @@ def advance_to_stage_2(session):
 
     client.post(f"/api/process/upload-avo/{process.id}", json=json_avo)
 
+    # expire session to obtain actual data
+    session.expire_all()
+
     return session.query(Process).filter_by(code="PRC123").first()
 
 def advance_to_stage_3(session):
@@ -91,29 +93,26 @@ def advance_to_stage_3(session):
 
     json_documents = [
         {
-            "id": 0,
             "name": "user document",
             "file_type": "png",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         },
         {
-            "id": 1,
             "name": "user document 2",
             "file_type": "png",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         },
         {
-            "id": 2,
-            "name": "user document 3",
+            "name": "user document 3.pdf",
             "file_type": "PDF",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         }
     ]
 
-    client.post(f"/api/process/upload/documentation/user/{process.user.id}", json=json_documents) 
+    client.post(f"/api/process/upload/documentation/user/{process.user.id}", json=json_documents)
+
+    # expire session to obtain actual data
+    session.expire_all() 
 
     return session.query(Process).filter_by(code="PRC123").first()
 
@@ -122,45 +121,44 @@ def advance_to_stage_4(session):
 
     json_documents = [
         {
-            "id": 3,
             "name": "avo document",
             "file_type": "png",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         }
     ]
 
     client.post(f"/api/process/upload/documentation/avo/{process.user.id}", json=json_documents)
+
+    # expire session to obtain actual data
+    session.expire_all()
 
     return session.query(Process).filter_by(code="PRC123").first()
 
 def advance_to_stage_5(session):
     process: Process = advance_to_stage_4(session)
 
-    process.descendant_count = 2
-
     session.add(process)
     session.commit()
     session.refresh(process)
 
-    json_documents = [
-        {
-            "id": 4,
-            "name": "descendant document",
+    json_documents = {
+        "count": 2,
+        "documentation": [{
+            "name": "ancestor document",
             "file_type": "png",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         },
         {
-            "id": 5,
-            "name": "descendant document",
+            "name": "ancestor document",
             "file_type": "png",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
-        }
-    ]
+            "file_base64": "dGVzdA=="
+        }]
+    }
 
-    client.post(f"/api/process/upload/documentation/descendants/{process.user.id}", json=json_documents)
+    client.post(f"/api/process/upload/documentation/ancestors/{process.user.id}", json=json_documents)
+
+    # expire session to obtain actual data
+    session.expire_all()
 
     return session.query(Process).filter_by(code="PRC123").first()
 
@@ -198,7 +196,6 @@ def test_upload_avo(session):
     process = session.query(Process).filter_by(code="PRC123").first()
 
     json_avo = {
-        "id": 0,
         "first_name": "John",
         "last_name": "Doe",
         "birth_date": "2025-02-08",
@@ -222,7 +219,6 @@ def test_upload_invalid_avo(session):
     process = session.query(Process).filter_by(code="PRC123").first()
 
     json_avo = {
-        "id": 0,
         "first_name": "",
         "last_name": "",
         "birth_date": "2025-02-08",
@@ -234,7 +230,6 @@ def test_upload_invalid_avo(session):
 
 def test_upload_avo_failed(session):
     json_avo = {
-        "id": 0,
         "first_name": "",
         "last_name": "",
         "birth_date": "2025-02-08",
@@ -251,25 +246,19 @@ def test_upload_user_documents_success(session):
 
     json_documents = [
         {
-            "id": 0,
             "name": "user document",
             "file_type": "png",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         },
         {
-            "id": 1,
             "name": "user document 2",
             "file_type": "png",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         },
         {
-            "id": 2,
-            "name": "user document 3",
+            "name": "user document 3.pdf",
             "file_type": "PDF",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         }
     ]
 
@@ -293,11 +282,9 @@ def test_upload_user_documents_process_failed(session):
 
     json_documents = [
         {
-            "id": 0,
             "name": "user document",
             "file_type": "png",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         }
     ]
 
@@ -314,11 +301,9 @@ def test_upload_avo_documents_success(session):
 
     json_documents = [
         {
-            "id": 3,
             "name": "avo document",
             "file_type": "PDF",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         }
     ]
 
@@ -335,7 +320,7 @@ def test_upload_avo_documents_success(session):
     assert len(retrieved_process.attachments_to_translate) == 2 # the avo document and the pdf user document
     assert len(retrieved_process.documentations) == 6 # the avo document, the user documents adn the attachments to translate
     assert retrieved_process.code == process.code
-    assert retrieved_process.stage.description == "Load Descendant Documentation"
+    assert retrieved_process.stage.description == "Load Ancestors Documentation"
 
 def test_upload_avo_documents_insufficient(session):
     process = advance_to_stage_3(session)
@@ -350,11 +335,9 @@ def test_upload_avo_documents_failed(session):
 
     json_documents = [
         {
-            "id": 3,
             "name": "avo document",
             "file_type": "PDF",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+            "file_base64": "dGVzdA=="
         }
     ]
     
@@ -363,33 +346,28 @@ def test_upload_avo_documents_failed(session):
     assert response.status_code == 404
     assert response.json() == {"detail": "Process not found."}
 
-def test_upload_descendant_documents_success(session):
+def test_upload_ancestors_documents_success(session):
     process: Process = advance_to_stage_4(session)
-
-    process.descendant_count = 2
 
     session.add(process)
     session.commit()
     session.refresh(process)
 
-    json_documents = [
-        {
-            "id": 4,
-            "name": "descendant document",
-            "file_type": "PDF",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
+    json_documents = {
+        "count": 2,
+        "documentation": [{
+            "name": "ancestor document",
+            "file_type": "png",
+            "file_base64": "dGVzdA=="
         },
         {
-            "id": 5,
-            "name": "descendant document",
-            "file_type": "PDF",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
-        }
-    ]
+            "name": "ancestor document",
+            "file_type": "png",
+            "file_base64": "dGVzdA=="
+        }]
+    }
 
-    response = client.post(f"/api/process/upload/documentation/descendants/{process.id}", json=json_documents)
+    response = client.post(f"/api/process/upload/documentation/ancestors/{process.id}", json=json_documents)
 
     # expire session to obtain actual data
     session.expire_all()
@@ -398,48 +376,49 @@ def test_upload_descendant_documents_success(session):
 
     assert response.status_code == 200
     assert response.json() == {"message": "Documentation successfully saved"}
-    assert len(retrieved_process.descendant_documentation) == 2
-    assert len(retrieved_process.attachments_to_translate) == 4 # the avo document, the pdf user document, the descendant documents
-    assert len(retrieved_process.documentations) == 10 # the avo document(1), the user documents(3), the attachments to translate(4) and the descendant documents(2)
+    assert len(retrieved_process.ancestors_documentation) == 2
+    assert len(retrieved_process.attachments_to_translate) == 4 # the avo document, the pdf user document, the ancestor documents
+    assert len(retrieved_process.documentations) == 10 # the avo document(1), the user documents(3), the attachments to translate(4) and the ancestor documents(2)
     assert retrieved_process.code == process.code
     assert retrieved_process.stage.description == "Load Translated Documentation"
 
-def test_upload_descendant_documents_insufficient(session):
+def test_upload_ancestor_documents_insufficient(session):
     process: Process = advance_to_stage_4(session)
-
-    process.descendant_count = 2
 
     session.add(process)
     session.commit()
     session.refresh(process)
 
-    json_documents = [
-        {
-            "id": 4,
-            "name": "descendant document",
-            "file_type": "PDF",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
-        }
-    ]
+    json_documents = {
+        "count": 2,
+        "documentation": [{
+            "name": "ancestor document",
+            "file_type": "png",
+            "file_base64": "dGVzdA=="
+        }]
+    }
 
-    with pytest.raises(InvalidDocumentationException, match="The process is missing necessary descendant documents"):
-        client.post(f"/api/process/upload/documentation/descendants/{process.id}", json=json_documents)
+    with pytest.raises(InvalidDocumentationException, match="The process is missing necessary ancestor documents"):
+        client.post(f"/api/process/upload/documentation/ancestors/{process.id}", json=json_documents)
 
-def test_upload_descendant_documents_failed(session):
+def test_upload_ancestor_documents_failed(session):
     process = advance_to_stage_3(session)
 
-    json_documents = [
+    json_documents = {
+        "count": 2,
+        "documentation": [{
+            "name": "ancestor document",
+            "file_type": "png",
+            "file_base64": "dGVzdA=="
+        },
         {
-            "id": 3,
-            "name": "avo document",
-            "file_type": "PDF",
-            "file_base64": "dGVzdA==",
-            "process_id": process.id
-        }
-    ]
+            "name": "ancestor document",
+            "file_type": "png",
+            "file_base64": "dGVzdA=="
+        }]
+    }
     
-    response = client.post(f"/api/process/upload/documentation/descendants/{343434}", json=json_documents)
+    response = client.post(f"/api/process/upload/documentation/ancestors/{343434}", json=json_documents)
 
     assert response.status_code == 404
     assert response.json() == {"detail": "Process not found."}
@@ -449,11 +428,9 @@ def test_upload_translated_documents_success(session):
 
     translated_docs = [
         {
-            "id": 6 + i,
             "name": f"translated doc{i}",
             "file_type": "PDF",
-            "file_base64": "encoded",
-            "process_id": process.id
+            "file_base64": "encoded"
         }
         for i in range(len(process.attachments_to_translate))
     ]    
@@ -468,8 +445,8 @@ def test_upload_translated_documents_success(session):
     assert response.status_code == 200
     assert response.json()["code"] == retrieved_process.code
     assert len(retrieved_process.translated_documentation) == 4
-    assert len(retrieved_process.attachments_to_translate) == 4 # the avo document, the pdf user document, the descendant documents
-    assert len(retrieved_process.documentations) == 14 # the avo document(1), the user documents(3), the attachments to translate(4), the descendant documents(2), translated documents(4)
+    assert len(retrieved_process.attachments_to_translate) == 4 # the avo document, the pdf user document, the ancestor documents
+    assert len(retrieved_process.documentations) == 14 # the avo document(1), the user documents(3), the attachments to translate(4), the ancestors documents(2), translated documents(4)
     assert retrieved_process.code == process.code
     assert retrieved_process.stage.description == "Process Completed, click to download files"
 
@@ -478,11 +455,9 @@ def test_upload_translated_documents_insufficient(session):
 
     translated_docs = [
             {
-                "id": 6 + i,
                 "name": f"translated doc{i}",
                 "file_type": "PDF",
-                "file_base64": "encoded",
-                "process_id": process.id
+                "file_base64": "encoded"
             }
             for i in range(len(process.attachments_to_translate)-1)
         ]     
@@ -495,11 +470,9 @@ def test_upload_translated_documents_failed(session):
 
     translated_docs = [
             {
-                "id": 6 + i,
                 "name": f"translated doc{i}",
                 "file_type": "PDF",
-                "file_base64": "encoded",
-                "process_id": process.id
+                "file_base64": "encoded"
             }
             for i in range(len(process.attachments_to_translate)-1)
         ]     
@@ -515,7 +488,7 @@ def test_get_documents_success(session):
     response = client.get(f"/api/process/documentation/{process.id}")
 
     assert response.status_code == 200
-    assert len(response.json()) == 10
+    assert len(response.json()) == 6
 
 def test_get_documents_process_not_found(session):
     response = client.get(f"/api/process/documentation/{4333434}")
@@ -567,7 +540,7 @@ def test_modify_doc(session):
                 "file_base64": "asdsdasadfasdfsdaf",
             }
     
-    response = client.post(f"/api/process/modify/document/{document.id}", json=updated_document)
+    response = client.put(f"/api/process/modify/document/{document.id}", json=updated_document)
 
     # expire session to obtain actual data
     session.expire_all()
@@ -586,7 +559,7 @@ def test_modify_doc_failed(session):
                 "file_base64": "asdsdasadfasdfsdaf",
             }
     
-    response = client.post(f"/api/process/modify/document/{343434}", json=updated_document)
+    response = client.put(f"/api/process/modify/document/{343434}", json=updated_document)
 
     assert response.status_code == 404
     assert response.json() == {"detail": "Documentation not found."}
@@ -611,3 +584,58 @@ def test_get_avo_by_user_failed(session):
 
     assert response.status_code == 404
     assert response.json() == {"detail": "User not found."}
+
+def test_update_avo(session):
+    process: Process = advance_to_stage_2(session)
+
+    assert process.request_avo.last_name == "Doe"
+
+    json_avo = {
+        "id": process.request_avo.id,
+        "first_name": "Luigi",
+        "last_name": "Buco",
+        "birth_date": "1995-02-08",
+        "gender": "Male"
+    }
+
+    response = client.put(f"/api/process/avo", json=json_avo)
+
+    # expire session to obtain actual data
+    session.expire_all()
+
+    assert response.status_code == 200
+    assert response.json() == {"message": "AVO updated successfully"}
+    assert process.request_avo.last_name == "Buco"
+
+def test_update_avo_failed(session):
+    process: Process = advance_to_stage_2(session)
+
+    json_avo = {
+        "id": process.request_avo.id,
+        "first_name": "Luigi",
+        "last_name": "Buco",
+        "birth_date": "3000-02-08",
+        "gender": "Male"
+    }
+
+    response = client.put(f"/api/process/avo", json=json_avo)
+
+    # expire session to obtain actual data
+    session.expire_all()
+
+    assert response.status_code == 400
+    assert response.json() == {"detail": "AVO is not valid."}
+
+def test_update_avo_not_found(session):
+    json_avo = {
+        "id": 0,
+        "first_name": "Luigi",
+        "last_name": "Buco",
+        "birth_date": "1995-02-08",
+        "gender": "Male"
+    }
+
+    response = client.put(f"/api/process/avo", json=json_avo)
+
+    assert response.status_code == 404
+    assert response.json() == {"detail": "The AVO to modify does not exist."}
