@@ -1,0 +1,34 @@
+/* LOGO ANIMATION */
+.ball {
+    animation: bounce-mobile 0.5s;
+    animation-direction: alternate;
+    animation-timing-function: cubic-bezier(0.5, 0.05, 1, 0.5);
+    animation-iteration-count: infinite;
+  }
+  
+  @media (min-width: 576px) {
+    .ball {
+      animation: bounce-desktop 0.5s;
+      animation-direction: alternate;
+      animation-timing-function: cubic-bezier(0.5, 0.05, 1, 0.5);
+      animation-iteration-count: infinite;
+    }
+  }
+  
+  @keyframes bounce-desktop {
+    from {
+      transform: translate3d(0, 0rem, 0);
+    }
+    to {
+      transform: translate3d(0, 8rem, 0);
+    }
+  }
+  
+  @keyframes bounce-mobile {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(0, 8rem, 0);
+    }
+  }

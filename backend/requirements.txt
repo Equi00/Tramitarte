@@ -1,0 +1,17 @@
+pillow
+fastapi[all] 
+pybase64
+databases
+datetime
+fastapi
+PyMuPDF
+openai
+pdf2image
+pydantic
+pypdf
+pytesseract
+pytest
+sqlalchemy
+typing
+uuid
+psycopg2-binary
